@@ -1,0 +1,12 @@
+.carousel-item img {
+  height: 70vh; 
+  width: 100%; 
+  object-fit: cover;
+  margin: auto;
+}
+
+.carousel-item {
+  height: 70vh;
+  background-size: cover; 
+  background-position: center;
+}
