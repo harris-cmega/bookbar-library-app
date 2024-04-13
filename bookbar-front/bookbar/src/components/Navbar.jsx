@@ -1,5 +1,8 @@
+import {Link} from "react-router-dom";
+
 const Navbar = () => {
   return (
+
     <nav className="navbar navbar-expand-lg pt-3 pb-3">
   <div className="container-fluid">
     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" 
@@ -38,12 +41,14 @@ const Navbar = () => {
         <form className="me-4 mb-2 mb-lg-0">
           <input type="text" className="form-control form-control-sm" placeholder="Search by Title, Author, Keyword or ISBN" />
         </form>
-        <a className="btn btn-primary" href="">Sign up</a>
+
+          <Link className="btn btn-primary" to="/signup">Sign up</Link>
+
       </div>
     </div>
   </div>
 </nav>
-  )
-};
+  );
+}
 
 export default Navbar;
