@@ -11,5 +11,15 @@
     <!-- app.jsx gjendet ne /src/app.jsx dhe permban
     krejt permbajtjen e faqes -->
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      const userloginform = document.getElementById("userloginform");
+
+      userloginform.addEventListener('submit', e => {
+        if(!userloginform.checkValidity()) {
+          e.preventDefault();
+        }
+        userloginform.classList.add("was-validated");
+      });
+    </script>
   </body>
 </html>

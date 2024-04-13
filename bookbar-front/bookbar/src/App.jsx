@@ -6,6 +6,7 @@ import CallToAction from './components/CallToAction';
 import Carousel from './components/Carousel';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Register from "./pages/Register.jsx";
+import Login from "./pages/Login.jsx";
 
 const App = () => {
     return (
@@ -14,6 +15,7 @@ const App = () => {
                 <Navbar />
                 <Routes>
                     <Route path="/signup" element={<Register />} />
+                    <Route path="/login " element={<Login />} />
                 </Routes>
             </Router>
             <CallToAction />
