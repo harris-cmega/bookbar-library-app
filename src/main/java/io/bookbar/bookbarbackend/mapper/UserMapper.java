@@ -1,7 +1,7 @@
 package io.bookbar.bookbarbackend.mapper;
 
 import io.bookbar.bookbarbackend.dto.UserDto;
-import io.bookbar.bookbarbackend.entity.User;
+import io.bookbar.bookbarbackend.entities.User;
 
 public class UserMapper {
 
@@ -18,7 +18,6 @@ public class UserMapper {
 
     public static User mapToUser(UserDto userDto){
         return new User(
-                userDto.getId(),
                 userDto.getUsername(),
                 userDto.getEmail(),
                 userDto.getPassword(),

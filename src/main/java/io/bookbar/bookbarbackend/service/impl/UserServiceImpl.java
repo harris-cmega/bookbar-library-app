@@ -1,7 +1,7 @@
 package io.bookbar.bookbarbackend.service.impl;
 
 import io.bookbar.bookbarbackend.dto.UserDto;
-import io.bookbar.bookbarbackend.entity.User;
+import io.bookbar.bookbarbackend.entities.User;
 import io.bookbar.bookbarbackend.exception.ResourceNotFoundException;
 import io.bookbar.bookbarbackend.mapper.UserMapper;
 import io.bookbar.bookbarbackend.repository.UserRepository;
