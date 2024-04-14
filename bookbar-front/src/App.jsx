@@ -15,7 +15,7 @@ const App = () => {
                 <Navbar />
                 <Routes>
                     <Route path="/signup" element={<Register />} />
-                    <Route path="/login " element={<Login />} />
+                    <Route path="/login" element={<Login />} />
                 </Routes>
             </Router>
             <CallToAction />
