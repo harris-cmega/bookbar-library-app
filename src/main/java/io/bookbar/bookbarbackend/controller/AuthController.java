@@ -7,8 +7,6 @@ import io.bookbar.bookbarbackend.dto.SignInDto;
 import io.bookbar.bookbarbackend.dto.SignUpDto;
 import io.bookbar.bookbarbackend.entities.User;
 import io.bookbar.bookbarbackend.service.AuthService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,10 +30,6 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody SignUpDto data) {
-        Logger logger = LoggerFactory.getLogger(AuthController.class);
-
-        logger.debug("signup hit," + data.toString());
-
         service.signUp(data);
         return ResponseEntity.status(HttpStatus.CREATED).build();
 
@@ -43,8 +37,6 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<JwtDto> signIn(@RequestBody SignInDto data) {
-        Logger logger = LoggerFactory.getLogger(AuthController.class);
-        logger.debug("login hit," + data.toString());
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.username(), data.password());
 
         var authUser = authenticationManager.authenticate(usernamePassword);
