@@ -12,7 +12,6 @@ public class UserMapper {
                 user.getEmail(),
                 user.getPassword(),
                 user.getRole()
-
         );
     }
 
