@@ -13,14 +13,14 @@ import lombok.NoArgsConstructor;
 public class Author {
     @Id
     @GeneratedValue
-    private long author_id;
+    private long id;
 
     @Column(nullable = false)
-    private String author_name;
+    private String name;
 
     @Column(nullable = false)
-    private String author_bio;
+    private String bio;
 
     @Column(nullable = false)
-    private String author_country;
+    private String country;
 }

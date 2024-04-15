@@ -30,15 +30,15 @@ public class AuthorService {
         return authorRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Author with given id does not exist: " + id));
     }
 
-    public Author getAuthorByName(String name){
-        return authorRepo.findByName(name);
+    public Author getAuthorByName(String author_name){
+        return authorRepo.findByName(author_name);
     }
 
     public Author updateAuthor(Author author){
-        Author existingAuthor = authorRepo.findById(author.getAuthor_id()).orElseThrow(() -> new ResourceNotFoundException("Author with given id does not exist"));
-        existingAuthor.setAuthor_name(author.getAuthor_name());
-        existingAuthor.setAuthor_bio(author.getAuthor_bio());
-        existingAuthor.setAuthor_country(author.getAuthor_country());
+        Author existingAuthor = authorRepo.findById(author.getId()).orElseThrow(() -> new ResourceNotFoundException("Author with given id does not exist"));
+        existingAuthor.setName(author.getName());
+        existingAuthor.setBio(author.getBio());
+        existingAuthor.setCountry(author.getCountry());
         return authorRepo.save(existingAuthor);
     }
 
