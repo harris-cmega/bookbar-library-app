@@ -35,7 +35,7 @@ public class AuthorService {
     }
 
     public Author updateAuthor(Author author){
-        Author existingAuthor = authorRepo.findById(author.getId()).orElseThrow(() -> new ResourceNotFoundException("Author with given id does not exist"));
+        Author existingAuthor = authorRepo.findById(author.getAuthorID()).orElseThrow(() -> new ResourceNotFoundException("Author with given id does not exist"));
         existingAuthor.setName(author.getName());
         existingAuthor.setEmail(author.getEmail());
         existingAuthor.setPassword(author.getPassword());

@@ -15,7 +15,7 @@ import java.sql.Blob;
 public class Author {
     @Id
     @GeneratedValue
-    private int id;
+    private int authorID;
 
     @Column(name= "name")
     private String name;

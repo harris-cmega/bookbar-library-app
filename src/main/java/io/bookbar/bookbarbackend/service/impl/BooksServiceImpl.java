@@ -27,7 +27,7 @@ public class BooksServiceImpl implements BooksService {
     }
 
     @Override
-    public BooksDto getBooksById(Long booksId) {
+    public BooksDto getBooksById(int booksId) {
         Books books = booksRepository.findById(booksId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Book not  with this ID: " + booksId));
@@ -41,13 +41,13 @@ public class BooksServiceImpl implements BooksService {
     }
 
     @Override
-    public BooksDto updateBook(Long booksId, BooksDto updatedBook) {
+    public BooksDto updateBook(int booksId, BooksDto updatedBook) {
         Books books = booksRepository.findById(booksId).orElseThrow(
                 () -> new ResourceNotFoundException("Book not  with this ID: " + booksId)
         );
 
         books.setTitle(updatedBook.getTitle());
-        books.setAuthor(updatedBook.getAuthor());
+//        books.setAuthor(updatedBook.getAuthor());
         books.setPublisher(updatedBook.getPublisher());
         books.setISBN(updatedBook.getISBN());
 
@@ -57,7 +57,7 @@ public class BooksServiceImpl implements BooksService {
     }
 
     @Override
-    public void deleteBook(Long booksId) {
+    public void deleteBook(int booksId) {
 
         Books books = booksRepository.findById(booksId).orElseThrow(
                 () -> new ResourceNotFoundException("Book not  with this ID: " + booksId)

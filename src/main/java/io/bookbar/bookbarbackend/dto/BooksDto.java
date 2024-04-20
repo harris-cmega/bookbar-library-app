@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BooksDto {
-    private Long id;
+    private long id;
     private String title;
     private Author author; // Consider using AuthorDto for better separation of concerns
     private String publisher;

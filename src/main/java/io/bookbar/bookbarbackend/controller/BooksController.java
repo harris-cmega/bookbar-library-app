@@ -26,7 +26,7 @@ public class BooksController {
 
     // REST API per GET
     @GetMapping("{id}")
-    public ResponseEntity<BooksDto> getAllBooks(@PathVariable("id") Long booksId) {
+    public ResponseEntity<BooksDto> getAllBooks(@PathVariable("id") int booksId) {
         BooksDto booksDto = booksService.getBooksById(booksId);
         return ResponseEntity.ok(booksDto);
     }
@@ -41,14 +41,14 @@ public class BooksController {
 
     // REST API per update books
     @PutMapping("{id}")
-    public ResponseEntity<BooksDto> updateBook(@PathVariable("id") Long booksId, @RequestBody BooksDto updatedBooks) {
+    public ResponseEntity<BooksDto> updateBook(@PathVariable("id") int booksId, @RequestBody BooksDto updatedBooks) {
         BooksDto booksDto = booksService.updateBook(booksId, updatedBooks);
         return ResponseEntity.ok(booksDto);
     }
 
     // REST API per delete te books
     @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteBook(@PathVariable("id") Long booksId) {
+    public ResponseEntity<String> deleteBook(@PathVariable("id") int booksId) {
         booksService.deleteBook(booksId);
         return ResponseEntity.ok("Book deleted");
     }
