@@ -5,22 +5,34 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Blob;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "authors")
+@Table(name = "author")
 public class Author {
     @Id
     @GeneratedValue
-    private long id;
+    private int id;
 
-    @Column(nullable = false)
+    @Column(name= "name")
     private String name;
 
-    @Column(nullable = false)
-    private String bio;
+    @Column(name = "email")
+    private String email;
 
-    @Column(nullable = false)
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "description")
+    private String description;
+
+    @Lob
+    @Column(name = "image")
+    private Blob image;
+
+    @Column(name = "country")
     private String country;
 }
