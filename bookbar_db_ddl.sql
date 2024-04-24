@@ -124,3 +124,29 @@ CREATE TABLE credit_cards (
     PRIMARY KEY (card_ID),
     FOREIGN KEY (user_ID) REFERENCES user(user_ID)
 );
+
+CREATE TABLE book_file (
+	book_file_ID INT NOT NULL AUTO_INCREMENT,
+    filename VARCHAR(255),
+    size BIGINT,
+    format VARCHAR(255),
+    isbn BIGINT,
+    PRIMARY KEY (book_file_ID),
+    FOREIGN KEY (isbn) REFERENCES book(isbn)
+);
+
+CREATE TABLE gift_cards ( 
+	gift_card_ID INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    value INT NOT NULL,
+    PRIMARY KEY (gift_card_ID)
+);
+
+CREATE TABLE user_gift_cards (
+	user_ID INT,
+    gift_card_ID INT,
+    date DATETIME,
+    PRIMARY KEY (user_ID, gift_card_ID),
+    FOREIGN KEY (user_ID) REFERENCES user (user_ID),
+    FOREIGN KEY (gift_card_ID) REFERENCES gift_cards (gift_card_ID)
+);
