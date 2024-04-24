@@ -17,4 +17,9 @@ public class UserDto {
     private String email;
     private String password;
     private UserRole role;
+    private Double balance;
+    private String street;
+    private String city;
+    private String country;
+
 }

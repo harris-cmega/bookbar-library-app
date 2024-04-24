@@ -65,11 +65,11 @@ CREATE TABLE book_category (
 
 CREATE TABLE user (
 	user_ID INT NOT NULL AUTO_INCREMENT,
-    username VARCHAR(255),
-    email VARCHAR(255),
-    password VARCHAR(255),
+    username VARCHAR(255) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
     balance DECIMAL(8,2) DEFAULT 0.00,
-    user_type VARCHAR(255) DEFAULT 'user',
+    role ENUM('USER', 'ADMIN') NOT NULL DEFAULT 'user',
     street VARCHAR(255),
     city VARCHAR(255),
     country VARCHAR(255),

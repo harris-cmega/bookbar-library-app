@@ -17,10 +17,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 public class User implements UserDetails {
 
     @Id
+    @Column(name = "user_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -34,8 +35,27 @@ public class User implements UserDetails {
     private String email;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "ENUM('USER', 'ADMIN') default 'USER'")
     private UserRole role;
+
+    @Column(columnDefinition = "DECIMAL(8,2) default '0.00'")
+    private Double balance;
+
+    private String street;
+    private String city;
+    private String country;
+
+
+    public User(String username, String email, String password, UserRole role, Double balance, String street, String city, String country) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.balance = balance;
+        this.street = street;
+        this.city = city;
+        this.country = country;
+    }
 
     public User(String username, String email, String password, UserRole role) {
         this.username = username;
