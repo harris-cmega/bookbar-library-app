@@ -1,3 +1,7 @@
+create database bookbar;
+
+use bookbar;
+
 CREATE TABLE library(
     library_ID INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(255),
@@ -65,11 +69,11 @@ CREATE TABLE book_category (
 
 CREATE TABLE user (
 	user_ID INT NOT NULL AUTO_INCREMENT,
-    username VARCHAR(255),
-    email VARCHAR(255),
-    password VARCHAR(255),
+    username VARCHAR(255) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
     balance DECIMAL(8,2) DEFAULT 0.00,
-    user_type VARCHAR(255) DEFAULT 'user',
+    role ENUM('USER', 'ADMIN') NOT NULL DEFAULT 'user',
     street VARCHAR(255),
     city VARCHAR(255),
     country VARCHAR(255),
@@ -98,11 +102,18 @@ CREATE TABLE subscription (
     subscription_ID INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(255),
     price DECIMAL(6,2),
-    start_time DATETIME,
-    end_time DATETIME,
+    PRIMARY KEY (subscription_ID)
+);
+
+CREATE TABLE user_subscriptions (
+	user_subscription_ID INT NOT NULL AUTO_INCREMENT,
     user_ID INT,
-    PRIMARY KEY (subscription_ID),
-    FOREIGN KEY (user_ID) REFERENCES user(user_ID)
+    subscription_ID INT,
+    start_date DATETIME,
+    end_date DATETIME,
+    PRIMARY KEY (user_subscription_ID),
+    FOREIGN KEY (user_ID) REFERENCES user (user_ID),
+    FOREIGN KEY (subscription_ID) REFERENCES subscription (subscription_ID)
 );
 
 CREATE TABLE rating (
@@ -123,4 +134,30 @@ CREATE TABLE credit_cards (
     card_number VARCHAR(20),
     PRIMARY KEY (card_ID),
     FOREIGN KEY (user_ID) REFERENCES user(user_ID)
+);
+
+CREATE TABLE book_file (
+	book_file_ID INT NOT NULL AUTO_INCREMENT,
+    filename VARCHAR(255),
+    size BIGINT,
+    format VARCHAR(255),
+    isbn BIGINT,
+    PRIMARY KEY (book_file_ID),
+    FOREIGN KEY (isbn) REFERENCES book(isbn)
+);
+
+CREATE TABLE gift_cards ( 
+	gift_card_ID INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    value INT NOT NULL,
+    PRIMARY KEY (gift_card_ID)
+);
+
+CREATE TABLE user_gift_cards (
+	user_ID INT,
+    gift_card_ID INT,
+    date DATETIME,
+    PRIMARY KEY (user_ID, gift_card_ID),
+    FOREIGN KEY (user_ID) REFERENCES user (user_ID),
+    FOREIGN KEY (gift_card_ID) REFERENCES gift_cards (gift_card_ID)
 );

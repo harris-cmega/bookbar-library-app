@@ -49,6 +49,10 @@ public class UserServiceImpl implements UserService {
        user.setEmail(updatedUser.getEmail());
        user.setUsername(updatedUser.getUsername());
        user.setPassword(updatedUser.getPassword());
+       user.setBalance(updatedUser.getBalance());
+       user.setCity(updatedUser.getCity());
+       user.setCountry(updatedUser.getCountry());
+       user.setStreet(updatedUser.getStreet());
 
       User updatedUserObj =  userRepository.save(user);
 
@@ -58,9 +62,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long userId) {
 
+        System.out.println("here");
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new ResourceNotFoundException("User with this id does not exist " + userId)
         );
+        System.out.println("here %s" + user);
 
         userRepository.deleteById(userId);
 
