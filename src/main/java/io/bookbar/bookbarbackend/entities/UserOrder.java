@@ -13,14 +13,21 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "user_orders")
 public class UserOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "order_ID")
     private Long id;
+
+    @Column(name = "date")
     private LocalDateTime date;
+
+    @Column(name = "total_price")
     private Double totalPrice;
-    @ManyToOne
-    private User user;
+
+    @Column(name = "user_ID")
+    private Long userID;
 
     public Long getId() {
         return id;
@@ -46,11 +53,9 @@ public class UserOrder {
         this.totalPrice = totalPrice;
     }
 
-    public User getUser() {
-        return user;
-    }
+    public Long getUserID() { return userID; }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+    public void setUserID(Long userID) { this.userID = userID; }
+
+
 }
