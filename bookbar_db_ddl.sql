@@ -1,3 +1,7 @@
+create database bookbar;
+
+use bookbar;
+
 CREATE TABLE library(
     library_ID INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(255),
@@ -98,11 +102,18 @@ CREATE TABLE subscription (
     subscription_ID INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(255),
     price DECIMAL(6,2),
-    start_time DATETIME,
-    end_time DATETIME,
+    PRIMARY KEY (subscription_ID)
+);
+
+CREATE TABLE user_subscriptions (
+	user_subscription_ID INT NOT NULL AUTO_INCREMENT,
     user_ID INT,
-    PRIMARY KEY (subscription_ID),
-    FOREIGN KEY (user_ID) REFERENCES user(user_ID)
+    subscription_ID INT,
+    start_date DATETIME,
+    end_date DATETIME,
+    PRIMARY KEY (user_subscription_ID),
+    FOREIGN KEY (user_ID) REFERENCES user (user_ID),
+    FOREIGN KEY (subscription_ID) REFERENCES subscription (subscription_ID)
 );
 
 CREATE TABLE rating (
