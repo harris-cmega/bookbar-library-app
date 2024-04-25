@@ -11,7 +11,11 @@ public class UserMapper {
                 user.getUsername(),
                 user.getEmail(),
                 user.getPassword(),
-                user.getRole()
+                user.getRole(),
+                user.getBalance(),
+                user.getStreet(),
+                user.getCity(),
+                user.getCountry()
         );
     }
 
@@ -20,7 +24,11 @@ public class UserMapper {
                 userDto.getUsername(),
                 userDto.getEmail(),
                 userDto.getPassword(),
-                userDto.getRole()
+                userDto.getRole(),
+                userDto.getBalance(),
+                userDto.getStreet(),
+                userDto.getCity(),
+                userDto.getCountry()
         );
     }
 }
