@@ -50,6 +50,8 @@ public class Books {
     @JoinColumn(name = "library_ID")
     private Library libraryID;
 
-    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "publisher_ID")
+    private Publisher publisherID;
 
 }

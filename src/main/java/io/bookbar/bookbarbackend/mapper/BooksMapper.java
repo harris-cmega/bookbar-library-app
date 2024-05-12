@@ -16,7 +16,8 @@ public class BooksMapper {
                 books.getPrice(),
                 books.getDescription(),
                 books.getAuthorID(),
-                books.getLibraryID()
+                books.getLibraryID(),
+                books.getPublisherID()
         );
     }
 
@@ -31,7 +32,8 @@ public class BooksMapper {
                 booksDto.getPrice(),
                 booksDto.getDescription(),
                 booksDto.getAuthorID(),
-                booksDto.getLibraryID()
+                booksDto.getLibraryID(),
+                booksDto.getPublisherID()
         );
     }
 }

@@ -2,6 +2,7 @@ package io.bookbar.bookbarbackend.dto;
 
 import io.bookbar.bookbarbackend.entities.Author;
 import io.bookbar.bookbarbackend.entities.Library;
+import io.bookbar.bookbarbackend.entities.Publisher;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,4 +35,6 @@ public class BooksDto {
     private Author authorID;
 
     private Library libraryID;
+
+    private Publisher publisherID;
 }
