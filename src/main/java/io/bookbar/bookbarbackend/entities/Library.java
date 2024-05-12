@@ -1,23 +1,23 @@
 package io.bookbar.bookbarbackend.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Blob;
 
 @Data
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "author")
-public class Author {
+@Table(name = "library")
+public class Library {
     @Id
     @GeneratedValue
-    private int id;
+    private long id;
 
-    @Column(name= "name")
+    @Column(name = "name")
     private String name;
 
     @Column(name = "email")
@@ -26,12 +26,15 @@ public class Author {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "description")
-    private String description;
-
     @Lob
     @Column(name = "image")
     private Blob image;
+
+    @Column(name = "street")
+    private String street;
+
+    @Column(name = "city")
+    private String city;
 
     @Column(name = "country")
     private String country;

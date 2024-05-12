@@ -26,23 +26,26 @@ public class AuthorService {
         return authorRepo.findAll();
     }
 
-    public Author getAuthorById(long id){
+    public Author getAuthorById(int id){
         return authorRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Author with given id does not exist: " + id));
     }
 
-    public Author getAuthorByName(String author_name){
-        return authorRepo.findByName(author_name);
+    public Author getAuthorByName(String name){
+        return authorRepo.findByName(name);
     }
 
     public Author updateAuthor(Author author){
         Author existingAuthor = authorRepo.findById(author.getId()).orElseThrow(() -> new ResourceNotFoundException("Author with given id does not exist"));
         existingAuthor.setName(author.getName());
-        existingAuthor.setBio(author.getBio());
+        existingAuthor.setEmail(author.getEmail());
+        existingAuthor.setPassword(author.getPassword());
+        existingAuthor.setDescription(author.getDescription());
+        existingAuthor.setImage(author.getImage());
         existingAuthor.setCountry(author.getCountry());
         return authorRepo.save(existingAuthor);
     }
 
-    public void deleteAuthorById(long id){
+    public void deleteAuthorById(int id){
         authorRepo.deleteById(id);
     }
 

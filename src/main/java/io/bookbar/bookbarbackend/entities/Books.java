@@ -1,41 +1,57 @@
 package io.bookbar.bookbarbackend.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.sql.Blob;
 
 @Entity
 @Table(name = "books")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Books {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int ISBN;
 
-    @Column(nullable = false)
+    @Column(name = "title")
     private String title;
 
-    @ManyToOne
-    @JoinColumn(name = "author_id", nullable = false)
-    private Author author;
+    @Column(name = "language")
+    private String language;
 
-    @Column(nullable = false)
-    private String publisher;
+    @Column(name = "publication_date")
+    private String publicationDate;
 
-    @Column(nullable = false, unique = true)
-    private String ISBN;
+    @Lob
+    @Column(name = "image")
+    private Blob image;
 
-    // konstruktore pa arguments
-    public Books() {
-    }
+    @Column(name = "page_number")
+    private int pageNumber;
 
+    @Column(name = "price")
+    private double price;
 
-    public Books(Long id, String title, Author author, String publisher, String isbn) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.publisher = publisher;
-        this.ISBN = ISBN;
-    }
+    @Column(name = "descrition")
+    private String description;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_ID")
+    private Author authorID;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "library_ID")
+    private Library libraryID;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "publisher_ID")
+    private Publisher publisherID;
+
 }
