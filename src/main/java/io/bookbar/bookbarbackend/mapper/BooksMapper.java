@@ -7,21 +7,31 @@ public class BooksMapper {
 
     public static BooksDto mapToBooksDto(Books books) {
         return new BooksDto(
-                books.getId(),
+                books.getISBN(),
                 books.getTitle(),
-                books.getAuthor(),
-                books.getPublisher(),
-                books.getISBN()
+                books.getLanguage(),
+                books.getPublicationDate(),
+                books.getImage(),
+                books.getPageNumber(),
+                books.getPrice(),
+                books.getDescription(),
+                books.getAuthorID(),
+                books.getLibraryID()
         );
     }
 
     public static Books mapToBooks(BooksDto booksDto) {
         return new Books(
-                booksDto.getId(),
+                booksDto.getISBN(),
                 booksDto.getTitle(),
-                booksDto.getAuthor(),
-                booksDto.getPublisher(),
-                booksDto.getISBN()
+                booksDto.getLanguage(),
+                booksDto.getPublicationDate(),
+                booksDto.getImage(),
+                booksDto.getPageNumber(),
+                booksDto.getPrice(),
+                booksDto.getDescription(),
+                booksDto.getAuthorID(),
+                booksDto.getLibraryID()
         );
     }
 }

@@ -47,8 +47,7 @@ public class BooksServiceImpl implements BooksService {
         );
 
         books.setTitle(updatedBook.getTitle());
-        books.setAuthor(updatedBook.getAuthor());
-        books.setPublisher(updatedBook.getPublisher());
+        books.setAuthorID(updatedBook.getAuthorID());
         books.setISBN(updatedBook.getISBN());
 
         Books updatedBooksObj = booksRepository.save(books);
