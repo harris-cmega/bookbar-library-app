@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Blob;
+import java.time.LocalDate;
 
 @Data
 @Getter
@@ -11,28 +12,21 @@ import java.sql.Blob;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "author")
+@Table(name = "authors", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 public class Author {
+
     @Id
-    @GeneratedValue
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(name= "name")
     private String name;
-
-    @Column(name = "email")
     private String email;
+    private String biography;
+    private String nationality;
 
-    @Column(name = "password")
-    private String password;
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
 
-    @Column(name = "description")
-    private String description;
-
-    @Lob
-    @Column(name = "image")
-    private Blob image;
-
-    @Column(name = "country")
-    private String country;
+    @Column(name = "death_date")
+    private LocalDate deathDate;
 }

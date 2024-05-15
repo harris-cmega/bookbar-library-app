@@ -1,17 +1,13 @@
 package io.bookbar.bookbarbackend.service;
 
-import io.bookbar.bookbarbackend.dto.CreditCardDto;
+import io.bookbar.bookbarbackend.dto.CreditCardDTO;
 
 import java.util.List;
 
 public interface CreditCardService {
-    CreditCardDto createCreditCard(CreditCardDto creditCardDto);
-
-    CreditCardDto getCreditCardById(Long id);
-
-    List<CreditCardDto> getAllCreditCards();
-
-    CreditCardDto updateCreditCard(Long id, CreditCardDto updatedCreditCard);
-
+    CreditCardDTO createCreditCard(CreditCardDTO creditCardDTO);
+    CreditCardDTO getCreditCardById(Long id);
+    List<CreditCardDTO> getAllCreditCards();
+    CreditCardDTO updateCreditCard(Long id, CreditCardDTO creditCardDTO);
     void deleteCreditCard(Long id);
 }

@@ -1,163 +1,168 @@
-create database bookbar;
+CREATE DATABASE bookbar;
 
-use bookbar;
+USE bookbar;
 
-CREATE TABLE library(
-    library_ID INT NOT NULL AUTO_INCREMENT,
-    name VARCHAR(255),
-    email VARCHAR(255) NULL,
-    password VARCHAR(255) NULL,
-    image longblob NULL,
-    street VARCHAR(255),
+CREATE TABLE libraries (
+   id BIGINT NOT NULL AUTO_INCREMENT,
+   name VARCHAR(255) NOT NULL,
+   address VARCHAR(255),
+   city VARCHAR(255),
+   state VARCHAR(255),
+   zip_code VARCHAR(20),
+   phone VARCHAR(20),
+   email VARCHAR(255),
+   opening_hours VARCHAR(255),
+   PRIMARY KEY (id)
+);
+
+CREATE TABLE publishers (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    address VARCHAR(255),
     city VARCHAR(255),
-    country VARCHAR(255),
-    PRIMARY KEY (library_ID)
-);
-
-CREATE TABLE publisher (
-    publisher_ID INT NOT NULL AUTO_INCREMENT,
-    name VARCHAR(255),
+    state VARCHAR(255),
+    zip_code VARCHAR(20),
+    phone VARCHAR(20),
     email VARCHAR(255),
-    password VARCHAR(255),
-    country VARCHAR(255),
-    phone_number LONG,
-    PRIMARY KEY (publisher_ID)
+    website VARCHAR(255),
+    PRIMARY KEY (id)
 );
 
-CREATE TABLE author (
-	author_ID INT NOT NULL AUTO_INCREMENT,
-    name VARCHAR(255),
-    email VARCHAR(255) NULL,
-    password VARCHAR(255) null,
-    description VARCHAR(255),
-    image longblob NULL,
-    country VARCHAR(255),
-    PRIMARY KEY (author_ID)
+CREATE TABLE authors (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255),
+    biography TEXT,
+    nationality VARCHAR(255),
+    birth_date DATE,
+    death_date DATE,
+    PRIMARY KEY (id),
+    UNIQUE (name)
 );
 
-CREATE TABLE book (
-	isbn BIGINT NOT NULL AUTO_INCREMENT,
-    title VARCHAR(255),
+CREATE TABLE books (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
     language VARCHAR(255),
     publication_date DATE,
     image LONGBLOB,
     page_number INT,
-    price DECIMAL(5,2),
-    description VARCHAR(255),
-    author_ID INT,
-    library_ID INT,
-    publisher_ID INT,
-    PRIMARY KEY (isbn),
-    FOREIGN KEY (author_ID) REFERENCES author(author_ID),
-    FOREIGN KEY (library_ID) REFERENCES library(library_ID),
-    FOREIGN KEY (publisher_ID) REFERENCES publisher(publisher_ID)
+    price DECIMAL(8,2),
+    description TEXT,
+    author_id BIGINT,
+    library_id BIGINT,
+    publisher_id BIGINT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (author_id) REFERENCES authors(id),
+    FOREIGN KEY (library_id) REFERENCES libraries(id),
+    FOREIGN KEY (publisher_id) REFERENCES publishers(id)
 );
 
-CREATE TABLE category(
-	category_ID INT NOT NULL AUTO_INCREMENT,
-    name VARCHAR(255),
-    PRIMARY KEY(category_ID)
+CREATE TABLE categories (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
 );
 
-CREATE TABLE book_category (
+CREATE TABLE book_categories (
     book_id BIGINT NOT NULL,
-    category_id INT NOT NULL,
+    category_id BIGINT NOT NULL,
     PRIMARY KEY (book_id, category_id),
-    FOREIGN KEY (book_id) REFERENCES book(isbn),
-    FOREIGN KEY (category_id) REFERENCES category(category_ID)
+    FOREIGN KEY (book_id) REFERENCES books(id),
+    FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 
-CREATE TABLE user (
-	user_ID INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE users (
+    id BIGINT NOT NULL AUTO_INCREMENT,
     username VARCHAR(255) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     balance DECIMAL(8,2) DEFAULT 0.00,
-    role ENUM('USER', 'ADMIN') NOT NULL DEFAULT 'user',
+    role ENUM('USER', 'ADMIN') NOT NULL DEFAULT 'USER',
     street VARCHAR(255),
     city VARCHAR(255),
     country VARCHAR(255),
-    PRIMARY KEY (user_ID)
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE user_orders (
-	order_ID INT NOT NULL,
+    id BIGINT NOT NULL AUTO_INCREMENT,
     date DATETIME,
     total_price DECIMAL(8,2),
-    user_ID INT,
-    PRIMARY KEY (order_ID),
-    FOREIGN KEY (user_ID) REFERENCES user (user_ID)
+    user_id BIGINT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE book_order_details (
-    order_ID INT,
-    isbn BIGINT,
+    order_id BIGINT,
+    book_id BIGINT,
     quantity INT,
-    PRIMARY KEY (order_ID, isbn),
-    FOREIGN KEY (order_ID) REFERENCES user_orders(order_ID),
-    FOREIGN KEY (isbn) REFERENCES book(isbn)
+    PRIMARY KEY (order_id, book_id),
+    FOREIGN KEY (order_id) REFERENCES user_orders(id),
+    FOREIGN KEY (book_id) REFERENCES books(id)
 );
 
-CREATE TABLE subscription (
-    subscription_ID INT NOT NULL AUTO_INCREMENT,
-    name VARCHAR(255),
-    price DECIMAL(6,2),
-    PRIMARY KEY (subscription_ID)
+CREATE TABLE subscriptions (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    price DECIMAL(8,2),
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE user_subscriptions (
-	user_subscription_ID INT NOT NULL AUTO_INCREMENT,
-    user_ID INT,
-    subscription_ID INT,
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    user_id BIGINT,
+    subscription_id BIGINT,
     start_date DATETIME,
     end_date DATETIME,
-    PRIMARY KEY (user_subscription_ID),
-    FOREIGN KEY (user_ID) REFERENCES user (user_ID),
-    FOREIGN KEY (subscription_ID) REFERENCES subscription (subscription_ID)
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (subscription_id) REFERENCES subscriptions(id)
 );
 
-CREATE TABLE rating (
-    rating_ID INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE ratings (
+    id BIGINT NOT NULL AUTO_INCREMENT,
     review DECIMAL(2,1),
-    comment VARCHAR(255),
+    comment TEXT,
     date DATETIME,
-    isbn BIGINT,
-    user_ID INT,
-    PRIMARY KEY (rating_ID),
-    FOREIGN KEY (isbn) REFERENCES book(isbn),
-    FOREIGN KEY (user_ID) REFERENCES user(user_ID)
+    book_id BIGINT,
+    user_id BIGINT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (book_id) REFERENCES books(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE credit_cards (
-    card_ID INT NOT NULL AUTO_INCREMENT,
-    user_ID INT,
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    user_id BIGINT,
     card_number VARCHAR(20),
-    PRIMARY KEY (card_ID),
-    FOREIGN KEY (user_ID) REFERENCES user(user_ID)
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-CREATE TABLE book_file (
-	book_file_ID INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE book_files (
+    id BIGINT NOT NULL AUTO_INCREMENT,
     filename VARCHAR(255),
     size BIGINT,
     format VARCHAR(255),
-    isbn BIGINT,
-    PRIMARY KEY (book_file_ID),
-    FOREIGN KEY (isbn) REFERENCES book(isbn)
+    book_id BIGINT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (book_id) REFERENCES books(id)
 );
 
-CREATE TABLE gift_cards ( 
-	gift_card_ID INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE gift_cards (
+    id BIGINT NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     value INT NOT NULL,
-    PRIMARY KEY (gift_card_ID)
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE user_gift_cards (
-	user_ID INT,
-    gift_card_ID INT,
+    user_id BIGINT,
+    gift_card_id BIGINT,
     date DATETIME,
-    PRIMARY KEY (user_ID, gift_card_ID),
-    FOREIGN KEY (user_ID) REFERENCES user (user_ID),
-    FOREIGN KEY (gift_card_ID) REFERENCES gift_cards (gift_card_ID)
+    PRIMARY KEY (user_id, gift_card_id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (gift_card_id) REFERENCES gift_cards(id)
 );

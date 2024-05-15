@@ -21,6 +21,6 @@ public class CreditCard {
     @Column(name = "card_number")
     private String cardNumber;
 
-    @Column(name = "user_ID")
+    @Column(name = "user_id")
     private Long userID;
 }

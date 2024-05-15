@@ -1,49 +1,43 @@
 package io.bookbar.bookbarbackend.controller;
 
-
-import io.bookbar.bookbarbackend.config.auth.TokenProvider;
-import io.bookbar.bookbarbackend.dto.JwtDto;
-import io.bookbar.bookbarbackend.dto.SignInDto;
-import io.bookbar.bookbarbackend.dto.SignUpDto;
+import io.bookbar.bookbarbackend.dto.UserLoginDTO;
+import io.bookbar.bookbarbackend.dto.UserRegistrationDTO;
+import io.bookbar.bookbarbackend.dto.UserResponseDTO;
 import io.bookbar.bookbarbackend.entities.User;
+import io.bookbar.bookbarbackend.mapper.UserMapper;
 import io.bookbar.bookbarbackend.service.AuthService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private AuthService service;
-    @Autowired
-    private TokenProvider tokenService;
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@RequestBody SignUpDto data) {
-        service.signUp(data);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    private final AuthService authService;
 
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<UserResponseDTO> registerUser(@RequestBody @Valid UserRegistrationDTO userRegistrationDTO) {
+        try {
+            User registeredUser = authService.register(userRegistrationDTO);
+            UserResponseDTO responseDTO = UserMapper.toUserResponseDTO(registeredUser);
+            return ResponseEntity.ok(responseDTO);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtDto> signIn(@RequestBody SignInDto data) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.username(), data.password());
-
-        var authUser = authenticationManager.authenticate(usernamePassword);
-
-        var accessToken = tokenService.generateAccessToken((User) authUser.getPrincipal());
-
-        return ResponseEntity.ok(new JwtDto(accessToken));
+    public ResponseEntity<String> loginUser(@RequestBody @Valid UserLoginDTO userLoginDTO) {
+        try {
+            String token = authService.authenticate(userLoginDTO);
+            return ResponseEntity.ok(token);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
-
 }

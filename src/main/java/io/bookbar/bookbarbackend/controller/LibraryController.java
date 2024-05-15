@@ -1,8 +1,9 @@
 package io.bookbar.bookbarbackend.controller;
 
-import io.bookbar.bookbarbackend.entities.Library;
+import io.bookbar.bookbarbackend.dto.LibraryDTO;
 import io.bookbar.bookbarbackend.service.LibraryService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,39 +12,38 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/libraries")
+@AllArgsConstructor
 public class LibraryController {
 
-    @Autowired
-    private LibraryService libraryService;
+    private final LibraryService libraryService;
 
     @PostMapping
-    public ResponseEntity<Library> createLibrary(@RequestBody Library library) {
-        Library createdLibrary = libraryService.createLibrary(library);
+    public ResponseEntity<LibraryDTO> createLibrary(@RequestBody @Valid LibraryDTO libraryDTO) {
+        LibraryDTO createdLibrary = libraryService.createLibrary(libraryDTO);
         return new ResponseEntity<>(createdLibrary, HttpStatus.CREATED);
     }
 
-    @GetMapping()
-    public ResponseEntity<List<Library>> getLibraries() {
-        List<Library> libraries = libraryService.getLibraries();
-        return new ResponseEntity<>(libraries, HttpStatus.OK);
+    @GetMapping("/{id}")
+    public ResponseEntity<LibraryDTO> getLibraryById(@PathVariable Long id) {
+        LibraryDTO libraryDTO = libraryService.getLibraryById(id);
+        return ResponseEntity.ok(libraryDTO);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Library> getLibraryById(@PathVariable long id) {
-        Library library = libraryService.getLibraryById(id);
-        return new ResponseEntity<>(library, HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<List<LibraryDTO>> getAllLibraries() {
+        List<LibraryDTO> libraries = libraryService.getAllLibraries();
+        return ResponseEntity.ok(libraries);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Library> updateLibrary(@PathVariable long id, @RequestBody Library library) {
-        library.setId(id);
-        Library updatedLibrary = libraryService.updateLibrary(library);
-        return new ResponseEntity<>(updatedLibrary, HttpStatus.OK);
+    public ResponseEntity<LibraryDTO> updateLibrary(@PathVariable Long id, @RequestBody @Valid LibraryDTO libraryDTO) {
+        LibraryDTO updatedLibrary = libraryService.updateLibrary(id, libraryDTO);
+        return ResponseEntity.ok(updatedLibrary);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteLibraryById(@PathVariable long id) {
-        libraryService.deleteLibraryById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<Void> deleteLibrary(@PathVariable Long id) {
+        libraryService.deleteLibrary(id);
+        return ResponseEntity.noContent().build();
     }
 }

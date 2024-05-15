@@ -1,58 +1,61 @@
 package io.bookbar.bookbarbackend.controller;
 
-import io.bookbar.bookbarbackend.dto.UserDto;
+
+import io.bookbar.bookbarbackend.dto.UserRegistrationDTO;
+import io.bookbar.bookbarbackend.dto.UserResponseDTO;
+import io.bookbar.bookbarbackend.entities.User;
+import io.bookbar.bookbarbackend.mapper.UserMapper;
 import io.bookbar.bookbarbackend.service.UserService;
-import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-@AllArgsConstructor
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
-    @PostMapping
-
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto){
-        if (userDto.getPassword() != null) {
-            String encryptedPassword = new BCryptPasswordEncoder().encode(userDto.getPassword());
-            userDto.setPassword(encryptedPassword);
-        }
-       UserDto savedUser = userService.createUser(userDto);
-       return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable("id") Long userId){
-       UserDto userDto =  userService.getUserById(userId);
-       return ResponseEntity.ok(userDto);
+    @PostMapping
+    public ResponseEntity<UserResponseDTO> createUser(@RequestBody @Valid UserRegistrationDTO userRegistrationDTO) {
+        User createdUser = userService.createUser(userRegistrationDTO);
+        UserResponseDTO responseDTO = UserMapper.toUserResponseDTO(createdUser);
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
+        User user = userService.getUserById(id);
+        UserResponseDTO responseDTO = UserMapper.toUserResponseDTO(user);
+        return ResponseEntity.ok(responseDTO);
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> getAllUsers(){
-        List<UserDto> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        List<UserResponseDTO> responseDTOs = users.stream()
+                .map(UserMapper::toUserResponseDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(responseDTOs);
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable("id") Long userId,@RequestBody UserDto updatedUser){
-        if (updatedUser.getPassword() != null) {
-            String encryptedPassword = new BCryptPasswordEncoder().encode(updatedUser.getPassword());
-            updatedUser.setPassword(encryptedPassword);
-        }
-        UserDto userDto = userService.updateUser(userId, updatedUser);
-        return ResponseEntity.ok(userDto);
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @RequestBody @Valid UserRegistrationDTO userRegistrationDTO) {
+        User updatedUser = userService.updateUser(id, userRegistrationDTO);
+        UserResponseDTO responseDTO = UserMapper.toUserResponseDTO(updatedUser);
+        return ResponseEntity.ok(responseDTO);
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") Long userId){
-        userService.deleteUser(userId);
-        return ResponseEntity.ok("User deleted successfully!");
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 }
