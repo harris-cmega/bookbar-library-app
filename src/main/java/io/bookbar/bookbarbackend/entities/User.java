@@ -2,37 +2,32 @@ package io.bookbar.bookbarbackend.entities;
 
 import io.bookbar.bookbarbackend.enums.UserRole;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-
-import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Collection;
-import java.util.stream.Collectors;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@Entity
-@Table(name = "user")
-public class User implements UserDetails {
+import java.util.Collection;
+import java.util.List;
 
+@Entity
+@Data
+@NoArgsConstructor
+@Table(name = "users")
+public class User implements UserDetails {
     @Id
-    @Column(name = "user_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false)
-    private String password;
-
     @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
+    private String password;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "ENUM('USER', 'ADMIN') default 'USER'")
@@ -41,28 +36,14 @@ public class User implements UserDetails {
     @Column(columnDefinition = "DECIMAL(8,2) default '0.00'")
     private Double balance;
 
+    @Column(length = 255)
     private String street;
+
+    @Column(length = 100)
     private String city;
+
+    @Column(length = 100)
     private String country;
-
-
-    public User(String username, String email, String password, UserRole role, Double balance, String street, String city, String country) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.balance = balance;
-        this.street = street;
-        this.city = city;
-        this.country = country;
-    }
-
-    public User(String username, String email, String password, UserRole role) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
