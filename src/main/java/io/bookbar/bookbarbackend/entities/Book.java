@@ -6,21 +6,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Blob;
-
-@Entity
-@Table(name = "books")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Books {
-
+@Entity
+@Table(name = "books")
+public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int ISBN;
+    private Long id;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "language")
@@ -31,7 +28,7 @@ public class Books {
 
     @Lob
     @Column(name = "image")
-    private Blob image;
+    private byte[] image;
 
     @Column(name = "page_number")
     private int pageNumber;
@@ -39,19 +36,18 @@ public class Books {
     @Column(name = "price")
     private double price;
 
-    @Column(name = "descrition")
+    @Column(name = "description")
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_ID")
-    private Author authorID;
+    @JoinColumn(name = "author_id")
+    private Author author;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "library_ID")
-    private Library libraryID;
+    @JoinColumn(name = "library_id")
+    private Library library;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "publisher_ID")
-    private Publisher publisherID;
-
+    @JoinColumn(name = "publisher_id")
+    private Publisher publisher;
 }

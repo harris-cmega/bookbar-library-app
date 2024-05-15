@@ -2,40 +2,43 @@ package io.bookbar.bookbarbackend.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.sql.Blob;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@Table(name = "library")
+@Table(name = "libraries")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Library {
-    @Id
-    @GeneratedValue
-    private long id;
 
-    @Column(name = "name")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "password")
-    private String password;
-
-    @Lob
-    @Column(name = "image")
-    private Blob image;
-
-    @Column(name = "street")
-    private String street;
+    @Column(name = "address")
+    private String address;
 
     @Column(name = "city")
     private String city;
 
-    @Column(name = "country")
-    private String country;
+    @Column(name = "state")
+    private String state;
+
+    @Column(name = "zip_code")
+    private String zipCode;
+
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "opening_hours")
+    private String openingHours;
 }

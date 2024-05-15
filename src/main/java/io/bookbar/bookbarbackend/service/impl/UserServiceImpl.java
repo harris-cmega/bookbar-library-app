@@ -1,75 +1,60 @@
 package io.bookbar.bookbarbackend.service.impl;
 
-import io.bookbar.bookbarbackend.dto.UserDto;
+import io.bookbar.bookbarbackend.dto.UserRegistrationDTO;
 import io.bookbar.bookbarbackend.entities.User;
 import io.bookbar.bookbarbackend.exception.ResourceNotFoundException;
 import io.bookbar.bookbarbackend.mapper.UserMapper;
 import io.bookbar.bookbarbackend.repository.UserRepository;
 import io.bookbar.bookbarbackend.service.UserService;
-import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
-    @Override
-    public UserDto createUser(UserDto userDto) {
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-        User user = UserMapper.mapToUser(userDto);
-        User savedUser = userRepository.save(user);
-        return UserMapper.mapToUserDto(savedUser);
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public UserDto getUserById(Long userId) {
-       User user =  userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User with given id does not exist: " + userId));
-        return UserMapper.mapToUserDto(user);
+    public User createUser(UserRegistrationDTO userRegistrationDTO) {
+        User user = UserMapper.toUser(userRegistrationDTO, passwordEncoder);
+        return userRepository.save(user);
     }
 
     @Override
-    public List<UserDto> getAllUsers() {
-       List<User> users = userRepository.findAll();
-
-        return users.stream().map((user) -> UserMapper.mapToUserDto(user))
-                .collect(Collectors.toList());
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
     }
 
     @Override
-    public UserDto updateUser(Long userId, UserDto updatedUser) {
-       User user = userRepository.findById(userId).orElseThrow(
-                () -> new ResourceNotFoundException("User with this id does not exist " + userId)
-        );
-
-       user.setEmail(updatedUser.getEmail());
-       user.setUsername(updatedUser.getUsername());
-       user.setPassword(updatedUser.getPassword());
-       user.setBalance(updatedUser.getBalance());
-       user.setCity(updatedUser.getCity());
-       user.setCountry(updatedUser.getCountry());
-       user.setStreet(updatedUser.getStreet());
-
-      User updatedUserObj =  userRepository.save(user);
-
-        return UserMapper.mapToUserDto(updatedUserObj);
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
     @Override
-    public void deleteUser(Long userId) {
-
-        System.out.println("here");
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new ResourceNotFoundException("User with this id does not exist " + userId)
-        );
-        System.out.println("here %s" + user);
-
-        userRepository.deleteById(userId);
-
+    public User updateUser(Long id, UserRegistrationDTO userRegistrationDTO) {
+        User existingUser = getUserById(id);
+        existingUser.setUsername(userRegistrationDTO.getUsername());
+        existingUser.setEmail(userRegistrationDTO.getEmail());
+        existingUser.setPassword(passwordEncoder.encode(userRegistrationDTO.getPassword()));
+        existingUser.setStreet(userRegistrationDTO.getStreet());
+        existingUser.setCity(userRegistrationDTO.getCity());
+        existingUser.setCountry(userRegistrationDTO.getCountry());
+        return userRepository.save(existingUser);
     }
 
+    @Override
+    public void deleteUser(Long id) {
+        User existingUser = getUserById(id);
+        userRepository.delete(existingUser);
+    }
 }
+

@@ -1,17 +1,14 @@
 package io.bookbar.bookbarbackend.service;
 
-import io.bookbar.bookbarbackend.dto.UserDto;
-
+import io.bookbar.bookbarbackend.dto.UserRegistrationDTO;
+import io.bookbar.bookbarbackend.entities.User;
 import java.util.List;
 
 public interface UserService {
-    UserDto createUser(UserDto userDto);
-
-    UserDto getUserById(Long userId);
-
-    List<UserDto> getAllUsers();
-
-    UserDto updateUser(Long userId, UserDto updatedUser);
-
-    void deleteUser(Long userId);
+    User createUser(UserRegistrationDTO userRegistrationDTO);
+    User getUserById(Long id);
+    List<User> getAllUsers();
+    User updateUser(Long id, UserRegistrationDTO userRegistrationDTO);
+    void deleteUser(Long id);
 }
+

@@ -1,46 +1,49 @@
 package io.bookbar.bookbarbackend.controller;
 
-import io.bookbar.bookbarbackend.entities.Publisher;
+import io.bookbar.bookbarbackend.dto.PublisherDTO;
 import io.bookbar.bookbarbackend.service.PublisherService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/api/publishers")
+@AllArgsConstructor
 public class PublisherController {
 
-    @Autowired
-    private PublisherService publisherService;
+    private final PublisherService publisherService;
 
-    @PostMapping("/createPublisher")
-    public Publisher createPublisher(@RequestBody Publisher publisher) {
-        return publisherService.createPublisher(publisher);
+    @PostMapping
+    public ResponseEntity<PublisherDTO> createPublisher(@RequestBody @Valid PublisherDTO publisherDTO) {
+        PublisherDTO createdPublisher = publisherService.createPublisher(publisherDTO);
+        return new ResponseEntity<>(createdPublisher, HttpStatus.CREATED);
     }
 
-    @GetMapping("/publisher/{id}")
-    public Publisher getPublisher(@PathVariable int id){
-        return publisherService.getPublisherById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<PublisherDTO> getPublisherById(@PathVariable Long id) {
+        PublisherDTO publisherDTO = publisherService.getPublisherById(id);
+        return ResponseEntity.ok(publisherDTO);
     }
 
-    @GetMapping("/publishers")
-    public List<Publisher> getAllPublishers(){
-        return publisherService.getAllPublishers();
+    @GetMapping
+    public ResponseEntity<List<PublisherDTO>> getAllPublishers() {
+        List<PublisherDTO> publishers = publisherService.getAllPublishers();
+        return ResponseEntity.ok(publishers);
     }
 
-    @GetMapping("/publisher/{name}")
-    public Publisher getPublisherByName(@PathVariable String name){
-        return publisherService.getPublisherByName(name);
+    @PutMapping("/{id}")
+    public ResponseEntity<PublisherDTO> updatePublisher(@PathVariable Long id, @RequestBody @Valid PublisherDTO publisherDTO) {
+        PublisherDTO updatedPublisher = publisherService.updatePublisher(id, publisherDTO);
+        return ResponseEntity.ok(updatedPublisher);
     }
 
-    @PostMapping("/updatePublisher")
-    public Publisher updateAuthor(@RequestBody Publisher publisher) {
-        return publisherService.updatePublisher(publisher);
-    }
-
-    @DeleteMapping("deletePublisher/{id}")
-    public void deletePublisher(@PathVariable int id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePublisher(@PathVariable Long id) {
         publisherService.deletePublisher(id);
+        return ResponseEntity.noContent().build();
     }
 }
