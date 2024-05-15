@@ -28,34 +28,4 @@ public class UserOrder {
 
     @Column(name = "user_ID")
     private Long userID;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDateTime getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
-
-    public Double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(Double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public Long getUserID() { return userID; }
-
-    public void setUserID(Long userID) { this.userID = userID; }
-
-
 }
