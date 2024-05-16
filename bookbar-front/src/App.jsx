@@ -1,31 +1,24 @@
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import Navbar from "./components/Navbar";
-import CallToAction from './components/CallToAction';
-import Carousel from './components/Carousel';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Register from "./pages/Register.jsx";
-import Login from "./pages/Login.jsx";
-import Footer from "./components/Footer.jsx";
-import Home from "./pages/Home.jsx";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext.jsx';
+import HomePage from './pages/Home';
+import LoginPage from './pages/Login';
+import RegisterPage from './pages/Register';
+import Users from './pages/Users';
+import PrivateRoute from './components/PrivateRoute';
 
-const App = () => {
+function App() {
     return (
-        <>
-            <Router>
-                <Navbar />
-                <Routes>
-                    <Route path={"/"} element={<Home />} />
-                    <Route path="/signup" element={<Register />} />
-                    <Route path="/login" element={<Login />} />
-                </Routes>
-            </Router>
-            {/*<CallToAction />*/}
-            {/*<Carousel />*/}
-            <Footer />
-        </>
-    )
+        <AuthProvider>
+            <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/users" element={<PrivateRoute><Users /></PrivateRoute>} />
+                {/* Add more routes here */}
+            </Routes>
+        </AuthProvider>
+    );
 }
 
 export default App;
