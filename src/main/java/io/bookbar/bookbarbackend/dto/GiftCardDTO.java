@@ -1,16 +1,19 @@
 package io.bookbar.bookbarbackend.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class GiftCardDTO {
-    private long id;
+    private Long id;
+
+    @NotBlank(message = "Name is mandatory")
     private String name;
+
+    @NotNull(message = "Value is mandatory")
     private int value;
 }
