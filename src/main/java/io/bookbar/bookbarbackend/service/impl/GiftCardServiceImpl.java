@@ -2,7 +2,7 @@ package io.bookbar.bookbarbackend.service.impl;
 
 import io.bookbar.bookbarbackend.dto.GiftCardDTO;
 import io.bookbar.bookbarbackend.entities.GiftCard;
-import io.bookbar.bookbarbackend.exception.GiftCardNotFoundException;
+import io.bookbar.bookbarbackend.exception.ResourceNotFoundException;
 import io.bookbar.bookbarbackend.mapper.GiftCardMapper;
 import io.bookbar.bookbarbackend.repository.GiftCardRepository;
 import io.bookbar.bookbarbackend.service.GiftCardService;
@@ -16,53 +16,44 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class GiftCardServiceImpl implements GiftCardService {
 
-    private GiftCardRepository giftCardRepository;
+    private final GiftCardRepository giftCardRepository;
 
     @Override
-    public GiftCardDTO createGiftCard(GiftCardDTO giftCardDTO) {
-        GiftCard giftCard = GiftCardMapper.mapToGiftCard(giftCardDTO);
+    public GiftCardDTO createGiftCard(GiftCardDTO giftCardDto) {
+        GiftCard giftCard = GiftCardMapper.toGiftCardEntity(giftCardDto);
         GiftCard savedGiftCard = giftCardRepository.save(giftCard);
-
-        return GiftCardMapper.mapToGiftCardDTO(savedGiftCard);
+        return GiftCardMapper.toGiftCardDto(savedGiftCard);
     }
 
     @Override
-    public GiftCardDTO getGiftCardById(long giftCardId) {
-        GiftCard giftCard = giftCardRepository.findById(giftCardId)
-                .orElseThrow(() -> new GiftCardNotFoundException("No Gift Card is existing with the given ID" + giftCardId));
-
-        return GiftCardMapper.mapToGiftCardDTO(giftCard);
+    public GiftCardDTO getGiftCardById(Long id) {
+        GiftCard giftCard = giftCardRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("GiftCard not found"));
+        return GiftCardMapper.toGiftCardDto(giftCard);
     }
 
     @Override
     public List<GiftCardDTO> getAllGiftCards() {
         List<GiftCard> giftCards = giftCardRepository.findAll();
-
-        return giftCards.stream().map((giftCard -> GiftCardMapper.mapToGiftCardDTO(giftCard)))
+        return giftCards.stream()
+                .map(GiftCardMapper::toGiftCardDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public GiftCardDTO updateGiftCard(long giftCardId, GiftCardDTO updatedGiftCard) {
-        GiftCard giftCard = giftCardRepository.findById(giftCardId)
-                .orElseThrow(() -> new GiftCardNotFoundException("No Gift Card is existing with the given ID" + giftCardId));
-
-        giftCard.setName(updatedGiftCard.getName());
-        giftCard.setValue(updatedGiftCard.getValue());
-
-        GiftCard updatedGiftCardObj = giftCardRepository.save(giftCard);
-
-        return GiftCardMapper.mapToGiftCardDTO(updatedGiftCardObj);
+    public GiftCardDTO updateGiftCard(Long id, GiftCardDTO giftCardDto) {
+        GiftCard giftCard = giftCardRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("GiftCard not found"));
+        giftCard.setName(giftCardDto.getName());
+        giftCard.setValue(giftCardDto.getValue());
+        GiftCard updatedGiftCard = giftCardRepository.save(giftCard);
+        return GiftCardMapper.toGiftCardDto(updatedGiftCard);
     }
 
     @Override
-    public void deleteGiftCard(long giftCardId) {
-
-        GiftCard giftCard = giftCardRepository.findById(giftCardId).orElseThrow(
-                () -> new GiftCardNotFoundException("No Gift Card is existing with the given ID" + giftCardId)
-        );
-
-        giftCardRepository.deleteById(giftCardId);
-
+    public void deleteGiftCard(Long id) {
+        GiftCard giftCard = giftCardRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("GiftCard not found"));
+        giftCardRepository.delete(giftCard);
     }
 }
