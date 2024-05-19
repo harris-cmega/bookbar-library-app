@@ -65,11 +65,13 @@ CREATE TABLE categories (
 );
 
 CREATE TABLE book_categories (
+    id BIGINT NOT NULL AUTO_INCREMENT,
     book_id BIGINT NOT NULL,
     category_id BIGINT NOT NULL,
-    PRIMARY KEY (book_id, category_id),
+    PRIMARY KEY (id),
     FOREIGN KEY (book_id) REFERENCES books(id),
-    FOREIGN KEY (category_id) REFERENCES categories(id)
+    FOREIGN KEY (category_id) REFERENCES categories(id),
+    UNIQUE KEY (book_id, category_id)
 );
 
 CREATE TABLE users (
