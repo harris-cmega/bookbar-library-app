@@ -1,12 +1,13 @@
 package io.bookbar.bookbarbackend.service;
 
-import io.bookbar.bookbarbackend.entities.Rating;
+import io.bookbar.bookbarbackend.dto.RatingDTO;
+
 import java.util.List;
 
 public interface RatingService {
-    Rating saveRating(Rating rating);
-    List<Rating> getAllRatings();
-    Rating getRatingById(Long id);
-    Rating updateRating(Long id, Rating rating);
+    RatingDTO createRating(RatingDTO ratingDto);
+    RatingDTO getRatingById(Long id);
+    List<RatingDTO> getAllRatings();
+    RatingDTO updateRating(Long id, RatingDTO ratingDto);
     void deleteRating(Long id);
 }
