@@ -50,7 +50,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         } catch (InvalidJwtException ex) {
-            // You can handle the exception and send an appropriate response
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("Invalid JWT token");
             return;

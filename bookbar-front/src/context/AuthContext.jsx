@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import ApiService from '../api/ApiService';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 export const AuthContext = createContext();
 
@@ -11,8 +11,9 @@ export const AuthProvider = ({ children }) => {
     const login = async (credentials) => {
         try {
             const response = await ApiService.login(credentials);
-            const token = response.data.token;
+            let token = response.data.token;
             localStorage.setItem('token', token);
+            localStorage.setItem('refresh_token', response.data.refresh_token);
             const decodedUser = jwtDecode(token);
             setUser(decodedUser);
         } catch (error) {
@@ -23,40 +24,27 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('refresh_token');
         setUser(null);
-    };
-
-    const isTokenExpired = (token) => {
-        const decoded = jwtDecode(token);
-        const currentTime = Date.now() / 1000;
-        return decoded.exp < currentTime;
     };
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        if (token) {
-            console.log('Token found:', token);
+        const refreshToken = localStorage.getItem('refresh_token');
+        if (token && refreshToken) {
             if (!isTokenExpired(token)) {
-                try {
-                    const decodedUser = jwtDecode(token);
-                    console.log('Decoded user:', decodedUser);
-                    setUser(decodedUser);
-                } catch (error) {
-                    console.error('Invalid token:', error);
-                    localStorage.removeItem('token');
-                }
+                const decodedUser = jwtDecode(token);
+                setUser(decodedUser);
             } else {
-                console.log('Token expired');
                 localStorage.removeItem('token');
+                localStorage.removeItem('refresh_token');
             }
-        } else {
-            console.log('No token found');
         }
-        setLoading(false); // Set loading to false after checking the token
+        setLoading(false);
     }, []);
 
     if (loading) {
-        return <div>Loading...</div>; // You can replace this with a better loading indicator if needed
+        return <div>Loading...</div>;
     }
 
     return (
@@ -64,4 +52,10 @@ export const AuthProvider = ({ children }) => {
             {children}
         </AuthContext.Provider>
     );
+};
+
+const isTokenExpired = (token) => {
+    const decoded = jwtDecode(token);
+    const currentTime = Date.now() / 1000;
+    return decoded.exp < currentTime;
 };

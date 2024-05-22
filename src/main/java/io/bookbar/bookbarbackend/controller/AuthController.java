@@ -5,18 +5,21 @@ import io.bookbar.bookbarbackend.dto.UserRegistrationDTO;
 import io.bookbar.bookbarbackend.dto.UserResponseDTO;
 import io.bookbar.bookbarbackend.entities.User;
 import io.bookbar.bookbarbackend.mapper.UserMapper;
-import io.bookbar.bookbarbackend.service.AuthService;
+import io.bookbar.bookbarbackend.service.impl.AuthServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final AuthService authService;
+    private final AuthServiceImpl authService;
 
-    public AuthController(AuthService authService) {
+
+    public AuthController(AuthServiceImpl authService) {
         this.authService = authService;
     }
 
@@ -32,12 +35,23 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody @Valid UserLoginDTO userLoginDTO) {
+    public ResponseEntity<Map<String, String>> loginUser(@RequestBody @Valid UserLoginDTO userLoginDTO) {
         try {
-            String token = authService.authenticate(userLoginDTO);
-            return ResponseEntity.ok(token);
+            Map<String, String> tokens = authService.authenticate(userLoginDTO);
+            return ResponseEntity.ok(tokens);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<Map<String, String>> refreshToken(@RequestBody Map<String, String> request) {
+        String refreshToken = request.get("refresh_token");
+        try {
+            String token = authService.refreshToken(refreshToken);
+            return ResponseEntity.ok(Map.of("token", token));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
     }
 }

@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
 import ApiService from '../api/ApiService';
 import { AuthContext } from '../context/AuthContext';
-import Layout from "../components/Layout.jsx";
+import Layout from '../components/Layout';
 
 const Users = () => {
     const [users, setUsers] = useState([]);
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
     const { user } = useContext(AuthContext);
 
     useEffect(() => {
@@ -16,6 +17,8 @@ const Users = () => {
             } catch (error) {
                 setError(error.message);
                 console.error('Failed to fetch users:', error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -24,8 +27,13 @@ const Users = () => {
             fetchUsers();
         } else {
             console.log('User is not authenticated');
+            setLoading(false);
         }
     }, [user]);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     if (error) {
         return <div>Error: {error}</div>;
