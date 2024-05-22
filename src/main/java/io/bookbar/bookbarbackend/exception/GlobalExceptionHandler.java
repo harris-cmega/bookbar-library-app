@@ -19,6 +19,8 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 @RestControllerAdvice
@@ -28,7 +30,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        logger.error("Validation error: {}", ex.getMessage());
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
@@ -43,7 +44,7 @@ public class GlobalExceptionHandler {
         logger.error("Data integrity violation: {}", ex.getMessage());
         Map<String, String> errors = new HashMap<>();
         errors.put("error", "Data Integrity Violation");
-        errors.put("message", ex.getRootCause().getMessage());
+        errors.put("message", Objects.requireNonNull(ex.getRootCause()).getMessage());
         return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
     }
 

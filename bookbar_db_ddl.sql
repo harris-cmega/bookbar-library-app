@@ -168,3 +168,14 @@ CREATE TABLE user_gift_cards (
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (gift_card_id) REFERENCES gift_cards(id)
 );
+
+CREATE TABLE refresh_tokens (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    token VARCHAR(255) NOT NULL,
+    expiry_date TIMESTAMP NOT NULL,
+    user_id BIGINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+

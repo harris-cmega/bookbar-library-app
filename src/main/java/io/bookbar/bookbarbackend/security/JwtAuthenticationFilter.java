@@ -2,6 +2,9 @@ package io.bookbar.bookbarbackend.security;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.bookbar.bookbarbackend.entities.RefreshToken;
+import io.bookbar.bookbarbackend.entities.User;
+import io.bookbar.bookbarbackend.service.impl.RefreshTokenServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,10 +23,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
+    private final RefreshTokenServiceImpl refreshTokenService;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtUtils jwtUtils, RefreshTokenServiceImpl refreshTokenService) {
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
+        this.refreshTokenService = refreshTokenService;
+        setFilterProcessesUrl("/api/auth/login");
     }
 
     @Override
@@ -40,13 +46,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        String token = jwtUtils.generateToken(authResult);
-        response.addHeader("Authorization", "Bearer " + token);
+        CustomUserDetails customUserDetails = (CustomUserDetails) authResult.getPrincipal();
+        User user = customUserDetails.getUser();
 
-        Map<String, String> tokenMap = new HashMap<>();
-        tokenMap.put("token", token);
+        String token = jwtUtils.generateToken(customUserDetails);
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
+        Map<String, String> tokens = new HashMap<>();
+        tokens.put("token", token);
+        tokens.put("refresh_token", refreshToken.getToken());
+
+        response.addHeader("Authorization", "Bearer " + tokens.get("token"));
         response.setContentType("application/json");
-        new ObjectMapper().writeValue(response.getWriter(), tokenMap);
+        new ObjectMapper().writeValue(response.getWriter(), tokens);
     }
 
     @Override
