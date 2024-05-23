@@ -15,9 +15,9 @@ const BooksPage = () => {
 
     return (
         <div>
-            <h1>Manage Books</h1>
-            <Table striped bordered hover>
-                <thead>
+            <h1 className="mb-4">Manage Books</h1>
+            <Table striped bordered hover responsive>
+                <thead className="bg-primary text-white">
                 <tr>
                     <th>ID</th>
                     <th>Title</th>
@@ -34,7 +34,7 @@ const BooksPage = () => {
                         <td>{book.author}</td>
                         <td>{book.publisher}</td>
                         <td>
-                            <Button variant="warning">Edit</Button>{' '}
+                            <Button variant="warning" className="me-2">Edit</Button>
                             <Button variant="danger">Delete</Button>
                         </td>
                     </tr>
