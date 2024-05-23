@@ -20,12 +20,6 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem('refresh_token', refreshToken);
             const decodedUser = jwtDecode(token);
             setUser(decodedUser);
-
-            if (decodedUser.role === Roles.ADMIN) {
-                navigate('/admin');
-            } else {
-                navigate('/'); // or another default page
-            }
         } catch (error) {
             console.error('Login failed:', error);
             throw error;
@@ -35,7 +29,7 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('refresh_token');
-        setUser(null);
+        setUser(null)
     };
 
     useEffect(() => {

@@ -34,7 +34,7 @@ const LoginForm = () => {
         }
         try {
             await login(credentials);
-            navigate('/users');
+            navigate('/admin/dashboard');
         } catch (error) {
             alert('Login failed!');
         }

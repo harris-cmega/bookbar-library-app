@@ -7,6 +7,31 @@ const ApiService = {
     login: (credentials) => axios.post(`${API_URL}/auth/login`, credentials),
     register: (user) => axios.post(`${API_URL}/auth/register`, user),
     refreshToken: (refreshToken) => axios.post(`${API_URL}/auth/refresh-token`, { refreshToken }),
+    createUser: (user) => {
+        const token = localStorage.getItem('token');
+        return axios.post(`${API_URL}/users`, user, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
+    updateUser: (id, user) => {
+        const token = localStorage.getItem('token');
+        return axios.put(`${API_URL}/users/${id}`, user, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
+    deleteUser: (userId) => {
+        const token = localStorage.getItem('token');
+        return axios.delete(`${API_URL}/users/${userId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
+
     getUsers: async () => {
         let token = localStorage.getItem('token');
         let refreshToken = localStorage.getItem('refresh_token');
