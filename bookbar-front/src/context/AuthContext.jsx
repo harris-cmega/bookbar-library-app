@@ -1,21 +1,31 @@
 import React, { createContext, useState, useEffect } from 'react';
 import ApiService from '../api/ApiService';
 import { jwtDecode } from 'jwt-decode';
+import {Roles} from "../utils/Roles.js";
+import { useNavigate } from 'react-router-dom';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+
 
     const login = async (credentials) => {
         try {
             const response = await ApiService.login(credentials);
-            let token = response.data.token;
+            const { token, refreshToken } = response.data;
             localStorage.setItem('token', token);
-            localStorage.setItem('refresh_token', response.data.refresh_token);
+            localStorage.setItem('refresh_token', refreshToken);
             const decodedUser = jwtDecode(token);
             setUser(decodedUser);
+
+            if (decodedUser.role === Roles.ADMIN) {
+                navigate('/admin');
+            } else {
+                navigate('/'); // or another default page
+            }
         } catch (error) {
             console.error('Login failed:', error);
             throw error;

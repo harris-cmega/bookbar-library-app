@@ -1,24 +1,39 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext.jsx';
-import HomePage from './pages/Home';
-import LoginPage from './pages/Login';
-import RegisterPage from './pages/Register';
-import Users from './pages/Users';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Users from './pages/Users';
+import AdminLayout from './components/layouts/AdminLayout';
+import AuthorsPage from './pages/admin/AuthorsPage';
+import BooksPage from './pages/admin/BooksPage';
+import LibrariesPage from './pages/admin/LibrariesPage';
+import PublishersPage from './pages/admin/PublishersPage';
+import UsersPage from './pages/admin/UsersPage';
+import { Roles } from './utils/Roles';
 
-function App() {
+const App = () => {
     return (
-        <AuthProvider>
-            <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
-                <Route path="/users" element={<PrivateRoute><Users /></PrivateRoute>} />
-                {/* Add more routes here */}
-            </Routes>
-        </AuthProvider>
+        <Router>
+            <AuthProvider>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/users" element={<PrivateRoute role={Roles.USER}><Users /></PrivateRoute>} />
+                    <Route path="/admin/*" element={<PrivateRoute role={Roles.ADMIN}><AdminLayout /></PrivateRoute>}>
+                        <Route path="authors" element={<AuthorsPage />} />
+                        <Route path="books" element={<BooksPage />} />
+                        <Route path="libraries" element={<LibrariesPage />} />
+                        <Route path="publishers" element={<PublishersPage />} />
+                        <Route path="users" element={<UsersPage />} />
+                    </Route>
+                </Routes>
+            </AuthProvider>
+        </Router>
     );
-}
+};
 
 export default App;
