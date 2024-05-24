@@ -29,17 +29,14 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDTO createBook(BookDTO bookDto) {
-        Author author = authorRepository.findById(bookDto.getAuthorId())
+        Author author = authorRepository.findById(bookDto.getAuthor_id())
                 .orElseThrow(() -> new ResourceNotFoundException("Author not found"));
-        Library library = libraryRepository.findById(bookDto.getLibraryId())
+        Library library = libraryRepository.findById(bookDto.getLibrary_id())
                 .orElseThrow(() -> new ResourceNotFoundException("Library not found"));
-        Publisher publisher = publisherRepository.findById(bookDto.getPublisherId())
+        Publisher publisher = publisherRepository.findById(bookDto.getPublisher_id())
                 .orElseThrow(() -> new ResourceNotFoundException("Publisher not found"));
 
-        Book book = BookMapper.toBookEntity(bookDto);
-        book.setAuthor(author);
-        book.setLibrary(library);
-        book.setPublisher(publisher);
+        Book book = BookMapper.toBookEntity(bookDto, author, library, publisher);
         Book savedBook = bookRepository.save(book);
         return BookMapper.toBookDto(savedBook);
     }
@@ -64,18 +61,18 @@ public class BookServiceImpl implements BookService {
         Book book = bookRepository.findById(booksId)
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found"));
 
-        Author author = authorRepository.findById(bookDto.getAuthorId())
+        Author author = authorRepository.findById(bookDto.getAuthor_id())
                 .orElseThrow(() -> new ResourceNotFoundException("Author not found"));
-        Library library = libraryRepository.findById(bookDto.getLibraryId())
+        Library library = libraryRepository.findById(bookDto.getLibrary_id())
                 .orElseThrow(() -> new ResourceNotFoundException("Library not found"));
-        Publisher publisher = publisherRepository.findById(bookDto.getPublisherId())
+        Publisher publisher = publisherRepository.findById(bookDto.getPublisher_id())
                 .orElseThrow(() -> new ResourceNotFoundException("Publisher not found"));
 
         book.setTitle(bookDto.getTitle());
         book.setLanguage(bookDto.getLanguage());
-        book.setPublicationDate(bookDto.getPublicationDate());
+        book.setPublication_date(bookDto.getPublication_date());
         book.setImage(bookDto.getImage());
-        book.setPageNumber(bookDto.getPageNumber());
+        book.setPage_number(bookDto.getPage_number());
         book.setPrice(bookDto.getPrice());
         book.setDescription(bookDto.getDescription());
         book.setAuthor(author);

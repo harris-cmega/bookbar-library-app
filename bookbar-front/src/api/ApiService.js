@@ -68,6 +68,30 @@ const ApiService = {
             });
         }
     },
+    createBook: (book) => {
+        const token = localStorage.getItem('token');
+        return axios.post(`${API_URL}/books`, book, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
+    updateBook: (id, book) => {
+        const token = localStorage.getItem('token');
+        return axios.put(`${API_URL}/books/${id}`, book, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
+    deleteBook: (bookId) => {
+        const token = localStorage.getItem('token');
+        return axios.delete(`${API_URL}/books/${bookId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
     getLibraries: async () => {
         let token = localStorage.getItem('token');
         let refreshToken = localStorage.getItem('refresh_token');

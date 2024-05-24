@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BookDTO {
-    private Long ISBN;
+    private Long id;
     @NotBlank(message = "Title is mandatory")
     private String title;
 
@@ -16,12 +16,12 @@ public class BookDTO {
     private String language;
 
     @NotBlank(message = "Publication date is mandatory")
-    private String publicationDate;
+    private String publication_date;
 
     private byte[] image;
 
     @NotNull(message = "Page number is mandatory")
-    private int pageNumber;
+    private int page_number;
 
     @NotNull(message = "Price is mandatory")
     private double price;
@@ -29,11 +29,14 @@ public class BookDTO {
     private String description;
 
     @NotNull(message = "Author ID is mandatory")
-    private Long authorId;
+    private Long author_id;
+    private String author_name; // Add this field
 
     @NotNull(message = "Library ID is mandatory")
-    private Long libraryId;
+    private Long library_id;
+    private String library_name; // Add this field
 
     @NotNull(message = "Publisher ID is mandatory")
-    private Long publisherId;
+    private Long publisher_id;
+    private String publisher_name; // Add this field
 }
