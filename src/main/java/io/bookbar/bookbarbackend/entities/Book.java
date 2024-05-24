@@ -24,14 +24,14 @@ public class Book {
     private String language;
 
     @Column(name = "publication_date")
-    private String publicationDate;
+    private String publication_date;
 
     @Lob
     @Column(name = "image")
     private byte[] image;
 
     @Column(name = "page_number")
-    private int pageNumber;
+    private int page_number;
 
     @Column(name = "price")
     private double price;

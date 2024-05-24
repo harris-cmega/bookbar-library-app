@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ApiService from '../../api/ApiService';
 import { Button, Form, Table } from 'react-bootstrap';
-import ReusableModal from '../components/ReusableModal';
+import ReusableModal from '../../components/ReusableModal.jsx';
 
 const UsersPage = () => {
     const [users, setUsers] = useState([]);
