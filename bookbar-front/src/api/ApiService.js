@@ -102,6 +102,30 @@ const ApiService = {
             });
         }
     },
+    createAuthor: (author) => {
+        const token = localStorage.getItem('token');
+        return axios.post(`${API_URL}/authors`, author, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
+    updateAuthor: (id, author) => {
+        const token = localStorage.getItem('token');
+        return axios.put(`${API_URL}/authors/${id}`, author, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
+    deleteAuthor: (authorId) => {
+        const token = localStorage.getItem('token');
+        return axios.delete(`${API_URL}/authors/${authorId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
     getAuthors: async () => {
         let token = localStorage.getItem('token');
         let refreshToken = localStorage.getItem('refresh_token');
