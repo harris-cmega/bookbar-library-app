@@ -6,7 +6,7 @@ import ReusableModal from '../../components/ReusableModal.jsx';
 const UsersPage = () => {
     const [users, setUsers] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const [newUser, setNewUser] = useState({ username: '', email: '', password: '' });
+    const [newUser, setNewUser] = useState({ username: '', email: '', password: '', role: '', street: '', city: '', country: ''});
     const [editUser, setEditUser] = useState(null);
     const [deleteUser, setDeleteUser] = useState(null);
     const [error, setError] = useState('');
@@ -42,6 +42,9 @@ const UsersPage = () => {
             id: user.id,
             username: user.username || '',
             email: user.email || '',
+            street: user.street || '',
+            city: user.city || '',
+            country: user.country || '',
             password: ''
         });
         setShowModal(true);
@@ -121,6 +124,24 @@ const UsersPage = () => {
                             value={editUser ? editUser.password : newUser.password}
                             onChange={e => editUser ? setEditUser({ ...editUser, password: e.target.value }) : setNewUser({ ...newUser, password: e.target.value })}
                         />
+                        <Form.Control
+                            type="street"
+                            placeholder="Enter street"
+                            value={editUser ? editUser.street : newUser.street}
+                            onChange={e => editUser ? setEditUser({ ...editUser, street: e.target.value }) : setNewUser({ ...newUser, street: e.target.value })}
+                        />
+                        <Form.Control
+                            type="city"
+                            placeholder="Enter city"
+                            value={editUser ? editUser.city : newUser.city}
+                            onChange={e => editUser ? setEditUser({ ...editUser, city: e.target.value }) : setNewUser({ ...newUser, city: e.target.value })}
+                        />
+                        <Form.Control
+                            type="country"
+                            placeholder="Enter country"
+                            value={editUser ? editUser.country : newUser.country}
+                            onChange={e => editUser ? setEditUser({ ...editUser, country: e.target.value }) : setNewUser({ ...newUser, country: e.target.value })}
+                        />
                     </>
                 )}
             </ReusableModal>
@@ -130,6 +151,10 @@ const UsersPage = () => {
                     <th>ID</th>
                     <th>Username</th>
                     <th>Email</th>
+                    <th>Role</th>
+                    <th>Street</th>
+                    <th>City</th>
+                    <th>Country</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -139,8 +164,13 @@ const UsersPage = () => {
                         <td>{user.id}</td>
                         <td>{user.username}</td>
                         <td>{user.email}</td>
+                        <td>{user.role}</td>
+                        <td>{user.street}</td>
+                        <td>{user.city}</td>
+                        <td>{user.country}</td>
                         <td>
-                            <Button variant="warning text-light me-4" onClick={() => handleEditClick(user)}>Edit</Button>{' '}
+                            <Button variant="warning text-light me-4"
+                                    onClick={() => handleEditClick(user)}>Edit</Button>{' '}
                             <Button variant="danger" onClick={() => {
                                 setDeleteUser(user);
                                 setShowModal(true);
