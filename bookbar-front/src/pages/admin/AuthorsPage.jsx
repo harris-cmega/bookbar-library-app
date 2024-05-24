@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import ApiService from '../../api/ApiService';
-import {Table, Button, Form} from 'react-bootstrap';
-import ReusableModal from '../../components/ReusableModal';
+import { Button, Form, Table } from 'react-bootstrap';
+import ReusableModal from '../../components/ReusableModal.jsx';
 
 const AuthorsPage = () => {
     const [authors, setAuthors] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const [newAuthor, setNewAuthor] = useState({ name: '', biography: ''});
+    const [newAuthor, setNewAuthor] = useState({ name: '', email: '', biography: '', nationality: '', birthDate: '', deathDate: '' });
     const [editAuthor, setEditAuthor] = useState(null);
     const [deleteAuthor, setDeleteAuthor] = useState(null);
     const [error, setError] = useState('');
-
 
     useEffect(() => {
         fetchAuthors();
@@ -25,14 +24,6 @@ const AuthorsPage = () => {
             setError('Error fetching authors.');
         }
     };
-
-    useEffect(() => {
-        ApiService.getAuthors().then(response => {
-            setAuthors(response.data);
-        }).catch(error => {
-            console.error('Error fetching authors:', error);
-        });
-    }, []);
 
     const handleAddAuthor = async (event) => {
         event.preventDefault();
@@ -51,7 +42,10 @@ const AuthorsPage = () => {
             id: author.id,
             name: author.name || '',
             email: author.email || '',
-            biography: author.biography || ''
+            biography: author.biography || '',
+            nationality: author.nationality || '',
+            birthDate: author.birthDate || '',
+            deathDate: author.deathDate || ''
         });
         setShowModal(true);
     };
@@ -94,7 +88,7 @@ const AuthorsPage = () => {
         setShowModal(false);
         setEditAuthor(null);
         setDeleteAuthor(null);
-        setNewAuthor({ name: '', biography: ''});
+        setNewAuthor({ name: '', email: '', biography: '', nationality: '', birthDate: '', deathDate: '' });
     };
 
     return (
@@ -130,6 +124,24 @@ const AuthorsPage = () => {
                             value={editAuthor ? editAuthor.biography : newAuthor.biography}
                             onChange={e => editAuthor ? setEditAuthor({ ...editAuthor, biography: e.target.value }) : setNewAuthor({ ...newAuthor, biography: e.target.value })}
                         />
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter nationality"
+                            value={editAuthor ? editAuthor.nationality : newAuthor.nationality}
+                            onChange={e => editAuthor ? setEditAuthor({ ...editAuthor, nationality: e.target.value }) : setNewAuthor({ ...newAuthor, nationality: e.target.value })}
+                        />
+                        <Form.Control
+                            type="date"
+                            placeholder="Enter birth date"
+                            value={editAuthor ? editAuthor.birthDate : newAuthor.birthDate}
+                            onChange={e => editAuthor ? setEditAuthor({ ...editAuthor, birthDate: e.target.value }) : setNewAuthor({ ...newAuthor, birthDate: e.target.value })}
+                        />
+                        <Form.Control
+                            type="date"
+                            placeholder="Enter death date"
+                            value={editAuthor ? editAuthor.deathDate : newAuthor.deathDate}
+                            onChange={e => editAuthor ? setEditAuthor({ ...editAuthor, deathDate: e.target.value }) : setNewAuthor({ ...newAuthor, deathDate: e.target.value })}
+                        />
                     </>
                 )}
             </ReusableModal>
@@ -138,7 +150,11 @@ const AuthorsPage = () => {
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
+                    <th>Email</th>
                     <th>Biography</th>
+                    <th>Nationality</th>
+                    <th>Birth Date</th>
+                    <th>Death Date</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -147,7 +163,11 @@ const AuthorsPage = () => {
                     <tr key={author.id}>
                         <td>{author.id}</td>
                         <td>{author.name}</td>
+                        <td>{author.email}</td>
                         <td>{author.biography}</td>
+                        <td>{author.nationality}</td>
+                        <td>{author.birthDate}</td>
+                        <td>{author.deathDate}</td>
                         <td>
                             <Button variant="warning text-light me-4" onClick={() => handleEditClick(author)}>Edit</Button>{' '}
                             <Button variant="danger" onClick={() => {
