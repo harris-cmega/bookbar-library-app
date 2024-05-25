@@ -48,10 +48,10 @@ public class LibraryServiceImpl implements LibraryService {
         library.setAddress(libraryDTO.getAddress());
         library.setCity(libraryDTO.getCity());
         library.setState(libraryDTO.getState());
-        library.setZipCode(libraryDTO.getZipCode());
+        library.setZip_code(libraryDTO.getZip_code());
         library.setPhone(libraryDTO.getPhone());
         library.setEmail(libraryDTO.getEmail());
-        library.setOpeningHours(libraryDTO.getOpeningHours());
+        library.setOpening_hours(libraryDTO.getOpening_hours());
         Library updatedLibrary = libraryRepository.save(library);
         return LibraryMapper.toLibraryDTO(updatedLibrary);
     }

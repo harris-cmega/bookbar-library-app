@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 
 const API_URL = 'http://localhost:8080/api';
 
@@ -31,7 +31,6 @@ const ApiService = {
             }
         });
     },
-
     getUsers: async () => {
         let token = localStorage.getItem('token');
         let refreshToken = localStorage.getItem('refresh_token');
@@ -109,6 +108,24 @@ const ApiService = {
             });
         }
     },
+    createLibrary: (library) => {
+        const token = localStorage.getItem('token');
+        return axios.post(`${API_URL}/libraries`, library, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+    },
+    updateLibrary: (id, library) => {
+        const token = localStorage.getItem('token');
+        return axios.put(`${API_URL}/libraries/${id}`, library, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+    },
+    deleteLibrary: (id) => {
+        const token = localStorage.getItem('token');
+        return axios.delete(`${API_URL}/libraries/${id}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+    },
     getPublishers: async () => {
         let token = localStorage.getItem('token');
         let refreshToken = localStorage.getItem('refresh_token');
@@ -129,25 +146,19 @@ const ApiService = {
     createAuthor: (author) => {
         const token = localStorage.getItem('token');
         return axios.post(`${API_URL}/authors`, author, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+            headers: { 'Authorization': `Bearer ${token}` }
         });
     },
     updateAuthor: (id, author) => {
         const token = localStorage.getItem('token');
         return axios.put(`${API_URL}/authors/${id}`, author, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+            headers: { 'Authorization': `Bearer ${token}` }
         });
     },
     deleteAuthor: (authorId) => {
         const token = localStorage.getItem('token');
         return axios.delete(`${API_URL}/authors/${authorId}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+            headers: { 'Authorization': `Bearer ${token}` }
         });
     },
     getAuthors: async () => {
@@ -161,9 +172,7 @@ const ApiService = {
                 localStorage.setItem('token', token);
             }
             return axios.get(`${API_URL}/authors`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
         }
     }

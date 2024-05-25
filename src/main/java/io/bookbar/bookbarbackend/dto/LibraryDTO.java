@@ -31,7 +31,7 @@ public class LibraryDTO {
 
     @NotBlank(message = "Zip Code is mandatory")
     @Pattern(regexp = "\\d{5}", message = "Zip Code should be 5 digits")
-    private String zipCode;
+    private String zip_code;
 
     @NotBlank(message = "Phone is mandatory")
     @Pattern(regexp = "\\d{10}", message = "Phone should be 10 digits")
@@ -42,5 +42,5 @@ public class LibraryDTO {
     private String email;
 
     @NotBlank(message = "Opening hours are mandatory")
-    private String openingHours;
+    private String opening_hours;
 }

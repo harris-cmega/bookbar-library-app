@@ -31,7 +31,7 @@ public class Library {
     private String state;
 
     @Column(name = "zip_code")
-    private String zipCode;
+    private String zip_code;
 
     @Column(name = "phone")
     private String phone;
@@ -40,5 +40,5 @@ public class Library {
     private String email;
 
     @Column(name = "opening_hours")
-    private String openingHours;
+    private String opening_hours;
 }
