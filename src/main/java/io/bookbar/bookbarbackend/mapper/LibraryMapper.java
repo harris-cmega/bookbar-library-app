@@ -12,10 +12,10 @@ public class LibraryMapper {
         dto.setAddress(library.getAddress());
         dto.setCity(library.getCity());
         dto.setState(library.getState());
-        dto.setZipCode(library.getZipCode());
+        dto.setZip_code(library.getZip_code());
         dto.setPhone(library.getPhone());
         dto.setEmail(library.getEmail());
-        dto.setOpeningHours(library.getOpeningHours());
+        dto.setOpening_hours(library.getOpening_hours());
         return dto;
     }
 
@@ -26,10 +26,10 @@ public class LibraryMapper {
         library.setAddress(dto.getAddress());
         library.setCity(dto.getCity());
         library.setState(dto.getState());
-        library.setZipCode(dto.getZipCode());
+        library.setZip_code(dto.getZip_code());
         library.setPhone(dto.getPhone());
         library.setEmail(dto.getEmail());
-        library.setOpeningHours(dto.getOpeningHours());
+        library.setOpening_hours(dto.getOpening_hours());
         return library;
     }
 }
