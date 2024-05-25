@@ -25,6 +25,9 @@ const Navbar = () => {
                 <a className="nav-link" aria-current="page" href="#">Accessories</a>
               </li>
               <li className="nav-item ps-3">
+                <Link className="nav-link" to="/subscription">Subscription</Link>
+              </li>
+              <li className="nav-item ps-3">
                 <a className="nav-link" aria-current="page" href="#">eBooks</a>
               </li>
               <li className="nav-item ps-3">

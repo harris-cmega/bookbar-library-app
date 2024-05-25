@@ -5,6 +5,7 @@ import PrivateRoute from './components/PrivateRoute';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Subscription from './pages/Subscription';
 import Users from './pages/Users';
 import AdminLayout from './components/layouts/AdminLayout';
 import AuthorsPage from './pages/admin/AuthorsPage';
@@ -22,6 +23,7 @@ const App = () => {
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/subscription" element={<Subscription />} />
                     <Route path="/users" element={<PrivateRoute role={Roles.USER}><Users /></PrivateRoute>} />
                     <Route path="/admin/*" element={<PrivateRoute role={Roles.ADMIN}><AdminLayout /></PrivateRoute>}>
                         <Route path="authors" element={<AuthorsPage />} />

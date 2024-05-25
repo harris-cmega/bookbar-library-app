@@ -105,13 +105,6 @@ CREATE TABLE book_order_details (
     FOREIGN KEY (book_id) REFERENCES books(id)
 );
 
-CREATE TABLE subscriptions (
-    id BIGINT NOT NULL AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
-    price DECIMAL(8,2),
-    PRIMARY KEY (id)
-);
-
 CREATE TABLE user_subscriptions (
     id BIGINT NOT NULL AUTO_INCREMENT,
     user_id BIGINT,
@@ -119,8 +112,7 @@ CREATE TABLE user_subscriptions (
     start_date DATETIME,
     end_date DATETIME,
     PRIMARY KEY (id),
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (subscription_id) REFERENCES subscriptions(id)
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE ratings (
