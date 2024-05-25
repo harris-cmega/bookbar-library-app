@@ -143,6 +143,30 @@ const ApiService = {
             });
         }
     },
+    createPublisher: (publisher) => {
+        const token = localStorage.getItem('token');
+        return axios.post(`${API_URL}/publishers`, publisher, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
+    updatePublisher: (id, publisher) => {
+        const token = localStorage.getItem('token');
+        return axios.put(`${API_URL}/publishers/${id}`, publisher, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
+    deletePublisher: (publisherId) => {
+        const token = localStorage.getItem('token');
+        return axios.delete(`${API_URL}/publishers/${publisherId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
     createAuthor: (author) => {
         const token = localStorage.getItem('token');
         return axios.post(`${API_URL}/authors`, author, {
