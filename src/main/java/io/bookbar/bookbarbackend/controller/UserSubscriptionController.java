@@ -11,7 +11,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/user-subscriptions")
 public class UserSubscriptionController {
-    private UserSubscriptionService userSubscriptionService;
+    private final UserSubscriptionService userSubscriptionService;
+
+    public UserSubscriptionController(UserSubscriptionService userSubscriptionService) {
+        this.userSubscriptionService = userSubscriptionService;
+    }
 
     // Build Add User Subscription REST API
     @PostMapping
