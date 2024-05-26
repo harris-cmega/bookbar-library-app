@@ -1,5 +1,5 @@
 import RegisterForm from "../components/Register/RegisterForm.jsx";
-import Layout from '../components/Layout.jsx';
+import Layout from '../components/layouts/Layout.jsx';
 
 function Register(){
     return(

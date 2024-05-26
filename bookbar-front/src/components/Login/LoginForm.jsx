@@ -2,11 +2,12 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext.jsx';
 import { Link } from 'react-router-dom';
-import loginpageimage from '../../assets/login-page-image.jpg';
+import LoginPageImg from '../../assets/login-page-image.jpg';
 
 const LoginForm = () => {
     const [credentials, setCredentials] = useState({ username: '', password: '' });
     const [errors, setErrors] = useState({});
+    const [serverError, setServerError] = useState('');
     const { login } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -29,6 +30,7 @@ const LoginForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setServerError(''); // Reset server error on new submit
         if (!validate()) {
             return;
         }
@@ -36,7 +38,7 @@ const LoginForm = () => {
             await login(credentials);
             navigate('/admin/dashboard');
         } catch (error) {
-            alert('Login failed!');
+            setServerError('Login failed! Please check your username and password.');
         }
     };
 
@@ -44,11 +46,13 @@ const LoginForm = () => {
         <section className="vh-100">
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-12 col-lg-5 col-sm-5 text-black">
+                    <div className="col-12 col-lg-5 col-md-6 offset-lg-1 offset-md-2 text-black">
                         <div className="d-flex align-items-center h-custom-2 px-4 ms-xl-4 mt-auto pt-auto pt-xl-0 mt-xl-n5">
-                            <form style={{ width: '23rem' }} noValidate onSubmit={handleSubmit} id="userloginform">
-                                <h3 className="fw-normal mb-3 pb-3" style={{ letterSpacing: '1px' }}>Log In</h3>
+                            <form style={{ width: '20rem' }} noValidate onSubmit={handleSubmit} id="userloginform">
+                                <h3 className="fw-bold mb-5 pb-3" style={{ letterSpacing: '1px' }}>Log In</h3>
+                                {serverError && <div className="alert alert-danger">{serverError}</div>}
                                 <div className="form-outline mb-4">
+                                    <label className="form-label" htmlFor="username">Username</label>
                                     <input
                                         type="text"
                                         id="username"
@@ -58,10 +62,10 @@ const LoginForm = () => {
                                         value={credentials.username}
                                         onChange={handleChange}
                                     />
-                                    <label className="form-label" htmlFor="username">Username</label>
                                     {errors.username && <div className="invalid-feedback">{errors.username}</div>}
                                 </div>
                                 <div className="form-outline mb-4">
+                                    <label className="form-label" htmlFor="password">Password</label>
                                     <input
                                         type="password"
                                         id="password"
@@ -71,7 +75,6 @@ const LoginForm = () => {
                                         value={credentials.password}
                                         onChange={handleChange}
                                     />
-                                    <label className="form-label" htmlFor="password">Password</label>
                                     {errors.password && <div className="invalid-feedback">{errors.password}</div>}
                                 </div>
                                 <div className="pt-1 mb-4">
@@ -81,8 +84,8 @@ const LoginForm = () => {
                             </form>
                         </div>
                     </div>
-                    <div className="col-12 col-lg-7 col-sm-7 px-0 d-none d-sm-block">
-                        <img src={loginpageimage} alt="Login image" className="w-100 vh-100" style={{ objectFit: 'cover', objectPosition: 'left' }} />
+                    <div className="col-12 col-lg-6 col-md-4 d-none d-sm-block px-0">
+                        <img src={LoginPageImg} alt="Login image" className="w-100 vh-100" style={{ objectFit: 'cover', objectPosition: 'left' }} />
                     </div>
                 </div>
             </div>

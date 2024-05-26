@@ -211,3 +211,29 @@
     height: 100%;
   }
 }
+
+.size-4 {
+  width: 24px;
+  height: 24px;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+}
+
+.admin .nav-link {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.admin .nav-link:hover {
+  background-color: #f8f9fa;
+  text-decoration: none;
+}
+
+.admin .text-center p {
+  margin-bottom: 0;
+}

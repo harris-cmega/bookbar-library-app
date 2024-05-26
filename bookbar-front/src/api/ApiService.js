@@ -50,7 +50,14 @@ const ApiService = {
             throw new Error('No token or refresh token available');
         }
     },
-    getBooks: async () => {
+    getPublicBooks: async (page = 0, size = 10) => {
+        return axios.get(`${API_URL}/public/books`, {params: { page, size }});
+    },
+    getPublicBookById: async (id) => {
+        return axios.get(`${API_URL}/public/books/${id}`, {
+        });
+    },
+    getBooks: async (page = 0, size = 10) => {
         let token = localStorage.getItem('token');
         let refreshToken = localStorage.getItem('refresh_token');
 
@@ -61,6 +68,24 @@ const ApiService = {
                 localStorage.setItem('token', token);
             }
             return axios.get(`${API_URL}/books`, {
+                params: { page, size },
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+        }
+    },
+    getBookById: async (id) => {
+        let token = localStorage.getItem('token');
+        let refreshToken = localStorage.getItem('refresh_token');
+
+        if (token && refreshToken) {
+            if (isTokenExpired(token)) {
+                const response = await ApiService.refreshToken(refreshToken);
+                token = response.data.token;
+                localStorage.setItem('token', token);
+            }
+            return axios.get(`${API_URL}/books/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -71,7 +96,7 @@ const ApiService = {
         const token = localStorage.getItem('token');
         return axios.post(`${API_URL}/books`, book, {
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
             }
         });
     },
@@ -79,7 +104,18 @@ const ApiService = {
         const token = localStorage.getItem('token');
         return axios.put(`${API_URL}/books/${id}`, book, {
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+            }
+        });
+    },
+    uploadBookImage: (imageFile) => {
+        const token = localStorage.getItem('token');
+        const formData = new FormData();
+        formData.append('image', imageFile);
+        return axios.post(`${API_URL}/books/upload-image`, formData, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data'
             }
         });
     },
@@ -90,6 +126,12 @@ const ApiService = {
                 'Authorization': `Bearer ${token}`
             }
         });
+    },
+    searchBooks: async (query) => {
+
+    return axios.get(`${API_URL}/search/books`, {
+        params: { query },
+    });
     },
     getLibraries: async () => {
         let token = localStorage.getItem('token');

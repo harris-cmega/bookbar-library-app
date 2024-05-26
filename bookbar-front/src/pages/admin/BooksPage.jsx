@@ -18,18 +18,22 @@ const BooksPage = () => {
         library_id: '',
         publisher_id: ''
     });
+    const [imageFile, setImageFile] = useState(null);
     const [editBook, setEditBook] = useState(null);
     const [deleteBook, setDeleteBook] = useState(null);
     const [error, setError] = useState('');
+    const [page, setPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
 
     useEffect(() => {
-        fetchBooks();
-    }, []);
+        fetchBooks(page);
+    }, [page]);
 
-    const fetchBooks = async () => {
+    const fetchBooks = async (page) => {
         try {
-            const response = await ApiService.getBooks();
-            setBooks(response.data);
+            const response = await ApiService.getBooks(page);
+            setBooks(response.data.content);
+            setTotalPages(response.data.totalPages);
         } catch (error) {
             console.error('Error fetching books:', error);
             setError('Error fetching books.');
@@ -39,7 +43,15 @@ const BooksPage = () => {
     const handleAddBook = async (event) => {
         event.preventDefault();
         try {
-            const response = await ApiService.createBook(newBook);
+            let imagePath = '';
+            if (imageFile) {
+                const uploadResponse = await ApiService.uploadBookImage(imageFile);
+                imagePath = uploadResponse.data;
+            }
+
+            const newBookWithImage = { ...newBook, image: imagePath };
+
+            const response = await ApiService.createBook(newBookWithImage);
             setBooks(prevBooks => [...prevBooks, response.data]);
             handleCloseModal();
         } catch (error) {
@@ -68,7 +80,14 @@ const BooksPage = () => {
     const handleUpdateBook = async (event) => {
         event.preventDefault();
         try {
-            const response = await ApiService.updateBook(editBook.id, editBook);
+            let imagePath = editBook.image;
+            if (imageFile) {
+                const uploadResponse = await ApiService.uploadBookImage(imageFile);
+                imagePath = uploadResponse.data;
+            }
+
+            const updatedBookWithImage = { ...editBook, image: imagePath };
+            const response = await ApiService.updateBook(editBook.id, updatedBookWithImage);
             setBooks(prevBooks => prevBooks.map(book => book.id === editBook.id ? response.data : book));
             handleCloseModal();
         } catch (error) {
@@ -115,6 +134,7 @@ const BooksPage = () => {
             library_id: '',
             publisher_id: ''
         });
+        setImageFile(null);
     };
 
     return (
@@ -186,6 +206,10 @@ const BooksPage = () => {
                             value={editBook ? editBook.publisher_id : newBook.publisher_id}
                             onChange={e => editBook ? setEditBook({ ...editBook, publisher_id: e.target.value }) : setNewBook({ ...newBook, publisher_id: e.target.value })}
                         />
+                        <Form.Control
+                            type="file"
+                            onChange={e => setImageFile(e.target.files[0])}
+                        />
                     </>
                 )}
             </ReusableModal>
@@ -229,6 +253,17 @@ const BooksPage = () => {
                 ))}
                 </tbody>
             </Table>
+            <div className="pagination">
+                {[...Array(totalPages).keys()].map((number) => (
+                    <Button
+                        key={number}
+                        className={`btn ${number === page ? 'btn-primary' : 'btn-secondary'}`}
+                        onClick={() => setPage(number)}
+                    >
+                        {number + 1}
+                    </Button>
+                ))}
+            </div>
         </div>
     );
 };

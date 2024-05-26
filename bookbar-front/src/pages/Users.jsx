@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import ApiService from '../api/ApiService';
 import { AuthContext } from '../context/AuthContext';
-import Layout from '../components/Layout';
+import Layout from '../components/layouts/Layout.jsx';
 
 const Users = () => {
     const [users, setUsers] = useState([]);
