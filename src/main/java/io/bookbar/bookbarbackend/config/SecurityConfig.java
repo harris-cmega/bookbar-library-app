@@ -58,8 +58,10 @@ public class SecurityConfig {
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/public/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll() // authorization endpoints
+                        .requestMatchers("/api/public/**").permitAll() // public book endpoints
+                        .requestMatchers("/public/**").permitAll() // uploaded images
+                        .requestMatchers("/api/search/**").permitAll()
                         .requestMatchers("/api/users/**").authenticated()
                         .requestMatchers("/api/books/**").authenticated()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")

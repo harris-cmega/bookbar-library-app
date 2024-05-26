@@ -28,7 +28,7 @@ public class Book {
 
     @Lob
     @Column(name = "image")
-    private byte[] image;
+    private String image;
 
     @Column(name = "page_number")
     private int page_number;

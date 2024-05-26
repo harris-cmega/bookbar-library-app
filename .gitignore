@@ -32,3 +32,6 @@ build/
 ### other ###
 .vscode
 .DS_Store
+/public/*
+!/public/ph/
+!/public/ph/**

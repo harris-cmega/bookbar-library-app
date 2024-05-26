@@ -13,6 +13,8 @@ import io.bookbar.bookbarbackend.repository.LibraryRepository;
 import io.bookbar.bookbarbackend.repository.PublisherRepository;
 import io.bookbar.bookbarbackend.service.BookService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,18 +44,16 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDTO getBooksById(Long booksId) {
+    public BookDTO getBookById(Long booksId) {
         Book book = bookRepository.findById(booksId)
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found"));
         return BookMapper.toBookDto(book);
     }
 
     @Override
-    public List<BookDTO> getAllBooks() {
-        List<Book> books = bookRepository.findAll();
-        return books.stream()
-                .map(BookMapper::toBookDto)
-                .collect(Collectors.toList());
+    public Page<BookDTO> getAllBooks(Pageable pageable) {
+        Page<Book> books = bookRepository.findAll(pageable);
+        return books.map(BookMapper::toBookDto);
     }
 
     @Override
@@ -88,5 +88,13 @@ public class BookServiceImpl implements BookService {
         Book book = bookRepository.findById(booksId)
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found"));
         bookRepository.delete(book);
+    }
+
+    @Override
+    public List<BookDTO> searchBooks(String query) {
+        return bookRepository.findByTitleContainingOrAuthor_NameContaining(query, query)
+                .stream()
+                .map(BookMapper::toBookDto)
+                .collect(Collectors.toList());
     }
 }

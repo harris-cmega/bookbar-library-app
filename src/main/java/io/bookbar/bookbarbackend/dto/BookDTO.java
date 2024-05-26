@@ -1,24 +1,35 @@
 package io.bookbar.bookbarbackend.dto;
 
+import io.bookbar.bookbarbackend.entities.Book;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+
 public class BookDTO {
     private Long id;
+
+    @NotNull
+    @Size(min = 1, max = 255)
     @NotBlank(message = "Title is mandatory")
     private String title;
 
+    @Size(min = 1, max = 255)
     @NotBlank(message = "Language is mandatory")
     private String language;
 
     @NotBlank(message = "Publication date is mandatory")
     private String publication_date;
 
-    private byte[] image;
+    private String image;
 
     @NotNull(message = "Page number is mandatory")
     private int page_number;
@@ -26,17 +37,15 @@ public class BookDTO {
     @NotNull(message = "Price is mandatory")
     private double price;
 
+    @Size(max = 2000)
     private String description;
 
-    @NotNull(message = "Author ID is mandatory")
     private Long author_id;
-    private String author_name; // Add this field
+    private String author_name;
 
-    @NotNull(message = "Library ID is mandatory")
     private Long library_id;
-    private String library_name; // Add this field
+    private String library_name;
 
-    @NotNull(message = "Publisher ID is mandatory")
     private Long publisher_id;
-    private String publisher_name; // Add this field
+    private String publisher_name;
 }
