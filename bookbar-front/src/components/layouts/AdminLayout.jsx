@@ -1,3 +1,5 @@
+// AdminLayout.jsx
+
 import React, { useContext } from 'react';
 import { Container, Row, Col, Nav } from 'react-bootstrap';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
@@ -5,6 +7,11 @@ import { AuthContext } from '../../context/AuthContext';
 import useAdminAuth from '../../hooks/useAdminAuth';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faUsers, faBook, faBuilding, faAddressBook, faUserTie } from '@fortawesome/free-solid-svg-icons';
+import LibrariesByCityPieChart from '../dashboard components/LibrariesByCityPieChart.jsx'; // Import the component
+import PublishersStatsCard from '../dashboard components/PublishersStatsCard';
+import LibrariesStatsCard from '../dashboard components/LibrariesStatsCard';
+import AuthorsStatsCard from '../dashboard components/AuthorsStatsCard';
+import BooksStatsCard from '../dashboard components/BooksStatsCard';
 
 const AdminLayout = () => {
     const { user, logout } = useContext(AuthContext);
@@ -19,7 +26,7 @@ const AdminLayout = () => {
     return (
         <Container fluid className="bg-light min-vh-100">
             <Row>
-                <Col md={2} className="bg-primary text-white min-vh-100">
+                <Col md={2} style={{ backgroundColor: '#1C4E80' }} className="bg-primary text-white min-vh-100" >
                     <div className="py-3 px-3">
                         <h4>{user?.sub + " Admin Dashboard"}</h4>
                     </div>
@@ -45,6 +52,19 @@ const AdminLayout = () => {
                     </button>
                 </Col>
                 <Col md={10} className="p-4">
+                    {location.pathname === '/admin/dashboard' && (
+                        <>
+                            <Row>
+                                <Col md={3}><AuthorsStatsCard/></Col>
+                                <Col md={3}><BooksStatsCard/></Col>
+                                <Col md={3}><PublishersStatsCard /></Col>
+                                <Col md={3}><LibrariesStatsCard/></Col>
+                            </Row>
+                            <Row>
+                                <Col md={12}><LibrariesByCityPieChart /></Col>
+                            </Row>
+                        </>
+                    )}
                     <Outlet/>
                 </Col>
             </Row>
