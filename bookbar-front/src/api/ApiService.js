@@ -241,7 +241,26 @@ const ApiService = {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
         }
-    }
+    },
+
+    // Dashboard methods
+    getLibrariesDashboard: async () => {
+        let token = localStorage.getItem('token');
+        let refreshToken = localStorage.getItem('refresh_token');
+
+        if (token && refreshToken) {
+            if (isTokenExpired(token)) {
+                const response = await ApiService.refreshToken(refreshToken);
+                token = response.data.token;
+                localStorage.setItem('token', token);
+            }
+            return axios.get(`${API_URL}/libraries`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+        }
+    },
 };
 
 const isTokenExpired = (token) => {
