@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ApiService from '../../api/ApiService';
 import { Button, Form, Table } from 'react-bootstrap';
 import ReusableModal from '../../components/ReusableModal.jsx';
+import { UserIcon } from '@heroicons/react/24/outline';
 
 const UsersPage = () => {
     const [users, setUsers] = useState([]);
@@ -93,8 +94,11 @@ const UsersPage = () => {
 
     return (
         <div>
-            <h1>Manage Users</h1>
-            <Button variant="primary mt-3" onClick={() => setShowModal(true)}>+ Add User</Button>
+            <div className="d-flex justify-content-between align-items-center mb-2">
+                <h3>Manage Users</h3>
+                <Button variant="btn btn-primary my-4" onClick={() => setShowModal(true)}><UserIcon
+                    className="icon size-3 me-1"/> Add User</Button>
+            </div>
             {error && <div className="alert alert-danger">{error}</div>}
             <ReusableModal
                 show={showModal}
@@ -108,36 +112,42 @@ const UsersPage = () => {
                     <>
                         <Form.Control
                             type="text"
+                            className="mb-2"
                             placeholder="Enter username"
                             value={editUser ? editUser.username : newUser.username}
                             onChange={e => editUser ? setEditUser({ ...editUser, username: e.target.value }) : setNewUser({ ...newUser, username: e.target.value })}
                         />
                         <Form.Control
                             type="email"
+                            className="mb-2"
                             placeholder="Enter email"
                             value={editUser ? editUser.email : newUser.email}
                             onChange={e => editUser ? setEditUser({ ...editUser, email: e.target.value }) : setNewUser({ ...newUser, email: e.target.value })}
                         />
                         <Form.Control
                             type="password"
+                            className="mb-2"
                             placeholder="Enter password"
                             value={editUser ? editUser.password : newUser.password}
                             onChange={e => editUser ? setEditUser({ ...editUser, password: e.target.value }) : setNewUser({ ...newUser, password: e.target.value })}
                         />
                         <Form.Control
                             type="street"
+                            className="mb-2"
                             placeholder="Enter street"
                             value={editUser ? editUser.street : newUser.street}
                             onChange={e => editUser ? setEditUser({ ...editUser, street: e.target.value }) : setNewUser({ ...newUser, street: e.target.value })}
                         />
                         <Form.Control
                             type="city"
+                            className="mb-2"
                             placeholder="Enter city"
                             value={editUser ? editUser.city : newUser.city}
                             onChange={e => editUser ? setEditUser({ ...editUser, city: e.target.value }) : setNewUser({ ...newUser, city: e.target.value })}
                         />
                         <Form.Control
                             type="country"
+                            className="mb-2"
                             placeholder="Enter country"
                             value={editUser ? editUser.country : newUser.country}
                             onChange={e => editUser ? setEditUser({ ...editUser, country: e.target.value }) : setNewUser({ ...newUser, country: e.target.value })}
@@ -145,7 +155,7 @@ const UsersPage = () => {
                     </>
                 )}
             </ReusableModal>
-            <Table className="table table-hover text-center mt-5">
+            <Table className="table table-hover text-center mt-2">
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -169,9 +179,9 @@ const UsersPage = () => {
                         <td>{user.city}</td>
                         <td>{user.country}</td>
                         <td>
-                            <Button variant="warning text-light me-4"
+                            <Button variant="outline-secondary btn-sm text-dark me-2"
                                     onClick={() => handleEditClick(user)}>Edit</Button>{' '}
-                            <Button variant="danger" onClick={() => {
+                            <Button variant="danger btn-sm" onClick={() => {
                                 setDeleteUser(user);
                                 setShowModal(true);
                             }}>Delete</Button>

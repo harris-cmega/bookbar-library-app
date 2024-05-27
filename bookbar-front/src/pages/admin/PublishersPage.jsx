@@ -102,8 +102,10 @@ const PublishersPage = () => {
 
     return (
         <div>
-            <h1>Manage Publishers</h1>
-            <Button variant="primary mt-3" onClick={() => setShowModal(true)}>+ Add Publisher</Button>
+            <div className="d-flex justify-content-between align-items-center mb-2">
+                <h3>Manage Publishers</h3>
+                <Button variant="btn btn-primary my-4" onClick={() => setShowModal(true)}>+ Add Publisher</Button>
+            </div>
             {error && <div className="alert alert-danger">{error}</div>}
             <ReusableModal
                 show={showModal}
@@ -117,42 +119,49 @@ const PublishersPage = () => {
                     <>
                         <Form.Control
                             type="text"
+                            className="mb-2"
                             placeholder="Enter name"
                             value={editPublisher ? editPublisher.name : newPublisher.name}
                             onChange={e => editPublisher ? setEditPublisher({ ...editPublisher, name: e.target.value }) : setnewPublisher({ ...newPublisher, name: e.target.value })}
                         />
                         <Form.Control
                             type="text"
+                            className="mb-2"
                             placeholder="Enter address"
                             value={editPublisher ? editPublisher.address : newPublisher.address}
                             onChange={e => editPublisher ? setEditPublisher({ ...editPublisher, address: e.target.value }) : setnewPublisher({ ...newPublisher, address: e.target.value })}
                         />
                         <Form.Control
                             type="text"
+                            className="mb-2"
                             placeholder="Enter city"
                             value={editPublisher ? editPublisher.city : newPublisher.city}
                             onChange={e => editPublisher ? setEditPublisher({ ...editPublisher, city: e.target.value }) : setnewPublisher({ ...newPublisher, city: e.target.value })}
                         />
                         <Form.Control
                             type="text"
+                            className="mb-2"
                             placeholder="Enter state"
                             value={editPublisher ? editPublisher.state : newPublisher.state}
                             onChange={e => editPublisher ? setEditPublisher({ ...editPublisher, state: e.target.value }) : setnewPublisher({ ...newPublisher, state: e.target.value })}
                         />
                         <Form.Control
                             type="text"
+                            className="mb-2"
                             placeholder="Enter phone"
                             value={editPublisher ? editPublisher.phone : newPublisher.phone}
                             onChange={e => editPublisher ? setEditPublisher({ ...editPublisher, phone: e.target.value }) : setnewPublisher({ ...newPublisher, phone: e.target.value })}
                         />
                         <Form.Control
                             type="email"
+                            className="mb-2"
                             placeholder="Enter email"
                             value={editPublisher ? editPublisher.email : newPublisher.email}
                             onChange={e => editPublisher ? setEditPublisher({ ...editPublisher, email: e.target.value }) : setnewPublisher({ ...newPublisher, email: e.target.value })}
                         />
                         <Form.Control
                             type="text"
+                            className="mb-2"
                             placeholder="Enter website"
                             value={editPublisher ? editPublisher.website : newPublisher.website}
                             onChange={e => editPublisher ? setEditPublisher({ ...editPublisher, website: e.target.value }) : setnewPublisher({ ...newPublisher, website: e.target.value })}
@@ -160,7 +169,7 @@ const PublishersPage = () => {
                     </>
                 )}
             </ReusableModal>
-            <Table striped bordered hover>
+            <Table hover center className="mt-2 text-center">
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -186,8 +195,8 @@ const PublishersPage = () => {
                         <td>{publisher.email}</td>
                         <td>{publisher.website}</td>
                         <td>
-                            <Button variant="warning" onClick={() => handleEditClick(publisher)}>Edit</Button>{' '}
-                            <Button variant="danger" onClick={() => {
+                            <Button variant="outline-secondary btn-sm text-dark me-2" onClick={() => handleEditClick(publisher)}>Edit</Button>{' '}
+                            <Button variant="danger btn-sm" onClick={() => {
                                 setDeletePublisher(publisher);
                                 setShowModal(true);
                             }}>Delete</Button>

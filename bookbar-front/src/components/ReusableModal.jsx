@@ -13,10 +13,10 @@ const ReusableModal = ({ show, handleClose, handleSubmit, title, children }) => 
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
-                        Close
+                        Cancel
                     </Button>
-                    <Button variant="primary" type="submit">
-                        Save Changes
+                    <Button variant="primary" type="submit" className="px-4">
+                        Save
                     </Button>
                 </Modal.Footer>
             </Form>

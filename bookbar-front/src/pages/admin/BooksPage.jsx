@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ApiService from '../../api/ApiService';
 import { Table, Button, Form } from 'react-bootstrap';
 import ReusableModal from '../../components/ReusableModal';
+import { ChevronDownIcon } from '@heroicons/react/24/solid';
 
 const BooksPage = () => {
     const [books, setBooks] = useState([]);
@@ -24,9 +25,15 @@ const BooksPage = () => {
     const [error, setError] = useState('');
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
+    const [authors, setAuthors] = useState([]);
+    const [libraries, setLibraries] = useState([]);
+    const [publishers, setPublishers] = useState([]);
 
     useEffect(() => {
         fetchBooks(page);
+        fetchAuthors();
+        fetchLibraries();
+        fetchPublishers();
     }, [page]);
 
     const fetchBooks = async (page) => {
@@ -37,6 +44,36 @@ const BooksPage = () => {
         } catch (error) {
             console.error('Error fetching books:', error);
             setError('Error fetching books.');
+        }
+    };
+
+    const fetchAuthors = async () => {
+        try {
+            const response = await ApiService.getAuthors();
+            setAuthors(response.data);
+        } catch (error) {
+            console.error('Error fetching authors:', error);
+            setError('Error fetching authors.');
+        }
+    };
+
+    const fetchLibraries = async () => {
+        try {
+            const response = await ApiService.getLibraries();
+            setLibraries(response.data);
+        } catch (error) {
+            console.error('Error fetching libraries:', error);
+            setError('Error fetching libraries.');
+        }
+    };
+
+    const fetchPublishers = async () => {
+        try {
+            const response = await ApiService.getPublishers();
+            setPublishers(response.data);
+        } catch (error) {
+            console.error('Error fetching publishers:', error);
+            setError('Error fetching publishers.');
         }
     };
 
@@ -139,8 +176,10 @@ const BooksPage = () => {
 
     return (
         <div>
-            <h1 className="mb-4">Manage Books</h1>
-            <Button variant="primary mt-3" onClick={() => setShowModal(true)}>+ Add Book</Button>
+            <div className="d-flex justify-content-between align-items-center mb-2">
+                <h3>Manage Books</h3>
+                <Button variant="btn btn-primary my-4" onClick={() => setShowModal(true)}>Add Book</Button>
+            </div>
             {error && <div className="alert alert-danger">{error}</div>}
             <ReusableModal
                 show={showModal}
@@ -155,57 +194,111 @@ const BooksPage = () => {
                         <Form.Control
                             type="text"
                             placeholder="Enter title"
+                            className="mb-2"
                             value={editBook ? editBook.title : newBook.title}
-                            onChange={e => editBook ? setEditBook({ ...editBook, title: e.target.value }) : setNewBook({ ...newBook, title: e.target.value })}
+                            onChange={e => editBook ? setEditBook({
+                                ...editBook,
+                                title: e.target.value
+                            }) : setNewBook({...newBook, title: e.target.value})}
                         />
                         <Form.Control
                             type="text"
                             placeholder="Enter language"
+                            className="mb-2"
                             value={editBook ? editBook.language : newBook.language}
-                            onChange={e => editBook ? setEditBook({ ...editBook, language: e.target.value }) : setNewBook({ ...newBook, language: e.target.value })}
+                            onChange={e => editBook ? setEditBook({
+                                ...editBook,
+                                language: e.target.value
+                            }) : setNewBook({...newBook, language: e.target.value})}
                         />
                         <Form.Control
                             type="date"
                             placeholder="Enter publication date"
+                            className="mb-2"
                             value={editBook ? editBook.publication_date : newBook.publication_date}
-                            onChange={e => editBook ? setEditBook({ ...editBook, publication_date: e.target.value }) : setNewBook({ ...newBook, publication_date: e.target.value })}
+                            onChange={e => editBook ? setEditBook({
+                                ...editBook,
+                                publication_date: e.target.value
+                            }) : setNewBook({...newBook, publication_date: e.target.value})}
                         />
                         <Form.Control
                             type="number"
                             placeholder="Enter page number"
+                            className="mb-2"
                             value={editBook ? editBook.page_number : newBook.page_number}
-                            onChange={e => editBook ? setEditBook({ ...editBook, page_number: e.target.value }) : setNewBook({ ...newBook, page_number: e.target.value })}
+                            onChange={e => editBook ? setEditBook({
+                                ...editBook,
+                                page_number: e.target.value
+                            }) : setNewBook({...newBook, page_number: e.target.value})}
                         />
                         <Form.Control
                             type="number"
                             placeholder="Enter price"
+                            className="mb-2"
                             value={editBook ? editBook.price : newBook.price}
-                            onChange={e => editBook ? setEditBook({ ...editBook, price: e.target.value }) : setNewBook({ ...newBook, price: e.target.value })}
+                            onChange={e => editBook ? setEditBook({
+                                ...editBook,
+                                price: e.target.value
+                            }) : setNewBook({...newBook, price: e.target.value})}
                         />
                         <Form.Control
                             type="text"
                             placeholder="Enter description"
+                            className="mb-2"
                             value={editBook ? editBook.description : newBook.description}
-                            onChange={e => editBook ? setEditBook({ ...editBook, description: e.target.value }) : setNewBook({ ...newBook, description: e.target.value })}
+                            onChange={e => editBook ? setEditBook({
+                                ...editBook,
+                                description: e.target.value
+                            }) : setNewBook({...newBook, description: e.target.value})}
                         />
-                        <Form.Control
-                            type="text"
-                            placeholder="Enter author ID"
-                            value={editBook ? editBook.author_id : newBook.author_id}
-                            onChange={e => editBook ? setEditBook({ ...editBook, author_id: e.target.value }) : setNewBook({ ...newBook, author_id: e.target.value })}
-                        />
-                        <Form.Control
-                            type="text"
-                            placeholder="Enter library ID"
-                            value={editBook ? editBook.library_id : newBook.library_id}
-                            onChange={e => editBook ? setEditBook({ ...editBook, library_id: e.target.value }) : setNewBook({ ...newBook, library_id: e.target.value })}
-                        />
-                        <Form.Control
-                            type="text"
-                            placeholder="Enter publisher ID"
-                            value={editBook ? editBook.publisher_id : newBook.publisher_id}
-                            onChange={e => editBook ? setEditBook({ ...editBook, publisher_id: e.target.value }) : setNewBook({ ...newBook, publisher_id: e.target.value })}
-                        />
+                        <div className="select-container mb-2">
+                            <Form.Control
+                                as="select"
+                                value={editBook ? editBook.author_id : newBook.author_id}
+                                onChange={e => editBook ? setEditBook({
+                                    ...editBook,
+                                    author_id: e.target.value
+                                }) : setNewBook({...newBook, author_id: e.target.value})}
+                            >
+                                <option value="">Select Author</option>
+                                {authors.map(author => (
+                                    <option key={author.id} value={author.id}>{author.name}</option>
+                                ))}
+                            </Form.Control>
+                            <ChevronDownIcon className="icon"/>
+                        </div>
+                        <div className="select-container mb-2">
+                            <Form.Control
+                                as="select"
+                                value={editBook ? editBook.library_id : newBook.library_id}
+                                onChange={e => editBook ? setEditBook({
+                                    ...editBook,
+                                    library_id: e.target.value
+                                }) : setNewBook({...newBook, library_id: e.target.value})}
+                            >
+                                <option value="">Select Library</option>
+                                {libraries.map(library => (
+                                    <option key={library.id} value={library.id}>{library.name}</option>
+                                ))}
+                            </Form.Control>
+                            <ChevronDownIcon className="icon"/>
+                        </div>
+                        <div className="select-container mb-2">
+                            <Form.Control
+                                as="select"
+                                value={editBook ? editBook.publisher_id : newBook.publisher_id}
+                                onChange={e => editBook ? setEditBook({
+                                    ...editBook,
+                                    publisher_id: e.target.value
+                                }) : setNewBook({...newBook, publisher_id: e.target.value})}
+                            >
+                                <option value="">Select Publisher</option>
+                                {publishers.map(publisher => (
+                                    <option key={publisher.id} value={publisher.id}>{publisher.name}</option>
+                                ))}
+                            </Form.Control>
+                            <ChevronDownIcon className="icon"/>
+                        </div>
                         <Form.Control
                             type="file"
                             onChange={e => setImageFile(e.target.files[0])}
@@ -213,7 +306,7 @@ const BooksPage = () => {
                     </>
                 )}
             </ReusableModal>
-            <Table striped bordered hover responsive>
+            <Table hover className="text-center mt-2">
                 <thead className="bg-primary text-white">
                 <tr>
                     <th>ID</th>
@@ -243,8 +336,8 @@ const BooksPage = () => {
                         <td>{book.library_name}</td>
                         <td>{book.publisher_name}</td>
                         <td>
-                            <Button variant="warning" className="me-2" onClick={() => handleEditClick(book)}>Edit</Button>
-                            <Button variant="danger" onClick={() => {
+                            <Button variant="outline-secondary btn-sm" className="me-2" onClick={() => handleEditClick(book)}>Edit</Button>
+                            <Button variant="danger btn-sm" onClick={() => {
                                 setDeleteBook(book);
                                 setShowModal(true);
                             }}>Delete</Button>
@@ -253,17 +346,19 @@ const BooksPage = () => {
                 ))}
                 </tbody>
             </Table>
-            <div className="pagination">
-                {[...Array(totalPages).keys()].map((number) => (
-                    <Button
-                        key={number}
-                        className={`btn ${number === page ? 'btn-primary' : 'btn-secondary'}`}
-                        onClick={() => setPage(number)}
-                    >
-                        {number + 1}
-                    </Button>
-                ))}
-            </div>
+            {books.length > 10 && (
+                <div className="pagination">
+                    {[...Array(totalPages).keys()].map((number) => (
+                        <Button
+                            key={number}
+                            className={`btn ${number === page ? 'btn-primary' : 'btn-secondary'}`}
+                            onClick={() => setPage(number)}
+                        >
+                            {number + 1}
+                        </Button>
+                    ))}
+                </div>
+            )}
         </div>
     );
 };

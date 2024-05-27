@@ -93,8 +93,10 @@ const AuthorsPage = () => {
 
     return (
         <div>
-            <h1>Manage Authors</h1>
-            <Button variant="primary mt-3" onClick={() => setShowModal(true)}>+ Add Author</Button>
+            <div className="d-flex justify-content-between align-items-center mb-2">
+                <h3>Manage Authors</h3>
+                <Button variant="btn btn-primary my-4" onClick={() => setShowModal(true)}>+ Add Author</Button>
+            </div>
             {error && <div className="alert alert-danger">{error}</div>}
             <ReusableModal
                 show={showModal}
@@ -109,43 +111,49 @@ const AuthorsPage = () => {
                         <Form.Control
                             type="text"
                             placeholder="Enter name"
+                            className="mb-2"
                             value={editAuthor ? editAuthor.name : newAuthor.name}
                             onChange={e => editAuthor ? setEditAuthor({ ...editAuthor, name: e.target.value }) : setNewAuthor({ ...newAuthor, name: e.target.value })}
                         />
                         <Form.Control
                             type="email"
                             placeholder="Enter email"
+                            className="mb-2"
                             value={editAuthor ? editAuthor.email : newAuthor.email}
                             onChange={e => editAuthor ? setEditAuthor({ ...editAuthor, email: e.target.value }) : setNewAuthor({ ...newAuthor, email: e.target.value })}
                         />
                         <Form.Control
                             type="text"
                             placeholder="Enter biography"
+                            className="mb-2"
                             value={editAuthor ? editAuthor.biography : newAuthor.biography}
                             onChange={e => editAuthor ? setEditAuthor({ ...editAuthor, biography: e.target.value }) : setNewAuthor({ ...newAuthor, biography: e.target.value })}
                         />
                         <Form.Control
                             type="text"
                             placeholder="Enter nationality"
+                            className="mb-2"
                             value={editAuthor ? editAuthor.nationality : newAuthor.nationality}
                             onChange={e => editAuthor ? setEditAuthor({ ...editAuthor, nationality: e.target.value }) : setNewAuthor({ ...newAuthor, nationality: e.target.value })}
                         />
                         <Form.Control
                             type="date"
                             placeholder="Enter birth date"
+                            className="mb-2"
                             value={editAuthor ? editAuthor.birthDate : newAuthor.birthDate}
                             onChange={e => editAuthor ? setEditAuthor({ ...editAuthor, birthDate: e.target.value }) : setNewAuthor({ ...newAuthor, birthDate: e.target.value })}
                         />
                         <Form.Control
                             type="date"
                             placeholder="Enter death date"
+                            className="mb-2"
                             value={editAuthor ? editAuthor.deathDate : newAuthor.deathDate}
                             onChange={e => editAuthor ? setEditAuthor({ ...editAuthor, deathDate: e.target.value }) : setNewAuthor({ ...newAuthor, deathDate: e.target.value })}
                         />
                     </>
                 )}
             </ReusableModal>
-            <Table className="table table-hover text-center mt-5">
+            <Table className="table table-hover text-center mt-2">
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -169,8 +177,8 @@ const AuthorsPage = () => {
                         <td>{author.birthDate}</td>
                         <td>{author.deathDate}</td>
                         <td>
-                            <Button variant="warning text-light me-4" onClick={() => handleEditClick(author)}>Edit</Button>{' '}
-                            <Button variant="danger" onClick={() => {
+                            <Button variant="outline-secondary btn-sm text-dark me-" onClick={() => handleEditClick(author)}>Edit</Button>{' '}
+                            <Button variant="danger btn-sm" onClick={() => {
                                 setDeleteAuthor(author);
                                 setShowModal(true);
                             }}>Delete</Button>

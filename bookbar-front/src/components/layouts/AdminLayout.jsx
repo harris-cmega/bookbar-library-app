@@ -3,13 +3,11 @@ import { Container, Row, Col, Nav, Dropdown, Image } from 'react-bootstrap';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import useAdminAuth from '../../hooks/useAdminAuth';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOutAlt, faUsers, faBook, faBuilding, faAddressBook, faUserTie } from '@fortawesome/free-solid-svg-icons';
-import LibrariesByCityPieChart from '../dashboard components/LibrariesByCityPieChart.jsx'; // Import the component
-import PublishersStatsCard from '../dashboard components/PublishersStatsCard';
-import LibrariesStatsCard from '../dashboard components/LibrariesStatsCard';
-import AuthorsStatsCard from '../dashboard components/AuthorsStatsCard';
-import BooksStatsCard from '../dashboard components/BooksStatsCard';
+import LibrariesByCityPieChart from '../dashboard/LibrariesByCityPieChart.jsx'; // Import the component
+import PublishersStatsCard from '../dashboard/PublishersStatsCard';
+import LibrariesStatsCard from '../dashboard/LibrariesStatsCard';
+import AuthorsStatsCard from '../dashboard/AuthorsStatsCard';
+import BooksStatsCard from '../dashboard/BooksStatsCard';
 import {
     UserIcon,
     BookOpenIcon,
@@ -57,19 +55,6 @@ const AdminLayout = () => {
                     </Nav>
                 </Col>
                 <Col md={10} className="px-0">
-                    {location.pathname === '/admin/dashboard' && (
-                        <>
-                            <Row>
-                                <Col md={3}><AuthorsStatsCard/></Col>
-                                <Col md={3}><BooksStatsCard/></Col>
-                                <Col md={3}><PublishersStatsCard /></Col>
-                                <Col md={3}><LibrariesStatsCard/></Col>
-                            </Row>
-                            <Row>
-                                <Col md={12}><LibrariesByCityPieChart /></Col>
-                            </Row>
-                        </>
-                    )}
                     <div className="d-flex justify-content-between align-items-center p-3 border-bottom">
                         <div className="d-flex align-items-center">
                             <MagnifyingGlassIcon className="icon size-5 me-3" />
@@ -92,6 +77,21 @@ const AdminLayout = () => {
                                 </Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
+                    </div>
+                    <div className="p-4">
+                        {location.pathname === '/admin/dashboard' && (
+                            <>
+                                <Row>
+                                    <Col md={3}><AuthorsStatsCard/></Col>
+                                    <Col md={3}><BooksStatsCard/></Col>
+                                    <Col md={3}><PublishersStatsCard /></Col>
+                                    <Col md={3}><LibrariesStatsCard/></Col>
+                                </Row>
+                                <Row className="mt-4">
+                                    <Col md={12}><LibrariesByCityPieChart /></Col>
+                                </Row>
+                            </>
+                        )}
                     </div>
                     <div className="p-4">
                         <Outlet/>

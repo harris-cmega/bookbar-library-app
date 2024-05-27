@@ -36,7 +36,7 @@ const Books = () => {
                         <div className="col-md-3 mb-4" key={book.id}>
                             <div className="card mb-4 h-100">
                                 <img
-                                    src={book.image ? `http://localhost:8080/${book.image}` : `http://localhost:8080/public/placeholder.png`}
+                                    src={book.image ? `http://localhost:8080/${book.image}` : `http://localhost:8080/public/ph/placeholder.png`}
                                     className="card-img-top"
                                     alt={book.title}
                                     style={{ height: '250px', objectFit: 'cover' }}
