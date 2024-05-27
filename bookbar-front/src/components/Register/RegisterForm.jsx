@@ -2,10 +2,12 @@ import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import ApiService from '../../api/ApiService';
 import { AuthContext } from '../../context/AuthContext';
+import RegisterPageImg from '../../assets/login-page-image.jpg'; // Assuming you want to use the same image
 
 const RegisterForm = () => {
     const [user, setUser] = useState({ username: '', email: '', password: '', confirmPassword: '' });
     const [errors, setErrors] = useState({});
+    const [serverError, setServerError] = useState('');
     const navigate = useNavigate();
     const { login } = useContext(AuthContext);
 
@@ -34,6 +36,7 @@ const RegisterForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setServerError(''); // Reset server error on new submit
         if (!validate()) {
             return;
         }
@@ -42,92 +45,92 @@ const RegisterForm = () => {
             await login({ username: user.username, password: user.password });
             navigate('/users');
         } catch (error) {
-            alert('Registration or login failed!');
+            setServerError('Registration failed!');
         }
     };
 
     return (
-        <div className="container">
-            <div className="row">
-                <div className="col-lg-10 col-xl-9 mx-auto">
-                    <div className="card flex-row my-5 border-0 shadow rounded-3 overflow-hidden">
-                        <div className="card-img-left d-none d-md-flex">
-                            {/* Background image for card set in CSS! */}
-                        </div>
-                        <div className="card-body p-4 p-sm-5">
-                            <h5 className="card-title text-center mb-5 fw-light fs-5">Register</h5>
-                            <form noValidate onSubmit={handleSubmit}>
-                                <div className="form-floating mb-3">
+        <section className="vh-100">
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col-12 col-lg-6 col-md-4 d-none d-sm-block px-0">
+                        <img src={RegisterPageImg} alt="Register image" className="w-100 vh-100" style={{ objectFit: 'cover', objectPosition: 'left' }} />
+                    </div>
+                    <div className="col-12 col-lg-5 col-md-6 offset-lg-1 offset-md-2 text-black">
+                        <div className="d-flex align-items-center h-custom-2 px-4 ms-xl-4 mt-auto pt-auto pt-xl-0 mt-xl-n5">
+                            <form style={{ width: '20rem' }} noValidate onSubmit={handleSubmit} id="userRegisterForm">
+                                <h3 className="fw-bold mb-5 pb-3" style={{ letterSpacing: '1px' }}>Register</h3>
+                                {serverError && <div className="alert alert-danger">{serverError}</div>}
+                                <div className="form-outline mb-4">
+                                    <label className="form-label" htmlFor="floatingInputUsername">Username</label>
                                     <input
                                         type="text"
-                                        className={`form-control ${errors.username ? 'is-invalid' : ''}`}
                                         id="floatingInputUsername"
                                         name="username"
+                                        className={`form-control ${errors.username ? 'is-invalid' : ''}`}
                                         placeholder="myusername"
                                         required
-                                        autoFocus
                                         value={user.username}
                                         onChange={handleChange}
                                     />
-                                    <label htmlFor="floatingInputUsername">Username</label>
                                     {errors.username && <div className="invalid-feedback">{errors.username}</div>}
                                 </div>
 
-                                <div className="form-floating mb-3">
+                                <div className="form-outline mb-4">
+                                    <label className="form-label" htmlFor="floatingInputEmail">Email address</label>
                                     <input
                                         type="email"
-                                        className={`form-control ${errors.email ? 'is-invalid' : ''}`}
                                         id="floatingInputEmail"
                                         name="email"
+                                        className={`form-control ${errors.email ? 'is-invalid' : ''}`}
                                         placeholder="name@example.com"
                                         value={user.email}
                                         onChange={handleChange}
                                     />
-                                    <label htmlFor="floatingInputEmail">Email address</label>
                                     {errors.email && <div className="invalid-feedback">{errors.email}</div>}
                                 </div>
 
-                                <hr />
-
-                                <div className="form-floating mb-3">
+                                <div className="form-outline mb-4">
+                                    <label className="form-label" htmlFor="floatingPassword">Password</label>
                                     <input
                                         type="password"
-                                        className={`form-control ${errors.password ? 'is-invalid' : ''}`}
                                         id="floatingPassword"
                                         name="password"
+                                        className={`form-control ${errors.password ? 'is-invalid' : ''}`}
                                         placeholder="Password"
                                         value={user.password}
                                         onChange={handleChange}
                                     />
-                                    <label htmlFor="floatingPassword">Password</label>
                                     {errors.password && <div className="invalid-feedback">{errors.password}</div>}
                                 </div>
 
-                                <div className="form-floating mb-3">
+                                <div className="form-outline mb-5">
+                                    <label className="form-label" htmlFor="floatingPasswordConfirm">Confirm Password</label>
                                     <input
                                         type="password"
-                                        className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
                                         id="floatingPasswordConfirm"
                                         name="confirmPassword"
+                                        className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
                                         placeholder="Confirm Password"
                                         value={user.confirmPassword}
                                         onChange={handleChange}
                                     />
-                                    <label htmlFor="floatingPasswordConfirm">Confirm Password</label>
                                     {errors.confirmPassword && <div className="invalid-feedback">{errors.confirmPassword}</div>}
                                 </div>
 
-                                <div className="d-grid mb-2">
-                                    <button className="btn btn-lg btn-primary btn-login fw-bold text-uppercase" type="submit">Register</button>
+                                <div className="mb-2">
+                                    <button className="btn btn-primary btn-lg btn-login btn-block" type="submit">Register</button>
                                 </div>
-                                <Link className="d-block text-center mt-2 small" to="/login">Have an account? Sign In</Link>
-                                <hr className="my-4" />
+                                <span className="d-block mt-2 small">
+                                    Already have an account? <Link to="/login">Sign In</Link>
+                                </span>
+
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     );
 };
 

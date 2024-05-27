@@ -1,6 +1,6 @@
 import Carousel from "../components/Carousel.jsx";
 import CallToAction from "../components/CallToAction.jsx";
-import Layout from '../components/Layout.jsx';
+import Layout from '../components/layouts/Layout.jsx';
 
 const Home = () => {
     return (

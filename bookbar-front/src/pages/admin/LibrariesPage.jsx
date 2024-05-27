@@ -123,8 +123,10 @@ const LibrariesPage = () => {
 
     return (
         <div>
-            <h1>Manage Libraries</h1>
-            <Button variant="primary mt-3" onClick={() => setShowModal(true)}>+ Add Library</Button>
+            <div className="d-flex justify-content-between align-items-center mb-2">
+                <h3>Manage Libraries</h3>
+                <Button variant="btn btn-primary my-4" onClick={() => setShowModal(true)}>+ Add Library</Button>
+            </div>
             {error && <div className="alert alert-danger">{error}</div>}
             <ReusableModal
                 show={showModal}
@@ -139,6 +141,7 @@ const LibrariesPage = () => {
                         <Form.Control
                             type="text"
                             name="name"
+                            className="mb-2"
                             placeholder="Enter name"
                             value={editLibrary ? editLibrary.name : newLibrary.name}
                             onChange={handleInputChange}
@@ -146,6 +149,7 @@ const LibrariesPage = () => {
                         <Form.Control
                             type="text"
                             name="address"
+                            className="mb-2"
                             placeholder="Enter address"
                             value={editLibrary ? editLibrary.address : newLibrary.address}
                             onChange={handleInputChange}
@@ -153,6 +157,7 @@ const LibrariesPage = () => {
                         <Form.Control
                             type="text"
                             name="city"
+                            className="mb-2"
                             placeholder="Enter city"
                             value={editLibrary ? editLibrary.city : newLibrary.city}
                             onChange={handleInputChange}
@@ -160,6 +165,7 @@ const LibrariesPage = () => {
                         <Form.Control
                             type="text"
                             name="state"
+                            className="mb-2"
                             placeholder="Enter state"
                             value={editLibrary ? editLibrary.state : newLibrary.state}
                             onChange={handleInputChange}
@@ -167,6 +173,7 @@ const LibrariesPage = () => {
                         <Form.Control
                             type="text"
                             name="zip_code"
+                            className="mb-2"
                             placeholder="Enter zip code"
                             value={editLibrary ? editLibrary.zip_code : newLibrary.zip_code}
                             onChange={handleInputChange}
@@ -174,6 +181,7 @@ const LibrariesPage = () => {
                         <Form.Control
                             type="text"
                             name="phone"
+                            className="mb-2"
                             placeholder="Enter phone"
                             value={editLibrary ? editLibrary.phone : newLibrary.phone}
                             onChange={handleInputChange}
@@ -181,6 +189,7 @@ const LibrariesPage = () => {
                         <Form.Control
                             type="email"
                             name="email"
+                            className="mb-2"
                             placeholder="Enter email"
                             value={editLibrary ? editLibrary.email : newLibrary.email}
                             onChange={handleInputChange}
@@ -188,6 +197,7 @@ const LibrariesPage = () => {
                         <Form.Control
                             type="text"
                             name="opening_hours"
+                            className="mb-2"
                             placeholder="Enter opening hours"
                             value={editLibrary ? editLibrary.opening_hours : newLibrary.opening_hours}
                             onChange={handleInputChange}
@@ -195,7 +205,7 @@ const LibrariesPage = () => {
                     </>
                 )}
             </ReusableModal>
-            <Table className="table table-hover text-center mt-5">
+            <Table className="table table-hover text-center mt-2">
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -223,8 +233,8 @@ const LibrariesPage = () => {
                         <td>{library.email}</td>
                         <td>{library.opening_hours}</td>
                         <td>
-                            <Button variant="warning text-light me-4" onClick={() => handleEditClick(library)}>Edit</Button>{' '}
-                            <Button variant="danger" onClick={() => {
+                            <Button variant="outline-secondary btn-sm text-dark me-2" onClick={() => handleEditClick(library)}>Edit</Button>{' '}
+                            <Button variant="danger btn-sm" onClick={() => {
                                 setDeleteLibrary(library);
                                 setShowModal(true);
                             }}>Delete</Button>

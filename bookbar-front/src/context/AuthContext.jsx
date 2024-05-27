@@ -15,9 +15,9 @@ export const AuthProvider = ({ children }) => {
     const login = async (credentials) => {
         try {
             const response = await ApiService.login(credentials);
-            const { token, refreshToken } = response.data;
+            const { token, refresh_token } = response.data;
             localStorage.setItem('token', token);
-            localStorage.setItem('refresh_token', refreshToken);
+            localStorage.setItem('refresh_token', refresh_token);
             const decodedUser = jwtDecode(token);
             setUser(decodedUser);
         } catch (error) {

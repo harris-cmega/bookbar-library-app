@@ -14,15 +14,24 @@ import LibrariesPage from './pages/admin/LibrariesPage';
 import PublishersPage from './pages/admin/PublishersPage';
 import UsersPage from './pages/admin/UsersPage';
 import { Roles } from './utils/Roles';
+import InternalServerError from "./pages/InternalServerError.jsx";
+import NotFound from "./pages/NotFound.jsx";
+import Forbidden from "./pages/Forbidden.jsx";
+import ErrorBoundary from "./components/ErrorBoundary.jsx";
+import BookDetails from "./pages/books/BookDetails.jsx";
+import Books from "./pages/books/Books.jsx";
 
 const App = () => {
     return (
         <Router>
+            <ErrorBoundary>
             <AuthProvider>
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/books" element={<Books />} />
+                    <Route path="/books/:id" element={<BookDetails />} />
                     <Route path="/subscription" element={<Subscription />} />
                     <Route path="/users" element={<PrivateRoute role={Roles.USER}><Users /></PrivateRoute>} />
                     <Route path="/admin/*" element={<PrivateRoute role={Roles.ADMIN}><AdminLayout /></PrivateRoute>}>
@@ -32,8 +41,13 @@ const App = () => {
                         <Route path="publishers" element={<PublishersPage />} />
                         <Route path="users" element={<UsersPage />} />
                     </Route>
+                    //Error pages
+                    <Route path="/500" element={<InternalServerError />} />
+                    <Route path="/403" element={<Forbidden />} />
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
             </AuthProvider>
+            </ErrorBoundary>
         </Router>
     );
 };
