@@ -8,10 +8,12 @@ import Register from './pages/Register';
 import Subscription from './pages/Subscription';
 import Users from './pages/Users';
 import AdminLayout from './components/layouts/AdminLayout';
+import UserSubscriptionsPage from './pages/admin/UserSubscriptionsPage'
 import AuthorsPage from './pages/admin/AuthorsPage';
 import BooksPage from './pages/admin/BooksPage';
 import LibrariesPage from './pages/admin/LibrariesPage';
 import PublishersPage from './pages/admin/PublishersPage';
+import BookFilesPage from './pages/admin/BookFilesPage';
 import UsersPage from './pages/admin/UsersPage';
 import { Roles } from './utils/Roles';
 import InternalServerError from "./pages/InternalServerError.jsx";
@@ -37,6 +39,8 @@ const App = () => {
                     <Route path="/admin/*" element={<PrivateRoute role={Roles.ADMIN}><AdminLayout /></PrivateRoute>}>
                         <Route path="authors" element={<AuthorsPage />} />
                         <Route path="books" element={<BooksPage />} />
+                        <Route path="user-subscriptions" element={<UserSubscriptionsPage />} />
+                        <Route path="book-files" element={<BookFilesPage />} />
                         <Route path="libraries" element={<LibrariesPage />} />
                         <Route path="publishers" element={<PublishersPage />} />
                         <Route path="users" element={<UsersPage />} />

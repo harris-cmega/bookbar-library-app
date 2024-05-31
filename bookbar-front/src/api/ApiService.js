@@ -242,6 +242,113 @@ const ApiService = {
             });
         }
     },
+    getBookFiles: async () => {
+        let token = localStorage.getItem('token');
+        let refreshToken = localStorage.getItem('refresh_token');
+
+        if (token && refreshToken) {
+            if (isTokenExpired(token)) {
+                const response = await ApiService.refreshToken(refreshToken);
+                token = response.data.token;
+                localStorage.setItem('token', token);
+            }
+            return axios.get(`${API_URL}/book-files`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+        }
+    },
+    getBookFileById: async (id) => {
+        let token = localStorage.getItem('token');
+        let refreshToken = localStorage.getItem('refresh_token');
+
+        if (token && refreshToken) {
+            if (isTokenExpired(token)) {
+                const response = await ApiService.refreshToken(refreshToken);
+                token = response.data.token;
+                localStorage.setItem('token', token);
+            }
+            return axios.get(`${API_URL}/book-files/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+        }
+    },
+    createBookFile: (bookFile) => {
+        const token = localStorage.getItem('token');
+        return axios.post(`${API_URL}/book-files`, bookFile, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+    },
+
+    updateBookFile: (id, bookFile) => {
+        const token = localStorage.getItem('token');
+        return axios.put(`${API_URL}/book-files/${id}`, bookFile, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+    },
+
+    deleteBookFile: (bookFileId) => {
+        const token = localStorage.getItem('token');
+        return axios.delete(`${API_URL}/book-files/${bookFileId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
+    getUserSubscriptions: async () => {
+        let token = localStorage.getItem('token');
+        let refreshToken = localStorage.getItem('refresh_token');
+
+        if(token && refreshToken) {
+            if (isTokenExpired(token)) {
+                const response = await ApiService.refreshToken(refreshToken);
+                token = response.data.token;
+                localStorage.setItem('token', token);
+            }
+            return axios.get(`${API_URL}/user-subscriptions`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+        }
+    },
+    createUserSubscription: (userSubscription) => {
+        const token = localStorage.getItem('token');
+        return axios.post(`${API_URL}/user-subscriptions`, userSubscription, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
+    updateUserSubscription: (id, userSubscription) => {
+        const token = localStorage.getItem('token');
+        return axios.put(`${API_URL}/user-subscriptions/${id}`, userSubscription, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
+    deleteUserSubscription: (userSubscriptionId) => {
+        const token = localStorage.getItem('token');
+        return axios.delete(`${API_URL}/user-subscriptions/${userSubscriptionId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
+    createSubscriptionForUser: (userId, userSubscription) => {
+        const token = localStorage.getItem('token');
+        return axios.post(`${API_URL}/user-subscriptions/create-for-user?userId=${userId}`, userSubscription, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
+
+
 
     // Dashboard methods
     getLibrariesDashboard: async () => {

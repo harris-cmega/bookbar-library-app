@@ -33,8 +33,8 @@ public class UserSubscriptionController {
 
     // Build Get All User Subscriptions REST API
     @GetMapping
-    public ResponseEntity<List<UserSubscriptionDto>> getAllUserSubscriptions(){
-        List<UserSubscriptionDto> userSubscriptions = userSubscriptionService.getAllUserSubscription();
+    public ResponseEntity<List<UserSubscriptionDto>> getAllUserSubscriptions() {
+        List<UserSubscriptionDto> userSubscriptions = userSubscriptionService.getAllUserSubscriptions();
         return ResponseEntity.ok(userSubscriptions);
     }
 
@@ -45,10 +45,15 @@ public class UserSubscriptionController {
         return ResponseEntity.ok(userSubscriptionDto);
     }
 
-    // Build Delete User Subcription REST API
+    // Build Delete User Subscription REST API
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteUserSubscription(@PathVariable("id") Long id){
         userSubscriptionService.deleteUserSubscription(id);
         return  ResponseEntity.ok("User Subscription deleted successfully!");
+    }
+
+    @PostMapping("/create-for-user")
+    public ResponseEntity<UserSubscriptionDto> createSubscriptionForUser(@RequestParam Long userId, @RequestBody UserSubscriptionDto userSubscriptionDto) {
+        return ResponseEntity.ok(userSubscriptionService.createSubscriptionForUser(userId, userSubscriptionDto));
     }
 }

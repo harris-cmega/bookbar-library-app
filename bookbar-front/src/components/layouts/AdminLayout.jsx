@@ -16,7 +16,9 @@ import {
     UsersIcon,
     ArrowRightOnRectangleIcon,
     MagnifyingGlassIcon,
-    BellIcon
+    BellIcon,
+    DocumentTextIcon,
+    FireIcon
 } from '@heroicons/react/24/outline';
 
 const AdminLayout = () => {
@@ -40,8 +42,14 @@ const AdminLayout = () => {
                         <Nav.Link as={Link} to="/admin/users" className="text-dark p-3 d-flex align-items-center">
                             <UsersIcon className="icon size-4 me-2" />Users
                         </Nav.Link>
+                        <Nav.Link as={Link} to="/admin/user-subscriptions" className="text-dark p-3 d-flex align-items-center">
+                            <FireIcon className="icon size-4 me-2" />User Subscriptions
+                        </Nav.Link>
                         <Nav.Link as={Link} to="/admin/books" className="text-dark p-3 d-flex align-items-center">
                             <BookOpenIcon className="icon size-4 me-2" />Books
+                        </Nav.Link>
+                        <Nav.Link as={Link} to="/admin/book-files" className="text-dark p-3 d-flex align-items-center">
+                            <DocumentTextIcon className="icon size-4 me-2" />Book files
                         </Nav.Link>
                         <Nav.Link as={Link} to="/admin/libraries" className="text-dark p-3 d-flex align-items-center">
                             <BuildingLibraryIcon className="icon size-4 me-2" />Libraries

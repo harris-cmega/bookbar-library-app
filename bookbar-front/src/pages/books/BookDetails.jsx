@@ -4,18 +4,32 @@ import ApiService from '../../api/ApiService';
 import Layout from '../../components/layouts/Layout';
 import { StarIcon, HeartIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid';
+import {
+    ReactReader, 
+    ReactReaderStyle
+  } from 'react-reader'
+import epubFile from '../../assets/atomichabits.epub'; // Import the EPUB file
 
 const BookDetails = () => {
     const { id } = useParams();
     const [book, setBook] = useState(null);
     const [rating, setRating] = useState(4); // Example rating
     const [isInWishlist, setIsInWishlist] = useState(false);
+    const [epubUrl, setEpubUrl] = useState(epubFile);
+    const [location, setLocation] = useState(null);
 
     useEffect(() => {
         const fetchBook = async () => {
             try {
                 const response = await ApiService.getPublicBookById(id);
                 setBook(response.data);
+
+                // Fetch the associated EPUB file
+                // const bookFilesResponse = await ApiService.getBookFileByBookId(id);
+                // if (bookFilesResponse.data.length > 0) {
+                //     const bookFile = bookFilesResponse.data[0]; 
+                //     setEpubUrl(bookFile.file); 
+                // }
             } catch (error) {
                 console.error('Error fetching book details:', error);
             }
@@ -25,6 +39,10 @@ const BookDetails = () => {
 
     const toggleWishlist = () => {
         setIsInWishlist(!isInWishlist);
+    };
+
+    const onLocationChanged = (epubcifi) => {
+        setLocation(epubcifi);
     };
 
     if (!book) {
@@ -81,8 +99,35 @@ const BookDetails = () => {
                     </div>
                 </div>
             </div>
+            {epubUrl && (
+                <div className="row mt-5">
+                    <div className="col-12">
+                        <h2>Read Book</h2>
+                        <div className="vh-100">
+                            <ReactReader
+                                url={epubUrl}
+                                title={book.title}
+                                location={location}
+                                locationChanged={onLocationChanged}
+                                readerStyle={{
+                                    ...ReactReaderStyle,
+                                    container: {
+                                        ...ReactReaderStyle.container,
+                                        backgroundColor: '#fff',
+                                        color: '#000',
+                                    },
+                                    reader: {
+                                        ...ReactReaderStyle.reader,
+                                        backgroundColor: '#fff',
+                                    }
+                                }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
         </Layout>
     );
-};
+}
 
 export default BookDetails;
