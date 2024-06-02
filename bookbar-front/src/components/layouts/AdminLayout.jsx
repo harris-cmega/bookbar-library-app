@@ -18,7 +18,8 @@ import {
     MagnifyingGlassIcon,
     BellIcon,
     DocumentTextIcon,
-    FireIcon
+    FireIcon,
+    TagIcon, // Add this line for categories icon
 } from '@heroicons/react/24/outline';
 
 const AdminLayout = () => {
@@ -59,6 +60,12 @@ const AdminLayout = () => {
                         </Nav.Link>
                         <Nav.Link as={Link} to="/admin/authors" className="text-dark p-3 d-flex align-items-center">
                             <UserIcon className="icon size-4 me-2" />Authors
+                        </Nav.Link>
+                        <Nav.Link as={Link} to="/admin/categories" className="text-dark p-3 d-flex align-items-center"> {/* Add this line */}
+                            <TagIcon className="icon size-4 me-2" />Categories
+                        </Nav.Link>
+                        <Nav.Link as={Link} to="/admin/book-categories" className="text-dark p-3 d-flex align-items-center"> {/* Add this line */}
+                            <BookOpenIcon className="icon size-4 me-2" />Book Categories
                         </Nav.Link>
                     </Nav>
                 </Col>

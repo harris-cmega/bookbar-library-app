@@ -11,8 +11,10 @@ public class BookCategoryDTO {
     private Long id;
 
     @NotNull(message = "Book ID is mandatory")
-    private Long bookId;
+    private Long book_id;
+    private String book_title;
 
     @NotNull(message = "Category ID is mandatory")
-    private Long categoryId;
+    private Long category_id;
+    private String category_name;
 }

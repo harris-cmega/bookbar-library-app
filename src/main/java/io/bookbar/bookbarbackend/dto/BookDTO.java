@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+import java.util.Set;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -48,4 +51,6 @@ public class BookDTO {
 
     private Long publisher_id;
     private String publisher_name;
+
+    private List<CategoryDTO> categories;
 }
