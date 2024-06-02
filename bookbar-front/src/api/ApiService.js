@@ -128,10 +128,22 @@ const ApiService = {
         });
     },
     searchBooks: async (query) => {
+        const token = localStorage.getItem('token');
+        let refreshToken = localStorage.getItem('refresh_token');
 
-    return axios.get(`${API_URL}/search/books`, {
-        params: { query },
-    });
+        if (token && refreshToken) {
+            if (isTokenExpired(token)) {
+                const response = await ApiService.refreshToken(refreshToken);
+                token = response.data.token;
+                localStorage.setItem('token', token);
+            }
+            return axios.get(`${API_URL}/books/search`, {
+                params: { query },
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+        }
     },
     getLibraries: async () => {
         let token = localStorage.getItem('token');
@@ -348,7 +360,83 @@ const ApiService = {
         });
     },
 
+    getCategories: async () => {
+        let token = localStorage.getItem('token');
+        let refreshToken = localStorage.getItem('refresh_token');
 
+        if (token && refreshToken) {
+            if (isTokenExpired(token)) {
+                const response = await ApiService.refreshToken(refreshToken);
+                token = response.data.token;
+                localStorage.setItem('token', token);
+            }
+            return axios.get(`${API_URL}/categories`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+        }
+    },
+
+    createCategory: (category) => {
+        const token = localStorage.getItem('token');
+        return axios.post(`${API_URL}/categories`, category, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+    },
+
+    updateCategory: (id, category) => {
+        const token = localStorage.getItem('token');
+        return axios.put(`${API_URL}/categories/${id}`, category, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+    },
+
+    deleteCategory: (id) => {
+        const token = localStorage.getItem('token');
+        return axios.delete(`${API_URL}/categories/${id}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+    },
+
+    getBookCategories: async () => {
+        let token = localStorage.getItem('token');
+        let refreshToken = localStorage.getItem('refresh_token');
+
+        if (token && refreshToken) {
+            if (isTokenExpired(token)) {
+                const response = await ApiService.refreshToken(refreshToken);
+                token = response.data.token;
+                localStorage.setItem('token', token);
+            }
+            return axios.get(`${API_URL}/book-categories`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+        }
+    },
+
+    createBookCategory: (bookCategory) => {
+        const token = localStorage.getItem('token');
+        return axios.post(`${API_URL}/book-categories`, bookCategory, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+    },
+
+    updateBookCategory: (id, bookCategory) => {
+        const token = localStorage.getItem('token');
+        return axios.put(`${API_URL}/book-categories/${id}`, bookCategory, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+    },
+
+    deleteBookCategory: (id) => {
+        const token = localStorage.getItem('token');
+        return axios.delete(`${API_URL}/book-categories/${id}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+    },
 
     // Dashboard methods
     getLibrariesDashboard: async () => {

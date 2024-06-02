@@ -15,6 +15,8 @@ import LibrariesPage from './pages/admin/LibrariesPage';
 import PublishersPage from './pages/admin/PublishersPage';
 import BookFilesPage from './pages/admin/BookFilesPage';
 import UsersPage from './pages/admin/UsersPage';
+import CategoriesPage from './pages/admin/CategoriesPage'; // Import CategoriesPage
+import BookCategoriesPage from './pages/admin/BookCategoriesPage'; // Import BookCategoriesPage
 import { Roles } from './utils/Roles';
 import InternalServerError from "./pages/InternalServerError.jsx";
 import NotFound from "./pages/NotFound.jsx";
@@ -27,30 +29,32 @@ const App = () => {
     return (
         <Router>
             <ErrorBoundary>
-            <AuthProvider>
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/books" element={<Books />} />
-                    <Route path="/books/:id" element={<BookDetails />} />
-                    <Route path="/subscription" element={<Subscription />} />
-                    <Route path="/users" element={<PrivateRoute role={Roles.USER}><Users /></PrivateRoute>} />
-                    <Route path="/admin/*" element={<PrivateRoute role={Roles.ADMIN}><AdminLayout /></PrivateRoute>}>
-                        <Route path="authors" element={<AuthorsPage />} />
-                        <Route path="books" element={<BooksPage />} />
-                        <Route path="user-subscriptions" element={<UserSubscriptionsPage />} />
-                        <Route path="book-files" element={<BookFilesPage />} />
-                        <Route path="libraries" element={<LibrariesPage />} />
-                        <Route path="publishers" element={<PublishersPage />} />
-                        <Route path="users" element={<UsersPage />} />
-                    </Route>
-                    //Error pages
-                    <Route path="/500" element={<InternalServerError />} />
-                    <Route path="/403" element={<Forbidden />} />
-                    <Route path="*" element={<NotFound />} />
-                </Routes>
-            </AuthProvider>
+                <AuthProvider>
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/books" element={<Books />} />
+                        <Route path="/books/:id" element={<BookDetails />} />
+                        <Route path="/subscription" element={<Subscription />} />
+                        <Route path="/users" element={<PrivateRoute role={Roles.USER}><Users /></PrivateRoute>} />
+                        <Route path="/admin/*" element={<PrivateRoute role={Roles.ADMIN}><AdminLayout /></PrivateRoute>}>
+                            <Route path="authors" element={<AuthorsPage />} />
+                            <Route path="books" element={<BooksPage />} />
+                            <Route path="user-subscriptions" element={<UserSubscriptionsPage />} />
+                            <Route path="book-files" element={<BookFilesPage />} />
+                            <Route path="libraries" element={<LibrariesPage />} />
+                            <Route path="publishers" element={<PublishersPage />} />
+                            <Route path="users" element={<UsersPage />} />
+                            <Route path="categories" element={<CategoriesPage />} /> {/* Add this line */}
+                            <Route path="book-categories" element={<BookCategoriesPage />} /> {/* Add this line */}
+                        </Route>
+                        {/* Error pages */}
+                        <Route path="/500" element={<InternalServerError />} />
+                        <Route path="/403" element={<Forbidden />} />
+                        <Route path="*" element={<NotFound />} />
+                    </Routes>
+                </AuthProvider>
             </ErrorBoundary>
         </Router>
     );

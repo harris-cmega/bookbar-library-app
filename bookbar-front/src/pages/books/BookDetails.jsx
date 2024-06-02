@@ -5,9 +5,9 @@ import Layout from '../../components/layouts/Layout';
 import { StarIcon, HeartIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid';
 import {
-    ReactReader, 
+    ReactReader,
     ReactReaderStyle
-  } from 'react-reader'
+} from 'react-reader';
 import epubFile from '../../assets/atomichabits.epub'; // Import the EPUB file
 
 const BookDetails = () => {
@@ -27,8 +27,8 @@ const BookDetails = () => {
                 // Fetch the associated EPUB file
                 // const bookFilesResponse = await ApiService.getBookFileByBookId(id);
                 // if (bookFilesResponse.data.length > 0) {
-                //     const bookFile = bookFilesResponse.data[0]; 
-                //     setEpubUrl(bookFile.file); 
+                //     const bookFile = bookFilesResponse.data[0];
+                //     setEpubUrl(bookFile.file);
                 // }
             } catch (error) {
                 console.error('Error fetching book details:', error);
@@ -51,7 +51,6 @@ const BookDetails = () => {
 
     const imageUrl = book.image ? `http://localhost:8080/${book.image}` : `http://localhost:8080/public/ph/placeholder.png`;
 
-
     return (
         <Layout>
             <div className="container mt-5 mb-5">
@@ -61,14 +60,13 @@ const BookDetails = () => {
                             src={imageUrl}
                             alt={book.title}
                             className="img-fluid rounded"
-                            style={{width: '500px', height: '600px', objectFit: 'cover'}}
+                            style={{ width: '500px', height: '600px', objectFit: 'cover' }}
                         />
                     </div>
                     <div className="col-md-8">
                         <h1>{book.title}</h1>
                         <div className="d-flex align-items-center">
                             <p className="me-2"><strong>Author:</strong> {book.author_name}</p>
-
                         </div>
                         <p><strong>Publisher:</strong> {book.publisher_name}</p>
                         <p><strong>Language:</strong> {book.language}</p>
@@ -76,13 +74,14 @@ const BookDetails = () => {
                         <p><strong>Description:</strong> {book.description}</p>
                         <p><strong>Pages:</strong> {book.page_number}</p>
                         <p><strong>Price:</strong> ${book.price}</p>
+                        <p><strong>Categories:</strong> {book.categories.map(category => category.name).join(', ')}</p> {/* Add this line */}
                         <div className="d-flex align-items-center">
                             <p className="me-2"><strong>Rating:</strong></p>
                             {[...Array(5)].map((star, index) => (
                                 <StarIcon
                                     key={index}
                                     className={`icon ${index < rating ? 'text-warning' : 'text-muted'}`}
-                                    style={{width: '1.5rem', height: '1.5rem'}}
+                                    style={{ width: '1.5rem', height: '1.5rem' }}
                                 />
                             ))}
                         </div>
@@ -92,8 +91,8 @@ const BookDetails = () => {
                             onClick={toggleWishlist}
                         >
                             {isInWishlist
-                                ? <HeartSolidIcon className="icon" style={{width: '1.4rem', height: '1.4rem'}}/>
-                                : <HeartIcon className="icon" style={{width: '1.4rem', height: '1.4rem'}}/>
+                                ? <HeartSolidIcon className="icon" style={{ width: '1.4rem', height: '1.4rem' }} />
+                                : <HeartIcon className="icon" style={{ width: '1.4rem', height: '1.4rem' }} />
                             }
                         </button>
                     </div>
