@@ -7,13 +7,31 @@ const ApiService = {
     login: (credentials) => axios.post(`${API_URL}/auth/login`, credentials),
     register: (user) => axios.post(`${API_URL}/auth/register`, user),
     refreshToken: (refreshToken) => axios.post(`${API_URL}/auth/refresh-token`, { refreshToken }),
-    createUser: (user) => {
+    createUser: async (user) => {
         const token = localStorage.getItem('token');
-        return axios.post(`${API_URL}/users`, user, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+        try {
+            // Create the user
+            const response = await axios.post(`${API_URL}/users`, user, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            // Extract the user ID from the response
+            const userId = response.data.id;
+
+            // Create a cart for the new user
+            await axios.post(`${API_URL}/carts`, { userId }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            return response;
+        } catch (error) {
+            console.error('Failed to create user and cart:', error);
+            throw error;
+        }
     },
     updateUser: (id, user) => {
         const token = localStorage.getItem('token');

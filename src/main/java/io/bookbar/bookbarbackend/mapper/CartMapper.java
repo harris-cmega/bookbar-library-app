@@ -5,6 +5,7 @@ import io.bookbar.bookbarbackend.entities.Cart;
 import io.bookbar.bookbarbackend.entities.CartItem;
 import io.bookbar.bookbarbackend.entities.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,9 +18,11 @@ public class CartMapper {
         CartDTO dto = new CartDTO();
         dto.setId(cart.getId());
         dto.setUserId(cart.getUser().getId());
-        dto.setCartItems(cart.getCartItems().stream()
-                .map(CartItemMapper::toCartItemDTO)
-                .collect(Collectors.toList()));
+        dto.setCartItems(cart.getCartItems() != null ?
+                cart.getCartItems().stream()
+                        .map(CartItemMapper::toCartItemDTO)
+                        .collect(Collectors.toList()) :
+                new ArrayList<>());
         return dto;
     }
 
@@ -30,7 +33,7 @@ public class CartMapper {
         Cart cart = new Cart();
         cart.setId(dto.getId());
         cart.setUser(user);
-        cart.setCartItems(cartItems);
+        cart.setCartItems(cartItems != null ? cartItems : new ArrayList<>());
         return cart;
     }
 }
