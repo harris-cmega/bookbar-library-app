@@ -128,7 +128,7 @@ const ApiService = {
         });
     },
     searchBooks: async (query) => {
-        const token = localStorage.getItem('token');
+        let token = localStorage.getItem('token');
         let refreshToken = localStorage.getItem('refresh_token');
 
         if (token && refreshToken) {

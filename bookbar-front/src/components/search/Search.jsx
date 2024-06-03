@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import ApiService from '../../api/ApiService.js';
+import ApiService from '../../api/ApiService';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './Search.css';
 
 const Search = () => {
@@ -45,9 +46,9 @@ const Search = () => {
                 </button>
             </div>
             {(results.length > 0 || query.length >= 3) && (
-                <ul className="dropdown-menu show">
+                <ul className="dropdown-menu show" style={{ position: 'absolute', top: '100%', left: 0, right: 0 }}>
                     {results.length > 0 ? (
-                        results.slice(0, 3).map((result) => (
+                        results.slice(0, 5).map((result) => (
                             <li key={result.id} className="dropdown-item">
                                 <Link to={`/books/${result.id}`} className="text-decoration-none text-dark">
                                     {result.title} by {result.author_name}
