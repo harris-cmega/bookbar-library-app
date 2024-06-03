@@ -6,10 +6,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -28,5 +27,11 @@ public class BookPublicController {
     public ResponseEntity<BookDTO> getBookById(@PathVariable("id") Long bookId) {
         BookDTO bookDto = bookService.getBookById(bookId);
         return ResponseEntity.ok(bookDto);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<BookDTO>> searchBooks(@RequestParam("query") String query) {
+        List<BookDTO> books = bookService.searchBooks(query);
+        return ResponseEntity.ok(books);
     }
 }

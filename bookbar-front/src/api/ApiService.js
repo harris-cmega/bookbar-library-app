@@ -57,6 +57,26 @@ const ApiService = {
         return axios.get(`${API_URL}/public/books/${id}`, {
         });
     },
+
+
+    getPublicCategories: async () => {
+        return axios.get(`${API_URL}/public/categories`);
+    },
+
+    getPublicAuthors: async () => {
+        return axios.get(`${API_URL}/public/authors`);
+    },
+
+    searchPublicBooks: async (query) => {
+        try {
+            const response = await axios.get(`${API_URL}/public/books/search`, { params: { query } });
+            return response.data;
+        } catch (error) {
+            console.error('Error searching books:', error);
+            throw error;
+        }
+    },
+
     getBooks: async (page = 0, size = 10) => {
         let token = localStorage.getItem('token');
         let refreshToken = localStorage.getItem('refresh_token');

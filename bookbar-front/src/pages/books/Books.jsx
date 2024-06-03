@@ -26,7 +26,7 @@ const Books = () => {
 
     const fetchBooks = async () => {
         try {
-            const response = await ApiService.getBooks(page);
+            const response = await ApiService.getPublicBooks(page);
             setBooks(response.data.content);
             setTotalPages(response.data.totalPages);
         } catch (error) {
@@ -36,7 +36,7 @@ const Books = () => {
 
     const fetchCategories = async () => {
         try {
-            const response = await ApiService.getCategories();
+            const response = await ApiService.getPublicCategories();
             setCategories(response.data);
         } catch (error) {
             console.error('Error fetching categories:', error);
@@ -45,7 +45,7 @@ const Books = () => {
 
     const fetchAuthors = async () => {
         try {
-            const response = await ApiService.getAuthors();
+            const response = await ApiService.getPublicAuthors();
             setAuthors(response.data);
         } catch (error) {
             console.error('Error fetching authors:', error);
@@ -63,9 +63,10 @@ const Books = () => {
     };
 
     const filteredBooks = books.filter(book => {
-        const matchesCategory = selectedCategory ? book.categories.some(cat => cat.id === selectedCategory.id) : true;
-        const matchesAuthor = selectedAuthor ? book.author_id === selectedAuthor.id : true;
-        return matchesCategory && matchesAuthor;
+        return (
+            (!selectedCategory || book.categories.some(cat => cat.id === selectedCategory.id)) &&
+            (!selectedAuthor || book.author_name === selectedAuthor.name)
+        );
     });
 
     const handlePageChange = (newPage) => {
@@ -79,7 +80,7 @@ const Books = () => {
                 <div className="row">
                     <div className="col-md-3">
                         <h4>Categories</h4>
-                        <ul className="list-group mb-4">
+                        <ul className="list-group">
                             <li
                                 className={`list-group-item ${!selectedCategory ? 'active' : ''}`}
                                 onClick={() => handleCategoryClick(null)}
@@ -96,7 +97,7 @@ const Books = () => {
                                 </li>
                             ))}
                         </ul>
-                        <h4>Authors</h4>
+                        <h4 className="mt-4">Authors</h4>
                         <ul className="list-group">
                             <li
                                 className={`list-group-item ${!selectedAuthor ? 'active' : ''}`}
