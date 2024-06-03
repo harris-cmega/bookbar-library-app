@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -22,6 +23,13 @@ import java.nio.file.Paths;
 public class BookController {
 
     private final BookService bookService;
+
+    @GetMapping("/search")
+    public ResponseEntity<List<BookDTO>> searchBooks(@RequestParam("query") String query) {
+        List<BookDTO> books = bookService.searchBooks(query);
+        return ResponseEntity.ok(books);
+    }
+
 
     @PostMapping
     public ResponseEntity<BookDTO> createBook(@RequestBody @Valid BookDTO bookDto) {
