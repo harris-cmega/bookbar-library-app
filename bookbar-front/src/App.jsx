@@ -20,6 +20,7 @@ import Forbidden from "./pages/Forbidden.jsx";
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
 import BookDetails from "./pages/books/BookDetails.jsx";
 import Books from "./pages/books/Books.jsx";
+import CartPage from "./pages/CartPage.jsx"
 
 const App = () => {
     return (
@@ -32,6 +33,7 @@ const App = () => {
                     <Route path="/register" element={<Register />} />
                     <Route path="/books" element={<Books />} />
                     <Route path="/books/:id" element={<BookDetails />} />
+                    <Route path="/cart" element={<CartPage />} />
                     <Route path="/subscription" element={<Subscription />} />
                     <Route path="/users" element={<PrivateRoute role={Roles.USER}><Users /></PrivateRoute>} />
                     <Route path="/admin/*" element={<PrivateRoute role={Roles.ADMIN}><AdminLayout /></PrivateRoute>}>
