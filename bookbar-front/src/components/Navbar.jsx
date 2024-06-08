@@ -37,6 +37,9 @@ const Navbar = () => {
                   <>
                     <button className="btn btn-danger me-2" onClick={logout}>Logout</button>
                     <span className="navbar-text me-2">Welcome, {user.sub}</span>
+                    <Link to="/cart" className="btn btn-outline-success">
+                      <i className="bi bi-cart-plus-fill me-2"></i>
+                    </Link>
                   </>
               ) : (
                   <>
