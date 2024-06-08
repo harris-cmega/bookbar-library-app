@@ -8,11 +8,15 @@ import Register from './pages/Register';
 import Subscription from './pages/Subscription';
 import Users from './pages/Users';
 import AdminLayout from './components/layouts/AdminLayout';
+import UserSubscriptionsPage from './pages/admin/UserSubscriptionsPage'
 import AuthorsPage from './pages/admin/AuthorsPage';
 import BooksPage from './pages/admin/BooksPage';
 import LibrariesPage from './pages/admin/LibrariesPage';
 import PublishersPage from './pages/admin/PublishersPage';
+import BookFilesPage from './pages/admin/BookFilesPage';
 import UsersPage from './pages/admin/UsersPage';
+import CategoriesPage from './pages/admin/CategoriesPage'; // Import CategoriesPage
+import BookCategoriesPage from './pages/admin/BookCategoriesPage'; // Import BookCategoriesPage
 import { Roles } from './utils/Roles';
 import InternalServerError from "./pages/InternalServerError.jsx";
 import NotFound from "./pages/NotFound.jsx";

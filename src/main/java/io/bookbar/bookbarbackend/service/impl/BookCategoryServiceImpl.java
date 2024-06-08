@@ -11,6 +11,8 @@ import io.bookbar.bookbarbackend.repository.BookRepository;
 import io.bookbar.bookbarbackend.repository.CategoryRepository;
 import io.bookbar.bookbarbackend.service.BookCategoryService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,9 +28,9 @@ public class BookCategoryServiceImpl implements BookCategoryService {
 
     @Override
     public BookCategoryDTO createBookCategory(BookCategoryDTO bookCategoryDto) {
-        Book book = bookRepository.findById(bookCategoryDto.getBookId())
+        Book book = bookRepository.findById(bookCategoryDto.getBook_id())
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found"));
-        Category category = categoryRepository.findById(bookCategoryDto.getCategoryId())
+        Category category = categoryRepository.findById(bookCategoryDto.getCategory_id())
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
         BookCategory bookCategory = BookCategoryMapper.toBookCategoryEntity(bookCategoryDto);
@@ -46,11 +48,9 @@ public class BookCategoryServiceImpl implements BookCategoryService {
     }
 
     @Override
-    public List<BookCategoryDTO> getAllBookCategories() {
-        List<BookCategory> bookCategories = bookCategoryRepository.findAll();
-        return bookCategories.stream()
-                .map(BookCategoryMapper::toBookCategoryDto)
-                .collect(Collectors.toList());
+    public Page<BookCategoryDTO> getAllBookCategories(Pageable pageable) {
+        Page<BookCategory> bookCategories = bookCategoryRepository.findAll(pageable);
+        return bookCategories.map(BookCategoryMapper::toBookCategoryDto);
     }
 
     @Override
@@ -58,9 +58,9 @@ public class BookCategoryServiceImpl implements BookCategoryService {
         BookCategory bookCategory = bookCategoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("BookCategory not found"));
 
-        Book book = bookRepository.findById(bookCategoryDto.getBookId())
+        Book book = bookRepository.findById(bookCategoryDto.getBook_id())
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found"));
-        Category category = categoryRepository.findById(bookCategoryDto.getCategoryId())
+        Category category = categoryRepository.findById(bookCategoryDto.getCategory_id())
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
         bookCategory.setBook(book);
@@ -74,5 +74,21 @@ public class BookCategoryServiceImpl implements BookCategoryService {
         BookCategory bookCategory = bookCategoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("BookCategory not found"));
         bookCategoryRepository.delete(bookCategory);
+    }
+
+    @Override
+    public List<BookCategoryDTO> getBookCategoriesByBookId(Long bookId) {
+        List<BookCategory> bookCategories = bookCategoryRepository.findByBook_Id(bookId);
+        return bookCategories.stream()
+                .map(BookCategoryMapper::toBookCategoryDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookCategoryDTO> getBookCategoriesByCategoryId(Long categoryId) {
+        List<BookCategory> bookCategories = bookCategoryRepository.findByCategory_Id(categoryId);
+        return bookCategories.stream()
+                .map(BookCategoryMapper::toBookCategoryDto)
+                .collect(Collectors.toList());
     }
 }

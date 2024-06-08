@@ -1,5 +1,6 @@
 package io.bookbar.bookbarbackend.dto;
 
+import io.bookbar.bookbarbackend.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

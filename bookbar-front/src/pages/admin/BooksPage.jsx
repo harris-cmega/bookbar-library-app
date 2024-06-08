@@ -319,6 +319,7 @@ const BooksPage = () => {
                     <th>Author</th>
                     <th>Library</th>
                     <th>Publisher</th>
+                    <th>Categories</th> {/* Add this line */}
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -335,6 +336,7 @@ const BooksPage = () => {
                         <td>{book.author_name}</td>
                         <td>{book.library_name}</td>
                         <td>{book.publisher_name}</td>
+                        <td>{book.categories.map(category => category.name).join(', ')}</td> {/* Add this line */}
                         <td>
                             <Button variant="outline-secondary btn-sm" className="me-2" onClick={() => handleEditClick(book)}>Edit</Button>
                             <Button variant="danger btn-sm" onClick={() => {

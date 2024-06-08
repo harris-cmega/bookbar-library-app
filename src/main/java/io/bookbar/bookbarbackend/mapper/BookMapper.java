@@ -6,6 +6,8 @@ import io.bookbar.bookbarbackend.entities.Book;
 import io.bookbar.bookbarbackend.entities.Library;
 import io.bookbar.bookbarbackend.entities.Publisher;
 
+import java.util.stream.Collectors;
+
 public class BookMapper {
 
     public static Book toBookEntity(BookDTO bookDto, Author author, Library library, Publisher publisher) {
@@ -40,6 +42,9 @@ public class BookMapper {
         bookDto.setLibrary_name(book.getLibrary() != null ? book.getLibrary().getName() : null);
         bookDto.setPublisher_id(book.getPublisher() != null ? book.getPublisher().getId() : null);
         bookDto.setPublisher_name(book.getPublisher() != null ? book.getPublisher().getName() : null);
+        bookDto.setCategories(book.getBook_categories().stream()
+                .map(bookCategory -> CategoryMapper.toCategoryDto(bookCategory.getCategory()))
+                .collect(Collectors.toList()));
         return bookDto;
     }
 }

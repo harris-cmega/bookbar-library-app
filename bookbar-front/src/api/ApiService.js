@@ -75,6 +75,26 @@ const ApiService = {
         return axios.get(`${API_URL}/public/books/${id}`, {
         });
     },
+
+
+    getPublicCategories: async () => {
+        return axios.get(`${API_URL}/public/categories`);
+    },
+
+    getPublicAuthors: async () => {
+        return axios.get(`${API_URL}/public/authors`);
+    },
+
+    searchPublicBooks: async (query) => {
+        try {
+            const response = await axios.get(`${API_URL}/public/books/search`, { params: { query } });
+            return response.data;
+        } catch (error) {
+            console.error('Error searching books:', error);
+            throw error;
+        }
+    },
+
     getBooks: async (page = 0, size = 10) => {
         let token = localStorage.getItem('token');
         let refreshToken = localStorage.getItem('refresh_token');
@@ -146,10 +166,22 @@ const ApiService = {
         });
     },
     searchBooks: async (query) => {
+        let token = localStorage.getItem('token');
+        let refreshToken = localStorage.getItem('refresh_token');
 
-    return axios.get(`${API_URL}/search/books`, {
-        params: { query },
-    });
+        if (token && refreshToken) {
+            if (isTokenExpired(token)) {
+                const response = await ApiService.refreshToken(refreshToken);
+                token = response.data.token;
+                localStorage.setItem('token', token);
+            }
+            return axios.get(`${API_URL}/books/search`, {
+                params: { query },
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+        }
     },
     getLibraries: async () => {
         let token = localStorage.getItem('token');
@@ -259,6 +291,189 @@ const ApiService = {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
         }
+    },
+    getBookFiles: async () => {
+        let token = localStorage.getItem('token');
+        let refreshToken = localStorage.getItem('refresh_token');
+
+        if (token && refreshToken) {
+            if (isTokenExpired(token)) {
+                const response = await ApiService.refreshToken(refreshToken);
+                token = response.data.token;
+                localStorage.setItem('token', token);
+            }
+            return axios.get(`${API_URL}/book-files`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+        }
+    },
+    getBookFileById: async (id) => {
+        let token = localStorage.getItem('token');
+        let refreshToken = localStorage.getItem('refresh_token');
+
+        if (token && refreshToken) {
+            if (isTokenExpired(token)) {
+                const response = await ApiService.refreshToken(refreshToken);
+                token = response.data.token;
+                localStorage.setItem('token', token);
+            }
+            return axios.get(`${API_URL}/book-files/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+        }
+    },
+    createBookFile: (bookFile) => {
+        const token = localStorage.getItem('token');
+        return axios.post(`${API_URL}/book-files`, bookFile, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+    },
+
+    updateBookFile: (id, bookFile) => {
+        const token = localStorage.getItem('token');
+        return axios.put(`${API_URL}/book-files/${id}`, bookFile, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+    },
+
+    deleteBookFile: (bookFileId) => {
+        const token = localStorage.getItem('token');
+        return axios.delete(`${API_URL}/book-files/${bookFileId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
+    getUserSubscriptions: async () => {
+        let token = localStorage.getItem('token');
+        let refreshToken = localStorage.getItem('refresh_token');
+
+        if(token && refreshToken) {
+            if (isTokenExpired(token)) {
+                const response = await ApiService.refreshToken(refreshToken);
+                token = response.data.token;
+                localStorage.setItem('token', token);
+            }
+            return axios.get(`${API_URL}/user-subscriptions`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+        }
+    },
+    createUserSubscription: (userSubscription) => {
+        const token = localStorage.getItem('token');
+        return axios.post(`${API_URL}/user-subscriptions`, userSubscription, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
+    updateUserSubscription: (id, userSubscription) => {
+        const token = localStorage.getItem('token');
+        return axios.put(`${API_URL}/user-subscriptions/${id}`, userSubscription, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
+    deleteUserSubscription: (userSubscriptionId) => {
+        const token = localStorage.getItem('token');
+        return axios.delete(`${API_URL}/user-subscriptions/${userSubscriptionId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
+    createSubscriptionForUser: (userId, userSubscription) => {
+        const token = localStorage.getItem('token');
+        return axios.post(`${API_URL}/user-subscriptions/create-for-user?userId=${userId}`, userSubscription, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
+
+    getCategories: async () => {
+        let token = localStorage.getItem('token');
+        let refreshToken = localStorage.getItem('refresh_token');
+
+        if (token && refreshToken) {
+            if (isTokenExpired(token)) {
+                const response = await ApiService.refreshToken(refreshToken);
+                token = response.data.token;
+                localStorage.setItem('token', token);
+            }
+            return axios.get(`${API_URL}/categories`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+        }
+    },
+
+    createCategory: (category) => {
+        const token = localStorage.getItem('token');
+        return axios.post(`${API_URL}/categories`, category, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+    },
+
+    updateCategory: (id, category) => {
+        const token = localStorage.getItem('token');
+        return axios.put(`${API_URL}/categories/${id}`, category, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+    },
+
+    deleteCategory: (id) => {
+        const token = localStorage.getItem('token');
+        return axios.delete(`${API_URL}/categories/${id}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+    },
+
+    getBookCategories: async () => {
+        let token = localStorage.getItem('token');
+        let refreshToken = localStorage.getItem('refresh_token');
+
+        if (token && refreshToken) {
+            if (isTokenExpired(token)) {
+                const response = await ApiService.refreshToken(refreshToken);
+                token = response.data.token;
+                localStorage.setItem('token', token);
+            }
+            return axios.get(`${API_URL}/book-categories`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+        }
+    },
+
+    createBookCategory: (bookCategory) => {
+        const token = localStorage.getItem('token');
+        return axios.post(`${API_URL}/book-categories`, bookCategory, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+    },
+
+    updateBookCategory: (id, bookCategory) => {
+        const token = localStorage.getItem('token');
+        return axios.put(`${API_URL}/book-categories/${id}`, bookCategory, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+    },
+
+    deleteBookCategory: (id) => {
+        const token = localStorage.getItem('token');
+        return axios.delete(`${API_URL}/book-categories/${id}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
     },
 
     // Dashboard methods

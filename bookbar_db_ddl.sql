@@ -158,6 +158,7 @@ CREATE TABLE book_files (
                             filename VARCHAR(255),
                             size BIGINT,
                             format VARCHAR(255),
+                            epub_file LONGBLOB,
                             book_id BIGINT,
                             PRIMARY KEY (id),
                             FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE,

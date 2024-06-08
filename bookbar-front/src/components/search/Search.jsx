@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import ApiService from '../../api/ApiService.js';
+import ApiService from '../../api/ApiService';
 import './Search.css';
 
 const Search = () => {
@@ -12,8 +12,8 @@ const Search = () => {
         if (query.length >= 3) {
             const fetchResults = async () => {
                 try {
-                    const response = await ApiService.searchBooks(query);
-                    setResults(response.data);
+                    const response = await ApiService.searchPublicBooks(query);
+                    setResults(response);
                 } catch (error) {
                     console.error('Error fetching search results:', error);
                 }

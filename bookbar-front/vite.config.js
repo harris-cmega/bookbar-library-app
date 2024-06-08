@@ -6,6 +6,7 @@ export default defineConfig({
   resolve: {
     extensions: ['.js', '.jsx'], // Ensure these extensions are resolved
   },
+  assetsInclude: ['**/*.epub'],
   esbuild: {
     jsxFactory: 'React.createElement',
     jsxFragment: 'React.Fragment',

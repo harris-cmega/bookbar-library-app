@@ -9,9 +9,11 @@ public interface UserSubscriptionService {
 
     UserSubscriptionDto getUserSubscriptionById(Long id);
 
-    List<UserSubscriptionDto> getAllUserSubscription();
+    List<UserSubscriptionDto> getAllUserSubscriptions();
 
     UserSubscriptionDto updateUserSubscription(Long id, UserSubscriptionDto updatedUserSubscription);
 
     void deleteUserSubscription(Long id);
+
+    UserSubscriptionDto createSubscriptionForUser(Long userId, UserSubscriptionDto userSubscriptionDto);
 }
