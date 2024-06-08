@@ -4,9 +4,6 @@ import ApiService from '../../api/ApiService';
 import Layout from '../../components/layouts/Layout';
 import { StarIcon, HeartIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid';
-import {jwtDecode} from 'jwt-decode';
-
-
 
 const BookDetails = () => {
     const { id } = useParams();
@@ -25,31 +22,6 @@ const BookDetails = () => {
         };
         fetchBook();
     }, [id]);
-
-    const addToCart = async () => {
-        try {
-            const token = localStorage.getItem('token');
-            const decodedToken = jwtDecode(token);
-            const userId = decodedToken.userId;
-            const userCart = await ApiService.getCartByUserId(userId);
-            const cartId = userCart.data.id;
-
-            // Check if the book is already in the cart
-            const existingCartItem = userCart.data.cartItems.find(item => item.bookId === book.id);
-            if (existingCartItem) {
-                alert('This book is already in your cart!');
-                return;
-            }
-
-            // If the book is not in the cart, proceed to add it
-            await ApiService.addItemToCart(cartId, book.id);
-            alert('Book added to cart!');
-        } catch (error) {
-            console.error('Error adding book to cart:', error);
-            alert('Failed to add book to cart');
-        }
-    };
-
 
     const toggleWishlist = () => {
         setIsInWishlist(!isInWishlist);
@@ -96,7 +68,7 @@ const BookDetails = () => {
                                 />
                             ))}
                         </div>
-                        <button className="btn btn-primary mt-3" onClick={addToCart}>Add to Cart</button>
+                        <button className="btn btn-primary mt-3">Order</button>
                         <button
                             className="btn btn-outline-secondary mt-3 ms-3"
                             onClick={toggleWishlist}

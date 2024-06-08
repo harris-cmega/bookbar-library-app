@@ -37,7 +37,6 @@ public class JwtUtils {
         CustomUserDetails customUserDetails = (CustomUserDetails) userDetails;
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", customUserDetails.getRole());
-        claims.put("userId", customUserDetails.getUser().getId());
 
         return Jwts.builder()
                 .setClaims(claims)

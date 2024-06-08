@@ -279,30 +279,6 @@ const ApiService = {
             });
         }
     },
-    getCartByUserId: async (userId) => {
-        const token = localStorage.getItem('token');
-        return await axios.get(`http://localhost:8080/api/cart/${userId}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-    },
-    addItemToCart: (cartId, bookId) => {
-        const token = localStorage.getItem('token');
-        return axios.put(`${API_URL}/cart/${cartId}/add-item/${bookId}`, {}, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-    },
-    removeItemFromCart: (cartId, cartItemId) => {
-        const token = localStorage.getItem('token');
-        return axios.put(`${API_URL}/cart/${cartId}/remove-item/${cartItemId}`, {}, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-    }
 };
 
 const isTokenExpired = (token) => {
