@@ -76,6 +76,10 @@ public class CartServiceImpl implements CartService {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found"));
 
+        if (cart.getCartItems().stream().anyMatch(item -> item.getBook().getId().equals(bookId))) {
+            throw new IllegalArgumentException("Book already exists in the cart");
+        }
+
         CartItem cartItem = new CartItem();
         cartItem.setCart(cart);
         cartItem.setBook(book);
