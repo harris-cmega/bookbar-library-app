@@ -15,6 +15,7 @@ import LibrariesPage from './pages/admin/LibrariesPage';
 import PublishersPage from './pages/admin/PublishersPage';
 import BookFilesPage from './pages/admin/BookFilesPage';
 import UsersPage from './pages/admin/UsersPage';
+import Success from './pages/Success';
 import CategoriesPage from './pages/admin/CategoriesPage'; // Import CategoriesPage
 import BookCategoriesPage from './pages/admin/BookCategoriesPage'; // Import BookCategoriesPage
 import { Roles } from './utils/Roles';
@@ -47,6 +48,7 @@ const App = () => {
                         <Route path="publishers" element={<PublishersPage />} />
                         <Route path="users" element={<UsersPage />} />
                     </Route>
+                    <Route path="/success" element={<Success />} />
                     //Error pages
                     <Route path="/500" element={<InternalServerError />} />
                     <Route path="/403" element={<Forbidden />} />
