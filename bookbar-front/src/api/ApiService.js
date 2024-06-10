@@ -517,7 +517,17 @@ const ApiService = {
                 'Authorization': `Bearer ${token}`
             }
         });
-    }
+    },
+
+    // Stripe Integration
+    createPaymentIntent: (paymentInfo) => {
+        const token = localStorage.getItem('token');
+        return axios.post(`${API_URL}/payment/secure/payment-intent`, paymentInfo, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
 };
 
 const isTokenExpired = (token) => {

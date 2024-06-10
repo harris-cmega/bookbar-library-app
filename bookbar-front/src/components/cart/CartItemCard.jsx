@@ -21,16 +21,18 @@ const CartItemCard = ({ item, onRemove }) => {
     };
 
     return (
-        <div className="card mb-4">
-            <img
-                src={imageUrl}
-                className="card-img-top"
-                alt={book.title}
-            />
-            <div className="card-body">
-                <h5 className="card-title">{book.title}</h5>
-                <p className="card-text">Author: {book.author_name}</p>
-                <p className="card-text">Price: ${book.price}</p>
+        <div className="cart-card mb-4">
+            <div className="cart-card-image">
+                <img
+                    src={imageUrl}
+                    className="card-img-top"
+                    alt={book.title}
+                />
+            </div>
+            <div className="cart-card-body">
+                <h5 className="cart-card-title">{book.title}</h5>
+                <p className="cart-card-text">Author: {book.author_name}</p>
+                <p className="cart-card-price">Price: ${book.price}</p>
                 <button
                     className="btn btn-danger"
                     onClick={handleRemove}
