@@ -308,38 +308,19 @@ const ApiService = {
                 }
             });
         }
-    },
-    getBookFileById: async (id) => {
-        let token = localStorage.getItem('token');
-        let refreshToken = localStorage.getItem('refresh_token');
-
-        if (token && refreshToken) {
-            if (isTokenExpired(token)) {
-                const response = await ApiService.refreshToken(refreshToken);
-                token = response.data.token;
-                localStorage.setItem('token', token);
-            }
-            return axios.get(`${API_URL}/book-files/${id}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-        }
-    },
+    },  
     createBookFile: (bookFile) => {
         const token = localStorage.getItem('token');
         return axios.post(`${API_URL}/book-files`, bookFile, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
     },
-
-    updateBookFile: (id, bookFile) => {
+    updateBookFile: async (id, bookFile) => {
         const token = localStorage.getItem('token');
         return axios.put(`${API_URL}/book-files/${id}`, bookFile, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-    },
-
+            headers: { 'Authorization': `Bearer ${token}`}
+        })
+      },
     deleteBookFile: (bookFileId) => {
         const token = localStorage.getItem('token');
         return axios.delete(`${API_URL}/book-files/${bookFileId}`, {
@@ -348,6 +329,18 @@ const ApiService = {
             }
         });
     },
+    uploadBookFileFile: (bookfileFile) => {
+        const token = localStorage.getItem('token');
+        const formData = new FormData();
+        formData.append('file', bookfileFile);
+        return axios.post(`${API_URL}/book-files/upload-book-file`, formData, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+    },
+    
     getUserSubscriptions: async () => {
         let token = localStorage.getItem('token');
         let refreshToken = localStorage.getItem('refresh_token');

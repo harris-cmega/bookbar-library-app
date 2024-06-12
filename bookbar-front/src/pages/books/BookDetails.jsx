@@ -9,7 +9,6 @@ import {
     ReactReader,
     ReactReaderStyle
 } from 'react-reader';
-import epubFile from '../../assets/atomichabits.epub'; // Import the EPUB file
 
 
 const BookDetails = () => {
@@ -17,26 +16,42 @@ const BookDetails = () => {
     const [book, setBook] = useState(null);
     const [rating, setRating] = useState(4); // Example rating
     const [isInWishlist, setIsInWishlist] = useState(false);
-    const [epubUrl, setEpubUrl] = useState(epubFile);
+    const [bookFiles, setBookFiles] = useState([]);
+    const [epubUrls, setEpubUrls] = useState([]);
+    const [selectedFile, setSelectedFile] = useState(null);
     const [location, setLocation] = useState(null);
 
     useEffect(() => {
-        const fetchBook = async () => {
+        const fetchBookDetails = async () => {
             try {
-                const response = await ApiService.getPublicBookById(id);
-                setBook(response.data);
-
-                // Fetch the associated EPUB file
-                // const bookFilesResponse = await ApiService.getBookFileByBookId(id);
-                // if (bookFilesResponse.data.length > 0) {
-                //     const bookFile = bookFilesResponse.data[0];
-                //     setEpubUrl(bookFile.file);
-                // }
+                const bookResponse = await ApiService.getPublicBookById(id);
+                setBook(bookResponse.data);
             } catch (error) {
                 console.error('Error fetching book details:', error);
             }
         };
-        fetchBook();
+
+        const fetchBookFiles = async () => {
+            try {
+                const bookFilesResponse = await ApiService.getBookFiles();
+                const allBookFiles = bookFilesResponse.data || [];
+                
+                // Filter book files based on bookId
+                const filteredBookFiles = allBookFiles.filter(file => file.bookId === parseInt(id));
+                setBookFiles(filteredBookFiles);
+                
+                // Set epubUrls
+                const epubUrls = filteredBookFiles.map(file => file.epubfile);
+                setEpubUrls(epubUrls);
+            } catch (error) {
+                console.error('Error fetching book files:', error);
+            }
+        };
+        
+        
+
+        fetchBookFiles();
+        fetchBookDetails();
     }, [id]);
 
     const addToCart = async () => {
@@ -70,6 +85,10 @@ const BookDetails = () => {
 
     const onLocationChanged = (epubcifi) => {
         setLocation(epubcifi);
+    };
+
+    const handleFileSelect = (file) => {
+        setSelectedFile(file);
     };
 
     if (!book) {
@@ -125,14 +144,33 @@ const BookDetails = () => {
                     </div>
                 </div>
             </div>
-            {epubUrl && (
-                <div className="row mt-5">
+            {bookFiles.length > 0 && (
+                <div className="row my-5 mx-5">
+                    <div className="col-12">
+                        <h2>Select File to Read</h2>
+                        <div className="list-group">
+                            {bookFiles.map(file => (
+                                <button
+                                    key={file.id}
+                                    type="button"
+                                    className={`list-group-item list-group-item-action ${selectedFile === file ? 'active' : ''}`}
+                                    onClick={() => handleFileSelect(file)}
+                                >
+                                    {file.filename}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+            {selectedFile && (
+                <div className="row my-3 mx-3">
                     <div className="col-12">
                         <h2>Read Book</h2>
                         <div className="vh-100">
                             <ReactReader
-                                url={epubUrl}
-                                title={book.title}
+                                url={`http://localhost:8080/${selectedFile.epubFile}`} // Assuming the URL is correct
+                                title={selectedFile.filename}
                                 location={location}
                                 locationChanged={onLocationChanged}
                                 readerStyle={{

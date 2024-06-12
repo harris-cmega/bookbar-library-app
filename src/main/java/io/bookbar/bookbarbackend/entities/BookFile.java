@@ -27,6 +27,10 @@ public class BookFile {
     @Column(name = "format", nullable = false)
     private String format;
 
+    @Lob
+    @Column(name = "epub_file")
+    private String epubFile;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;

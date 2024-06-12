@@ -23,6 +23,8 @@ public class BookFileDTO {
     @Size(max = 255, message = "Format can't be longer than 255 characters")
     private String format;
 
+    private String epubFile;
+
     @NotNull(message = "Book ID is mandatory")
     private Long bookId;
 }
