@@ -7,7 +7,7 @@ const BookFilesPage = () => {
     const [bookFiles, setBookFiles] = useState([]);
     const [books, setBooks] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const [newBookFile, setNewBookFile] = useState({ id: '', filename: '', size: '', format: '', file: '', bookId: '' });
+    const [newBookFile, setNewBookFile] = useState({ id: '', filename: '', size: '', format: '', epubFile: '', bookId: '' });
     const [editBookFile, setEditBookFile] = useState(null);
     const [deleteBookFile, setDeleteBookFile] = useState(null);
     const [error, setError] = useState('');
@@ -21,11 +21,7 @@ const BookFilesPage = () => {
     const fetchBookFiles = async () => {
         try {
             const response = await ApiService.getBookFiles();
-            if (response && response.data) {
-                setBookFiles(response.data);
-            } else {
-                setBookFiles([]);
-            }
+            setBookFiles(response.data || []);
         } catch (error) {
             console.error('Error fetching book files:', error);
             setError('Error fetching book files.');
@@ -35,11 +31,7 @@ const BookFilesPage = () => {
     const fetchBooks = async () => {
         try {
             const response = await ApiService.getBooks();
-            if (response && response.data) {
-                setBooks(response.data.content || []);
-            } else {
-                setBooks([]);
-            }
+            setBooks(response.data.content || []);
         } catch (error) {
             console.error('Error fetching books:', error);
             setError('Error fetching books.');
@@ -49,10 +41,16 @@ const BookFilesPage = () => {
     const handleAddBookFile = async (event) => {
         event.preventDefault();
         try {
+            let filePath = '';
             if (file) {
-                const response = await ApiService.uploadBookFile(file, newBookFile.bookId);
-                setBookFiles(prevBookFiles => [...prevBookFiles, response.data]);
+                const uploadResponse = await ApiService.uploadBookFileFile(file);
+                filePath = uploadResponse.data;
             }
+
+            const newBookFileWithFile = { ...newBookFile, epubFile: filePath };
+
+            const response = await ApiService.createBookFile(newBookFileWithFile);
+            setBookFiles(prevBookFiles => [...prevBookFiles, response.data]);
             handleCloseModal();
         } catch (error) {
             console.error('Failed to add book file:', error.response || error);
@@ -66,7 +64,7 @@ const BookFilesPage = () => {
             filename: bookFile.filename || '',
             size: bookFile.size || '',
             format: bookFile.format || '',
-            file: bookFile.file || '',
+            epubFile: bookFile.epubFile || '',
             bookId: bookFile.bookId || ''
         });
         setShowModal(true);
@@ -75,12 +73,8 @@ const BookFilesPage = () => {
     const handleUpdateBookFile = async (event) => {
         event.preventDefault();
         try {
-            const payload = {
-                ...editBookFile,
-                bookId: parseInt(editBookFile.bookId, 10)
-            };
-            console.log('Updating book file with payload:', payload);
-            const response = await ApiService.updateBookFile(editBookFile.id, payload);
+            const updatedBookFile = { ...editBookFile };
+            const response = await ApiService.updateBookFile(editBookFile.id, updatedBookFile);
             setBookFiles(prevBookFiles => prevBookFiles.map(bookFile => bookFile.id === editBookFile.id ? response.data : bookFile));
             handleCloseModal();
         } catch (error) {
@@ -115,20 +109,23 @@ const BookFilesPage = () => {
         setShowModal(false);
         setEditBookFile(null);
         setDeleteBookFile(null);
-        setNewBookFile({ filename: '', size: '', format: '', file: '', bookId: '' });
+        setNewBookFile({ filename: '', size: '', format: '', epubFile: '', bookId: '' });
+        setFile(null);
     };
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-        setNewBookFile({ ...newBookFile, file });
+        setFile(file);
+        setNewBookFile({ ...newBookFile, size: file.size, format: file.type });
     };
 
     const handleEditFileChange = (e) => {
         const file = e.target.files[0];
+        setFile(file);
         const reader = new FileReader();
         reader.onloadend = () => {
             const base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
-            setEditBookFile({ ...editBookFile, file: base64String });
+            setEditBookFile({ ...editBookFile, epubFile: base64String, size: file.size, format: file.type });
         };
         reader.readAsDataURL(file);
     };
@@ -163,6 +160,7 @@ const BookFilesPage = () => {
                             placeholder="Enter size"
                             value={editBookFile ? editBookFile.size : newBookFile.size}
                             onChange={e => editBookFile ? setEditBookFile({ ...editBookFile, size: e.target.value }) : setNewBookFile({ ...newBookFile, size: e.target.value })}
+                            disabled
                         />
                         <Form.Control
                             type="text"
@@ -170,6 +168,7 @@ const BookFilesPage = () => {
                             placeholder="Enter format (must be .EPUB)"
                             value={editBookFile ? editBookFile.format : newBookFile.format}
                             onChange={e => editBookFile ? setEditBookFile({ ...editBookFile, format: e.target.value }) : setNewBookFile({ ...newBookFile, format: e.target.value })}
+                            disabled
                         />
                         <Form.Control
                             type="file"
@@ -213,7 +212,7 @@ const BookFilesPage = () => {
                             <td>{bookFile.size}</td>
                             <td>{bookFile.format}</td>
                             <td>{bookFile.bookId}</td>
-                            <td>{bookFile.file ? 'Yes' : 'No'}</td>
+                            <td>{bookFile.epubFile ? 'Yes' : 'No'}</td>
                             <td>
                                 <Button variant="outline-secondary btn-sm text-dark me-2" onClick={() => handleEditClick(bookFile)}>Edit</Button>
                                 <Button variant="danger btn-sm" onClick={() => {

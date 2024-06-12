@@ -10,6 +10,7 @@ public class BookFileMapper {
         bookFile.setFilename(bookFileDto.getFilename());
         bookFile.setSize(bookFileDto.getSize());
         bookFile.setFormat(bookFileDto.getFormat());
+        bookFile.setEpubFile(bookFileDto.getEpubFile());
         return bookFile;
     }
 
@@ -19,6 +20,7 @@ public class BookFileMapper {
         bookFileDto.setFilename(bookFile.getFilename());
         bookFileDto.setSize(bookFile.getSize());
         bookFileDto.setFormat(bookFile.getFormat());
+        bookFileDto.setEpubFile(bookFile.getEpubFile());
         bookFileDto.setBookId(bookFile.getBook().getId());
         return bookFileDto;
     }

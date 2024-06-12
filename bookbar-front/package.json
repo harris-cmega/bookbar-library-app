@@ -18,6 +18,7 @@
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "chart.js": "^4.4.3",
+    "cors": "^2.8.5",
     "epubjs": "^0.3.93",
     "jwt-decode": "^4.0.0",
     "react": "^18.2.0",
