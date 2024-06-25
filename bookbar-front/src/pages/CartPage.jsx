@@ -87,7 +87,6 @@ const CartPage = () => {
                 },
                 body: JSON.stringify({
                     userEmail: userEmail,
-                    amount: totalPrice,
                     firstName: firstName,
                     lastName: lastName,
                     products: cartItems.map(item => item.book.title),
