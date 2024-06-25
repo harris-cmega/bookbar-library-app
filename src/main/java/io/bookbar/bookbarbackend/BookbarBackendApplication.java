@@ -8,7 +8,7 @@ public class BookbarBackendApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BookbarBackendApplication.class, args);
-		System.out.println("Elsa queen <3");
+		System.out.println("Bookbar is running!");
 	}
 
 }

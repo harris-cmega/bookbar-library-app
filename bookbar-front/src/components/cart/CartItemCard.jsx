@@ -13,7 +13,6 @@ const CartItemCard = ({ item, onRemove }) => {
             const userId = decodedToken.userId;
             await ApiService.removeItemFromCart(userId, id);
             onRemove(id);
-            alert('Item removed from cart!');
         } catch (error) {
             console.error('Error removing item from cart:', error);
             alert('Failed to remove item from cart');

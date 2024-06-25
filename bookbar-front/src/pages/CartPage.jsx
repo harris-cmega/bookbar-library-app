@@ -1,8 +1,10 @@
+// src/pages/CartPage.js
 import React, { useState, useEffect } from 'react';
 import ApiService from '../api/ApiService';
 import Layout from '../components/layouts/Layout';
 import CartItemCard from '../components/cart/CartItemCard';
-import {jwtDecode} from 'jwt-decode';
+import MessageModal from '../components/MessageModal';
+import { jwtDecode } from 'jwt-decode';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import '../index.css';
@@ -17,6 +19,8 @@ const CartPage = () => {
     const [userEmail, setUserEmail] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
 
     const fetchBookDetails = async (bookId) => {
         try {
@@ -73,6 +77,8 @@ const CartPage = () => {
             const updatedItems = prevItems.filter((item) => item.id !== cartItemId);
             const total = updatedItems.reduce((acc, item) => acc + item.book.price, 0);
             setTotalPrice(total);
+            setModalMessage("Item removed!");
+            setShowModal(true);
             return updatedItems;
         });
     };
@@ -107,9 +113,13 @@ const CartPage = () => {
 
             if (error) {
                 console.error('Stripe error:', error.message);
+                setModalMessage(error.message);
+                setShowModal(true);
             }
         } catch (error) {
             console.error('Error during checkout:', error);
+            setModalMessage(error.message);
+            setShowModal(true);
         }
     };
 
@@ -123,7 +133,7 @@ const CartPage = () => {
 
     return (
         <Layout>
-            <div className="container mt-5 mb-5">
+            <div className="container mt-5 mb-5 vh-100">
                 <h1>Cart</h1>
                 <div className="row">
                     {cartItems.length > 0 ? (
@@ -147,6 +157,7 @@ const CartPage = () => {
                     </button>
                 )}
             </div>
+            <MessageModal show={showModal} onClose={() => setShowModal(false)} message={modalMessage} />
         </Layout>
     );
 };
