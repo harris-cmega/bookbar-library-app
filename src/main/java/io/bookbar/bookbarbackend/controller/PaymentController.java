@@ -3,7 +3,7 @@ package io.bookbar.bookbarbackend.controller;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
-import com.stripe.model.checkout.Session;  // Correct import
+import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 import io.bookbar.bookbarbackend.dto.PaymentDTO;
 import io.bookbar.bookbarbackend.security.JwtUtils;
@@ -70,16 +70,19 @@ public class PaymentController {
     public ResponseEntity<Map<String, String>> createCheckoutSession(@RequestBody PaymentDTO paymentInfoRequest) {
         try {
             List<SessionCreateParams.LineItem> lineItems = paymentInfoRequest.getProducts().stream()
-                    .map(product -> SessionCreateParams.LineItem.builder()
-                            .setPriceData(SessionCreateParams.LineItem.PriceData.builder()
-                                    .setCurrency("usd")
-                                    .setProductData(SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                                            .setName(product)
-                                            .build())
-                                    .setUnitAmount((long) (paymentInfoRequest.getAmount() * 100)) // Amount in cents
-                                    .build())
-                            .setQuantity(1L)
-                            .build())
+                    .map(product -> {
+                        double bookPrice = paymentService.getBookPriceByTitle(product);
+                        return SessionCreateParams.LineItem.builder()
+                                .setPriceData(SessionCreateParams.LineItem.PriceData.builder()
+                                        .setCurrency("usd")
+                                        .setProductData(SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                                                .setName(product)
+                                                .build())
+                                        .setUnitAmount((long) (bookPrice * 100)) // Amount in cents
+                                        .build())
+                                .setQuantity(1L)
+                                .build();
+                    })
                     .collect(Collectors.toList());
 
             SessionCreateParams params = SessionCreateParams.builder()
