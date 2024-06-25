@@ -1,16 +1,15 @@
-// src/pages/BookDetails.js
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ApiService from '../../api/ApiService';
 import Layout from '../../components/layouts/Layout';
-import MessageModal from '../../components/MessageModal';
 import { StarIcon, HeartIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 import {
     ReactReader,
     ReactReaderStyle
 } from 'react-reader';
+
 
 const BookDetails = () => {
     const { id } = useParams();
@@ -21,9 +20,6 @@ const BookDetails = () => {
     const [epubUrls, setEpubUrls] = useState([]);
     const [selectedFile, setSelectedFile] = useState(null);
     const [location, setLocation] = useState(null);
-
-    const [showModal, setShowModal] = useState(false);
-    const [modalMessage, setModalMessage] = useState('');
 
     useEffect(() => {
         const fetchBookDetails = async () => {
@@ -39,11 +35,11 @@ const BookDetails = () => {
             try {
                 const bookFilesResponse = await ApiService.getBookFiles();
                 const allBookFiles = bookFilesResponse.data || [];
-
+                
                 // Filter book files based on bookId
                 const filteredBookFiles = allBookFiles.filter(file => file.bookId === parseInt(id));
                 setBookFiles(filteredBookFiles);
-
+                
                 // Set epubUrls
                 const epubUrls = filteredBookFiles.map(file => file.epubfile);
                 setEpubUrls(epubUrls);
@@ -51,6 +47,8 @@ const BookDetails = () => {
                 console.error('Error fetching book files:', error);
             }
         };
+        
+        
 
         fetchBookFiles();
         fetchBookDetails();
@@ -67,21 +65,19 @@ const BookDetails = () => {
             // Check if the book is already in the cart
             const existingCartItem = userCart.data.cartItems.find(item => item.bookId === book.id);
             if (existingCartItem) {
-                setModalMessage('This book is already in your cart!');
-                setShowModal(true);
+                alert('This book is already in your cart!');
                 return;
             }
 
             // If the book is not in the cart, proceed to add it
             await ApiService.addItemToCart(cartId, book.id);
-            setModalMessage('Book added to cart!');
-            setShowModal(true);
+            alert('Book added to cart!');
         } catch (error) {
             console.error('Error adding book to cart:', error);
-            setModalMessage('Failed to add book to cart');
-            setShowModal(true);
+            alert('Failed to add book to cart');
         }
     };
+
 
     const toggleWishlist = () => {
         setIsInWishlist(!isInWishlist);
@@ -124,7 +120,7 @@ const BookDetails = () => {
                         <p><strong>Description:</strong> {book.description}</p>
                         <p><strong>Pages:</strong> {book.page_number}</p>
                         <p><strong>Price:</strong> ${book.price}</p>
-                        <p><strong>Categories:</strong> {book.categories.map(category => category.name).join(', ')}</p>
+                        <p><strong>Categories:</strong> {book.categories.map(category => category.name).join(', ')}</p> {/* Add this line */}
                         <div className="d-flex align-items-center">
                             <p className="me-2"><strong>Rating:</strong></p>
                             {[...Array(5)].map((star, index) => (
@@ -194,7 +190,6 @@ const BookDetails = () => {
                     </div>
                 </div>
             )}
-            <MessageModal show={showModal} onClose={() => setShowModal(false)} message={modalMessage} />
         </Layout>
     );
 }
