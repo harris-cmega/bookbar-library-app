@@ -50,6 +50,7 @@ const App = () => {
                         <Route path="publishers" element={<PublishersPage />} />
                         <Route path="users" element={<UsersPage />} />
                         <Route path="categories" element={<CategoriesPage />} />
+                        <Route path="book-categories" element={<BookCategoriesPage />} />
                     </Route>
                     <Route path="/success" element={<Success />} />
                     //Error pages
