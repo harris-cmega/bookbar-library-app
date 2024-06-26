@@ -47,6 +47,7 @@ const App = () => {
                         <Route path="libraries" element={<LibrariesPage />} />
                         <Route path="publishers" element={<PublishersPage />} />
                         <Route path="users" element={<UsersPage />} />
+                        <Route path="categories" element={<CategoriesPage />} />
                     </Route>
                     <Route path="/success" element={<Success />} />
                     //Error pages
