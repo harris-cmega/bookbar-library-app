@@ -44,6 +44,8 @@ const App = () => {
                     <Route path="/admin/*" element={<PrivateRoute role={Roles.ADMIN}><AdminLayout /></PrivateRoute>}>
                         <Route path="authors" element={<AuthorsPage />} />
                         <Route path="books" element={<BooksPage />} />
+                        <Route path="user-subscriptions" element={<UserSubscriptionsPage />} />
+                        <Route path="book-files" element={<BookFilesPage />} />
                         <Route path="libraries" element={<LibrariesPage />} />
                         <Route path="publishers" element={<PublishersPage />} />
                         <Route path="users" element={<UsersPage />} />
