@@ -2,7 +2,6 @@ package io.bookbar.bookbarbackend.controller;
 
 import io.bookbar.bookbarbackend.dto.UserOrderDTO;
 import io.bookbar.bookbarbackend.service.UserOrderService;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,33 +16,53 @@ public class UserOrderController {
 
     private final UserOrderService userOrderService;
 
-    @PostMapping
-    public ResponseEntity<UserOrderDTO> createUserOrder(@RequestBody @Valid UserOrderDTO userOrderDTO) {
-        UserOrderDTO savedUserOrder = userOrderService.createUserOrder(userOrderDTO);
-        return new ResponseEntity<>(savedUserOrder, HttpStatus.CREATED);
+    @PostMapping("/{userId}")
+    public ResponseEntity<UserOrderDTO> createOrder(@PathVariable Long userId, @RequestBody UserOrderDTO userOrderDTO) {
+        try {
+            UserOrderDTO createdOrder = userOrderService.createOrder(userId, userOrderDTO);
+            return new ResponseEntity<>(createdOrder, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<UserOrderDTO> getUserOrderById(@PathVariable("id") Long userOrderId) {
-        UserOrderDTO userOrderDTO = userOrderService.getUserOrderById(userOrderId);
-        return ResponseEntity.ok(userOrderDTO);
+    @GetMapping("/{id}")
+    public ResponseEntity<UserOrderDTO> getOrderById(@PathVariable("id") Long orderId) {
+        try {
+            UserOrderDTO orderDto = userOrderService.getOrderById(orderId);
+            return ResponseEntity.ok(orderDto);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
     }
 
-    @GetMapping
-    public ResponseEntity<List<UserOrderDTO>> getAllUserOrders() {
-        List<UserOrderDTO> userOrders = userOrderService.getAllUserOrders();
-        return ResponseEntity.ok(userOrders);
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<UserOrderDTO>> getOrdersByUserId(@PathVariable Long userId) {
+        try {
+            List<UserOrderDTO> orders = userOrderService.getOrdersByUserId(userId);
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<UserOrderDTO> updateUserOrder(@PathVariable("id") Long userOrderId, @RequestBody @Valid UserOrderDTO userOrderDTO) {
-        UserOrderDTO updatedUserOrder = userOrderService.updateUserOrder(userOrderId, userOrderDTO);
-        return ResponseEntity.ok(updatedUserOrder);
+    @PutMapping("/{orderId}")
+    public ResponseEntity<UserOrderDTO> updateOrder(@PathVariable Long orderId, @RequestBody UserOrderDTO userOrderDTO) {
+        try {
+            UserOrderDTO updatedOrder = userOrderService.updateOrder(orderId, userOrderDTO);
+            return ResponseEntity.ok(updatedOrder);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteUserOrder(@PathVariable("id") Long userOrderId) {
-        userOrderService.deleteUserOrder(userOrderId);
-        return ResponseEntity.ok("User order deleted");
+    @DeleteMapping("/{orderId}")
+    public ResponseEntity<String> deleteOrder(@PathVariable Long orderId) {
+        try {
+            userOrderService.deleteOrder(orderId);
+            return ResponseEntity.ok("Order deleted");
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
