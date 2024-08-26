@@ -103,21 +103,22 @@ CREATE TABLE orders (
                         order_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                         total_price DECIMAL(8,2),
                         user_id BIGINT,
+                        order_status varchar(10),
                         PRIMARY KEY (id),
                         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
                         INDEX (user_id)
 );
 
-CREATE TABLE order_details (
-                               order_id BIGINT,
-                               book_id BIGINT,
-                               quantity INT,
-                               PRIMARY KEY (order_id, book_id),
-                               FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
-                               FOREIGN KEY (book_id) REFERENCES books(id),
-                               INDEX (order_id),
-                               INDEX (book_id)
+CREATE TABLE order_items (
+                             id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                             order_id BIGINT,
+                             book_id BIGINT,
+                             FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+                             FOREIGN KEY (book_id) REFERENCES books(id),
+                             INDEX (order_id),
+                             INDEX (book_id)
 );
+
 
 CREATE TABLE user_subscriptions (
                                     id BIGINT NOT NULL AUTO_INCREMENT,
@@ -196,27 +197,27 @@ CREATE TABLE refresh_tokens (
 );
 
 CREATE TABLE cart (
-								user_id BIGINT NOT NULL PRIMARY KEY,
-								FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+                      user_id BIGINT NOT NULL PRIMARY KEY,
+                      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 CREATE TABLE cart_items (
-							id BIGINT auto_increment primary key,
-							cart_id bigint not null,
-							book_id bigint not null,
-							foreign key (cart_id) references cart(user_id) on delete cascade,
-							foreign key (book_id) references books(id)
+                            id BIGINT auto_increment primary key,
+                            cart_id bigint not null,
+                            book_id bigint not null,
+                            foreign key (cart_id) references cart(user_id) on delete cascade,
+                            foreign key (book_id) references books(id)
 );
 
 CREATE TABLE payment (
-							id BIGINT AUTO_INCREMENT PRIMARY KEY,
-							user_email VARCHAR(255) NOT NULL,
-							amount DOUBLE NOT NULL,
-							first_name VARCHAR(255),
-							last_name VARCHAR(255)
+                         id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                         user_email VARCHAR(255) NOT NULL,
+                         amount DOUBLE NOT NULL,
+                         first_name VARCHAR(255),
+                         last_name VARCHAR(255)
 );
 
 CREATE TABLE ordered_products (
-							payment_id BIGINT,
-							product VARCHAR(255),
-							FOREIGN KEY (payment_id) REFERENCES payment(id)
+                                  payment_id BIGINT,
+                                  product VARCHAR(255),
+                                  FOREIGN KEY (payment_id) REFERENCES payment(id)
 );

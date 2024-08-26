@@ -9,6 +9,8 @@ import io.bookbar.bookbarbackend.repository.UserOrderRepository;
 import io.bookbar.bookbarbackend.repository.UserRepository;
 import io.bookbar.bookbarbackend.service.UserOrderService;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,51 +20,65 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class UserOrderServiceImpl implements UserOrderService {
 
+    private static final Logger log = LoggerFactory.getLogger(UserOrderServiceImpl.class);
+
     private final UserOrderRepository userOrderRepository;
     private final UserRepository userRepository;
 
     @Override
-    public UserOrderDTO createUserOrder(UserOrderDTO userOrderDTO) {
-        User user = userRepository.findById(userOrderDTO.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    public UserOrderDTO createOrder(Long userId, UserOrderDTO userOrderDTO) {
+        try {
+            User user = userRepository.findById(userId).orElseThrow(() -> {
+                log.error("User not found with ID: {}", userId);
+                return new ResourceNotFoundException("User not found");
+            });
 
-        UserOrder userOrder = UserOrderMapper.toUserOrderEntity(userOrderDTO);
-        userOrder.setUser(user);
-        UserOrder savedUserOrder = userOrderRepository.save(userOrder);
-        return UserOrderMapper.toUserOrderDTO(savedUserOrder);
+            UserOrder userOrder = new UserOrder();
+            userOrder.setUser(user);
+
+
+            UserOrder savedOrder = userOrderRepository.save(userOrder);
+            return UserOrderMapper.toUserOrderDTO(savedOrder);
+        } catch (Exception e) {
+            log.error("Error creating order for user with ID: {}", userId, e);
+            throw e;
+        }
     }
 
+
     @Override
-    public UserOrderDTO getUserOrderById(Long id) {
-        UserOrder userOrder = userOrderRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User order not found"));
+    public UserOrderDTO getOrderById(Long orderId) {
+        UserOrder userOrder = userOrderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with ID: " + orderId));
+
         return UserOrderMapper.toUserOrderDTO(userOrder);
     }
 
     @Override
-    public List<UserOrderDTO> getAllUserOrders() {
-        List<UserOrder> userOrders = userOrderRepository.findAll();
+    public List<UserOrderDTO> getOrdersByUserId(Long userId) {
+        List<UserOrder> userOrders = userOrderRepository.findByUserId(userId);
         return userOrders.stream()
                 .map(UserOrderMapper::toUserOrderDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public UserOrderDTO updateUserOrder(Long id, UserOrderDTO userOrderDTO) {
-        UserOrder userOrder = userOrderRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User order not found"));
+    public UserOrderDTO updateOrder(Long orderId, UserOrderDTO userOrderDTO) {
+        UserOrder existingOrder = userOrderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with ID: " + orderId));
 
-        userOrder.setDate(userOrderDTO.getDate());
-        userOrder.setTotalPrice(userOrderDTO.getTotalPrice());
+        existingOrder.setDate(userOrderDTO.getDate());
+        existingOrder.setTotalPrice(userOrderDTO.getTotalPrice());
 
-        UserOrder updatedUserOrder = userOrderRepository.save(userOrder);
-        return UserOrderMapper.toUserOrderDTO(updatedUserOrder);
+        UserOrder updatedOrder = userOrderRepository.save(existingOrder);
+
+        return UserOrderMapper.toUserOrderDTO(updatedOrder);
     }
 
     @Override
-    public void deleteUserOrder(Long id) {
-        UserOrder userOrder = userOrderRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User order not found"));
+    public void deleteOrder(Long orderId) {
+        UserOrder userOrder = userOrderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with ID: " + orderId));
         userOrderRepository.delete(userOrder);
     }
 }
