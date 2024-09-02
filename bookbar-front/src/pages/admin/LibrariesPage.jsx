@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ApiService from '../../api/ApiService';
 import { Button, Form, Table } from 'react-bootstrap';
 import ReusableModal from '../../components/ReusableModal.jsx';
+import { Country, State, City } from 'country-state-city';
 
 const LibrariesPage = () => {
     const [libraries, setLibraries] = useState([]);
@@ -10,7 +11,7 @@ const LibrariesPage = () => {
         name: '',
         address: '',
         city: '',
-        state: '',
+        state: '', // This will hold the country code
         zip_code: '',
         phone: '',
         email: '',
@@ -19,6 +20,9 @@ const LibrariesPage = () => {
     const [editLibrary, setEditLibrary] = useState(null);
     const [deleteLibrary, setDeleteLibrary] = useState(null);
     const [error, setError] = useState('');
+    const [states, setStates] = useState([]);
+    const [cities, setCities] = useState([]);
+    const [selectedCountry, setSelectedCountry] = useState('');
 
     useEffect(() => {
         fetchLibraries();
@@ -34,42 +38,71 @@ const LibrariesPage = () => {
         }
     };
 
+    const handleCountryChange = (e) => {
+        const countryCode = e.target.value;
+        setSelectedCountry(countryCode);
+        const statesList = State.getStatesOfCountry(countryCode);
+        setStates(statesList);
+        setNewLibrary({ ...newLibrary, state: countryCode, city: '' }); // Set country as state
+        setCities([]);
+    };
+
+    const handleStateChange = (e) => {
+        const stateCode = e.target.value;
+        const citiesList = City.getCitiesOfState(selectedCountry, stateCode);
+        setCities(citiesList);
+        setNewLibrary({ ...newLibrary, state: selectedCountry, city: '' }); // Ensure country is still in state
+    };
+
+    const handleCityChange = (e) => {
+        setNewLibrary({ ...newLibrary, city: e.target.value });
+    };
+
     const handleAddLibrary = async (event) => {
         event.preventDefault();
-        console.log('Adding library with data:', newLibrary); // Log request payload
+        const libraryToSend = {
+            ...newLibrary,
+            state: newLibrary.state, // Send the country code as state
+            city: newLibrary.city // Only send city as selected
+        };
         try {
-            const response = await ApiService.createLibrary(newLibrary);
+            const response = await ApiService.createLibrary(libraryToSend);
             setLibraries(prevLibraries => [...prevLibraries, response.data]);
             handleCloseModal();
         } catch (error) {
-            console.error('Failed to add library:', error.response ? error.response.data : error.message); // Log API error response
+            console.error('Failed to add library:', error.response ? error.response.data : error.message);
             setError('Failed to add library.');
         }
     };
 
     const handleEditClick = (library) => {
-        setEditLibrary({
-            id: library.id,
-            name: library.name || '',
-            address: library.address || '',
-            city: library.city || '',
-            state: library.state || '',
-            zip_code: library.zip_code || '',
-            phone: library.phone || '',
-            email: library.email || '',
-            opening_hours: library.opening_hours || ''
+        setEditLibrary(library);
+        setSelectedCountry(library.state); // Set the selected country for editing
+        const statesList = State.getStatesOfCountry(library.state);
+        setStates(statesList);
+        const citiesList = City.getCitiesOfState(library.state, library.city);
+        setCities(citiesList);
+        setNewLibrary({
+            ...library,
+            state: library.state, // Set the country as state
+            city: library.city
         });
         setShowModal(true);
     };
 
     const handleUpdateLibrary = async (event) => {
         event.preventDefault();
+        const libraryToUpdate = {
+            ...editLibrary,
+            state: selectedCountry, // Send the country code as state
+            city: newLibrary.city // Only send city as selected
+        };
         try {
-            const response = await ApiService.updateLibrary(editLibrary.id, editLibrary);
+            const response = await ApiService.updateLibrary(editLibrary.id, libraryToUpdate);
             setLibraries(prevLibraries => prevLibraries.map(library => library.id === editLibrary.id ? response.data : library));
             handleCloseModal();
         } catch (error) {
-            console.error('Failed to update library:', error.response ? error.response.data : error.message); // Log API error response
+            console.error('Failed to update library:', error.response ? error.response.data : error.message);
             setError('Failed to update library.');
         }
     };
@@ -80,7 +113,7 @@ const LibrariesPage = () => {
             setLibraries(prevLibraries => prevLibraries.filter(library => library.id !== deleteLibrary.id));
             handleCloseModal();
         } catch (error) {
-            console.error('Failed to delete library:', error.response ? error.response.data : error.message); // Log API error response
+            console.error('Failed to delete library:', error.response ? error.response.data : error.message);
             setError('Failed to delete library.');
         }
     };
@@ -104,12 +137,15 @@ const LibrariesPage = () => {
             name: '',
             address: '',
             city: '',
-            state: '',
+            state: '', // Reset to empty
             zip_code: '',
             phone: '',
             email: '',
             opening_hours: ''
         });
+        setStates([]);
+        setCities([]);
+        setSelectedCountry('');
     };
 
     const handleInputChange = (e) => {
@@ -154,22 +190,36 @@ const LibrariesPage = () => {
                             value={editLibrary ? editLibrary.address : newLibrary.address}
                             onChange={handleInputChange}
                         />
-                        <Form.Control
-                            type="text"
-                            name="city"
+                        <Form.Select
                             className="mb-2"
-                            placeholder="Enter city"
-                            value={editLibrary ? editLibrary.city : newLibrary.city}
-                            onChange={handleInputChange}
-                        />
-                        <Form.Control
-                            type="text"
-                            name="state"
+                            value={selectedCountry}
+                            onChange={handleCountryChange}
+                        >
+                            <option value="">Select Country</option>
+                            {Country.getAllCountries().map(country => (
+                                <option key={country.isoCode} value={country.isoCode}>{country.name}</option>
+                            ))}
+                        </Form.Select>
+                        <Form.Select
                             className="mb-2"
-                            placeholder="Enter state"
-                            value={editLibrary ? editLibrary.state : newLibrary.state}
-                            onChange={handleInputChange}
-                        />
+                            value={newLibrary.state}
+                            onChange={handleStateChange}
+                        >
+                            <option value="">Select State</option>
+                            {states.map(state => (
+                                <option key={state.isoCode} value={state.isoCode}>{state.name}</option>
+                            ))}
+                        </Form.Select>
+                        <Form.Select
+                            className="mb-2"
+                            value={newLibrary.city}
+                            onChange={handleCityChange}
+                        >
+                            <option value="">Select City</option>
+                            {cities.map(city => (
+                                <option key={city.name} value={city.name}>{city.name}</option>
+                            ))}
+                        </Form.Select>
                         <Form.Control
                             type="text"
                             name="zip_code"

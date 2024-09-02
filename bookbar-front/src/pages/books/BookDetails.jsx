@@ -91,6 +91,10 @@ const BookDetails = () => {
         setSelectedFile(file);
     };
 
+    const handleContextMenu = (event) => {
+        event.preventDefault(); // Prevent the default context menu from appearing
+    };
+
     if (!book) {
         return <div>Loading...</div>;
     }
@@ -167,7 +171,7 @@ const BookDetails = () => {
                 <div className="row my-3 mx-3">
                     <div className="col-12">
                         <h2>Read Book</h2>
-                        <div className="vh-100">
+                        <div className="vh-100" onContextMenu={handleContextMenu}>
                             <ReactReader
                                 url={`http://localhost:8080/${selectedFile.epubFile}`} // Assuming the URL is correct
                                 title={selectedFile.filename}
