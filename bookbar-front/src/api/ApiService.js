@@ -68,6 +68,14 @@ const ApiService = {
             throw new Error('No token or refresh token available');
         }
     },
+    getUserById: async (id) => {
+        let token = localStorage.getItem('token');
+        return axios.get(`${API_URL}/users/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
     getPublicBooks: async (page = 0, size = 10) => {
         return axios.get(`${API_URL}/public/books`, {params: { page, size }});
     },
@@ -512,6 +520,92 @@ const ApiService = {
         });
     },
 
+    clearCart: async (cartId) => {
+        try {
+            const response = await axios.put(`${API_URL}/cart/${cartId}/clear`, null, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error clearing the cart:', error);
+            throw error;
+        }
+    },
+
+    createOrder: (userId, totalPrice) => {
+        const token = localStorage.getItem('token');
+        return axios.post(`${API_URL}/user-orders/${userId}?totalPrice=${totalPrice}`, null, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
+
+
+    addItemsToOrder: async (orderId, bookIds) => {
+        try {
+            const token = localStorage.getItem('token');
+            await axios.post(
+                `${API_URL}/user-orders/${orderId}/add-items`, // Ensure the path matches the backend
+                bookIds,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    },
+                }
+            );
+            console.log("Items successfully added to order.");
+        } catch (error) {
+            console.error("Error adding items to order:", error);
+            throw error;
+        }
+    },
+
+
+    getOrders: async (page) => {
+        const token = localStorage.getItem('token');
+        return axios.get(`${API_URL}/user-orders/all`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
+
+    getOrdersByUserId: async (id) => {
+        const token = localStorage.getItem('token');
+        return axios.get(`${API_URL}/user-orders/user/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    },
+
+    updateOrder: async (orderId, orderDTO) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.put(`/api/user-orders/${orderId}`, orderDTO, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+            return response.data; // Optional if you need the response
+        } catch (error) {
+            console.error('Error updating order status:', error);
+            throw error; // Re-throw the error for proper handling
+        }
+    },
+
+    deleteOrder: (id) => {
+        const token = localStorage.getItem('token');
+        return axios.delete(`${API_URL}/user-orders/${id}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+    },
+
     // Stripe Integration
     createPaymentIntent: (paymentInfo) => {
         const token = localStorage.getItem('token');
@@ -520,7 +614,7 @@ const ApiService = {
                 'Authorization': `Bearer ${token}`
             }
         });
-    },
+    }
 };
 
 const isTokenExpired = (token) => {

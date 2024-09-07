@@ -26,6 +26,8 @@ import ErrorBoundary from "./components/ErrorBoundary.jsx";
 import BookDetails from "./pages/books/BookDetails.jsx";
 import Books from "./pages/books/Books.jsx";
 import CartPage from "./pages/CartPage.jsx"
+import UserOrdersPage from "./pages/UserOrdersPage.jsx"
+import OrdersPage from "./pages/admin/OrdersPage.jsx";
 
 const App = () => {
     return (
@@ -39,6 +41,7 @@ const App = () => {
                     <Route path="/books" element={<Books />} />
                     <Route path="/books/:id" element={<BookDetails />} />
                     <Route path="/cart" element={<CartPage />} />
+                    <Route path="/userorders" element={<UserOrdersPage />} />
                     <Route path="/subscription" element={<Subscription />} />
                     <Route path="/users" element={<PrivateRoute role={Roles.USER}><Users /></PrivateRoute>} />
                     <Route path="/admin/*" element={<PrivateRoute role={Roles.ADMIN}><AdminLayout /></PrivateRoute>}>
@@ -51,6 +54,7 @@ const App = () => {
                         <Route path="users" element={<UsersPage />} />
                         <Route path="categories" element={<CategoriesPage />} />
                         <Route path="book-categories" element={<BookCategoriesPage />} />
+                        <Route path="orders" element={<OrdersPage />} />
                     </Route>
                     <Route path="/success" element={<Success />} />
                     //Error pages
