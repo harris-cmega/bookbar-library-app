@@ -282,6 +282,10 @@
   font-weight: bold;
 }
 
+.nav-button-spacing {
+  margin-right: 5px;
+}
+
 /*Success page styling*/
 .success-page {
   background-color: #F3F5F5;

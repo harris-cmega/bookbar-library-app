@@ -11,6 +11,7 @@ import BooksStatsCard from '../dashboard/BooksStatsCard';
 import {
     UserIcon,
     BookOpenIcon,
+    TruckIcon,
     BuildingLibraryIcon,
     BookmarkIcon,
     UsersIcon,
@@ -48,6 +49,9 @@ const AdminLayout = () => {
                         </Nav.Link>
                         <Nav.Link as={Link} to="/admin/books" className="text-dark p-3 d-flex align-items-center">
                             <BookOpenIcon className="icon size-4 me-2" />Books
+                        </Nav.Link>
+                        <Nav.Link as={Link} to="/admin/orders" className="text-dark p-3 d-flex align-items-center">
+                            <TruckIcon className="icon size-4 me-2" />Orders
                         </Nav.Link>
                         <Nav.Link as={Link} to="/admin/book-files" className="text-dark p-3 d-flex align-items-center">
                             <DocumentTextIcon className="icon size-4 me-2" />Book files

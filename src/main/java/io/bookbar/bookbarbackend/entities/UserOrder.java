@@ -22,11 +22,19 @@ public class UserOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "order_date", nullable = false, updatable = false)
     private LocalDateTime date;
 
-    @Column(name = "total_price", precision = 8, scale = 2, nullable = false)
+    @PrePersist
+    protected void onCreate() {
+        date = LocalDateTime.now();
+    }
+
+    @Column(name = "total_price", nullable = false)
     private BigDecimal totalPrice;
+
+    @Column(name = "order_status", length = 10)  // Add if you plan to use it
+    private String orderStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -34,4 +42,14 @@ public class UserOrder {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserOrderItems> orderItems = new ArrayList<>();
+
+    public void addOrderItem(UserOrderItems item) {
+        orderItems.add(item);
+        item.setOrder(this);
+    }
+
+    public void removeOrderItem(UserOrderItems item) {
+        orderItems.remove(item);
+        item.setOrder(null);
+    }
 }
